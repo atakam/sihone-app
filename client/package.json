@@ -32,7 +32,6 @@
     "react-swipeable-views": "0.12.15",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "request": "^2.88.0",
     "validator": "^10.7.1"
   },
   "scripts": {

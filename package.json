@@ -16,8 +16,7 @@
   "devDependencies": {
     "express-formidable": "^1.2.0",
     "mv": "^2.1.1",
-    "nodemon": "^1.18.4",
-    "request": "^2.88.0"
+    "nodemon": "^1.18.4"
   },
   "dependencies": {
     "body-parser": "^1.18.3",

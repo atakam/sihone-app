@@ -6,7 +6,7 @@ const GroupSmsTable = require('../domain/groupsms/table');
 const MemberTable = require('../domain/member/table');
 const GroupTable = require('../domain/group/table');
 const SettingsTable = require('../domain/settings/table');
-const request = require('request');
+//const request = require('request');
 
 const router = new Router();
 
@@ -200,14 +200,14 @@ function sendSms(phone, smstext, res) {
             form: {api_key: smsapikey, api_secret: smsapisecret, from: smsnumber, to: phoneNumber, text: smstext}
         };
       
-        request(options, function (error, response, body) {
-            if (error) throw new Error(error);
-            console.log(body);
-            res.json({
-                message: 'successfully added sms',
-                result: body
-            });
-        }.bind(this));
+        // request(options, function (error, response, body) {
+        //     if (error) throw new Error(error);
+        //     console.log(body);
+        //     res.json({
+        //         message: 'successfully added sms',
+        //         result: body
+        //     });
+        // }.bind(this));
 
     });
 }
