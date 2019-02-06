@@ -1,0 +1,37 @@
+.card-header input, .card-header label{
+  color: #fff !important;
+}
+.accounting-top-button {
+  position: relative !important;
+  margin-right: 24px !important;
+  float: right;
+}
+.accounting-add-button {
+  position: absolute !important;
+  right: 0;
+  margin-right: 24px !important;
+  margin-bottom: 20px !important;
+}
+.accounting-add-button.create {
+  margin-top: 24px;
+}
+.accounting-title {
+  width: 67%;
+}
+
+.statement-filter {
+  margin-right: 24px !important;
+  margin-top: 24px !important;
+}
+.statement-filter.date {
+  margin-left: 16px;
+}
+.statement-body .accounting-body-list {
+  padding-top: 0px;
+}
+.statement-body .accounting-body-list>div {
+  margin-top: 0px;
+}
+.create-envelope-body {
+  margin-bottom: 64px;
+}

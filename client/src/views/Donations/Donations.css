@@ -1,0 +1,16 @@
+.invisible {
+  visibility: hidden;
+}
+.statement-filter {
+  margin-right: 24px !important;
+  margin-top: 24px !important;
+}
+.statement-filter.date {
+  margin-left: 16px;
+}
+.statement-body .donations-body-list {
+  padding-top: 0px;
+}
+.statement-body .donations-body-list>div {
+  margin-top: 0px;
+}

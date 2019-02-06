@@ -1,0 +1,286 @@
+.logo {
+  width: 100% !important;
+  position: relative !important;
+  margin-top: -15px;
+  margin-bottom: 15px;
+}
+.logo-div {
+  padding: 20px !important;
+}
+.full-form-details-details h6 {
+  float: left;
+  border-bottom: 1px solid #eee;
+}
+.full-form-details-details h6:first-child {
+  font-weight: 400;
+  width: 40%;
+}
+.full-form-details-details h6:nth-child(2) {
+  width: 60%;
+}
+.full-form-details-details.select h6:nth-child(2) {
+  margin-top: 20px;
+}
+.full-form-details-details.select2 h6:nth-child(2) {
+  margin-top: 22px;
+}
+.full-form-details-details.date h6:nth-child(2) {
+  margin-top: 13px;
+}
+
+.full-form-details-details.field h6:nth-child(2) {
+  margin-top: -4px;
+}
+.full-form-details-details.field2 h6:nth-child(2) {
+  margin-top: -3px;
+}
+.full-form-details-details h6 {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0;
+}
+.form-checkbox {
+  margin-top: 36px;
+}
+.form-checkbox span{
+  color: #AAAAAA !important;
+}
+.form-subtitle {
+  margin-bottom: 0px;
+  border-bottom: 1px solid #eee;
+}
+.form-button {
+  margin-top: 36px !important;
+}
+.jss2 {
+  background-color: #f9f9f9;
+}
+.select-input {
+  margin-top: 27px !important;
+}
+.form-subtitle {
+  font-weight: 400;
+  border-bottom: 1px solid #a7a7a7;
+}
+.MuiInput-underline-214:before {
+  border-bottom: 1px solid #D2D2D2 !important;
+}
+.MuiInput-underline-214:after {
+  border-bottom: 1px solid #9c27b0 !important;
+}
+.MuiFormLabel-root-389 {
+  color: #AAAAAA !important;
+  font-size: 14px;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.42857;
+}
+.member-select > div > div > div {
+  margin-top: 30px !important;
+}
+
+.react-calendar__tile--now {
+  border: 1px solid !important;
+}
+
+/** DIALOG **/
+.full-screen-dialog {
+  width: calc(100% - 256px);
+  left: unset !important;
+}
+
+/** TOOLBAR **/
+.toolbar {
+   background: linear-gradient(60deg, #00cec3, #01ddd2) !important;
+}
+.toolbar .toolbar-icons {
+  position: absolute;
+  right: 0;
+}
+
+/** GENERIC **/
+.invisible {
+  visibility: hidden;
+}
+
+.form-button.details {
+  margin-top: 12px !important;
+  float: right;
+}
+
+/** EVENTS **/
+.event.close-button {
+  position: absolute;
+  right: 0;
+}
+
+/** TABLE ROW **/
+.table-header th {
+  font-weight: 400;
+}
+.table-row {
+  cursor: pointer;
+}
+.table-row:hover, .table-row:nth-child(odd):hover {
+  background-color: #CCC;
+}
+.table-row:nth-child(odd){
+  background-color: #EEE;
+}
+
+tr > th.checkbox-cell, tr > td.checkbox-cell {
+  width: 32px;
+}
+
+td button {
+  float: right;
+}
+
+/** MEMBERS **/
+.view-family-label {
+  position: relative;
+  height: 100%;
+}
+.view-family-label a {
+  position: absolute;
+  bottom: 8px;
+  cursor: pointer;
+}
+
+/** EMAIL **/
+.email {
+  border-left: 1px solid #ccc;
+  padding-left: 25px;
+}
+dt {
+  float: left;
+  font-weight: 500;
+}
+dd {
+  padding-left: 20px
+}
+.email-to {
+  padding: 0 15px;
+}
+.email-to > div {
+  float: left;
+  padding: 8px 32px 8px 8px;
+  border: 2px solid #01ddd2;
+  margin-right: 8px;
+  border-radius: 8px;
+  line-height: .875rem;
+}
+.email-to > div > svg {
+  position: absolute;
+  margin: -5px 8px 8px 4px;
+  cursor: pointer;
+}
+.fr-box.fr-basic.fr-top {
+  z-index: 0;
+}
+.email-body {
+  min-height: 200px;
+  border: 1px solid #eee;
+  padding: 8px;
+}
+
+.text-messages {
+  min-height: 200px;
+  max-height: 400px;
+  overflow: auto;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  background-color: #fefefe;
+}
+
+.text-message-single {
+  position: relative;
+  padding: 14px;
+  margin: 0 10px;
+  border-bottom: 2px solid #ddd;
+}
+
+.text-message-single > span {
+  font-size: 9px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.outbox {
+  float: right;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-right-absolute {
+  position: absolute !important;
+  right: 20px;
+}
+
+.float-left {
+  float: left;
+}
+
+.click {
+  cursor: pointer;
+}
+.click:hover {
+  color: #454545;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-item {
+  align-self: flex-start;
+  flex: 1;
+}
+
+.float-left-top {
+  top: 50px;
+  position: absolute !important;
+  right: 20px;
+}
+
+table{
+  margin-top: 16px;
+}
+
+/**** LOGIN ****/
+.login-logo {
+  text-align: center;
+}
+.login-logo img {
+  width: 300px;
+}
+
+/*** TRANSACTION ***/
+.transaction-form {
+  padding-top: 10px;
+}
+
+/**** Footer ****/
+.footer {
+  text-align: center;
+  font-size: 14px;
+}
+.login-error {
+  text-align: center;
+  color: #ef5350;
+}
+.forgot-password-message {
+  text-align: center;
+  color: #01ddd2;
+}
+.forgot-password-error {
+  text-align: center;
+  color: #ef5350;
+}
+
+.CustomTable-tableResponsive-406 {
+  max-height: 500px;
+  overflow: auto;
+}

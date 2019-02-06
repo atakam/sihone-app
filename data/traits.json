@@ -1,0 +1,48 @@
+[
+  {
+    "type": "roles",
+    "values": [
+      {"value": "Visitor", "key": "vistor"},
+      {"value": "Member", "key": "member"},
+      {"value": "Accountant", "key": "accountant"},
+      {"value": "Administrator", "key": "admin"},
+      {"value": "Assistant", "key": "assistant"}
+    ]
+  },
+  {
+    "type": "familyroles",
+    "values": [
+      {"value": "Other", "key": "other"},
+      {"value": "Head of Household", "key": "head"},
+      {"value": "Spouse", "key": "spouse"},
+      {"value": "Child", "key": "child"}
+    ]
+  },
+  {
+    "type": "marital",
+    "values": [
+      {"value": "Not Specified", "key": "none"},
+      {"value": "Single", "key": "single"},
+      {"value": "Married", "key": "married"},
+      {"value": "Divorced", "key": "divorced"},
+      {"value": "Widow(er)", "key": "widow"}
+    ]
+  },
+  {
+    "type": "paytypes",
+    "values": [
+      {"value": "Not Specified", "key": "none"},
+      {"value": "Cash", "key": "cash"},
+      {"value": "Debit / Credit", "key": "card"},
+      {"value": "Check", "key": "check"}
+    ]
+  },
+  {
+    "type": "gender",
+    "values": [
+      {"value": "Not Specified", "key": "none"},
+      {"value": "Male", "key": "male"},
+      {"value": "Female", "key": "female"}
+    ]
+  }
+]

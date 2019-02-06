@@ -1,0 +1,356 @@
+import React from "react";
+import PropTypes from "prop-types";
+import CONFIG from "../../configs";
+import request from "request";
+// core components
+import GridItem from "components/Grid/GridItem.jsx";
+import GridContainer from "components/Grid/GridContainer.jsx";
+import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
+import CardBody from "components/Card/CardBody.jsx";
+import CardFooter from "components/Card/CardFooter.jsx";
+import Button from "components/CustomButtons/Button.jsx";
+import CustomInput from "components/CustomInput/CustomInput.jsx";
+import Snackbar from "components/Snackbar/Snackbar.jsx";
+import AlertDialog from "components/Dialog/AlertDialog";
+
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+
+import DonationsList from './DonationsList.jsx'
+
+class CreateEnvelope extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      descriptiontext: '',
+      envelopedate: '',
+      isopen: 'open',
+      notificationOpen: false,
+
+      deleteAction: false,
+      notificationDeleteErrorOpen: false,
+
+      account: 0,
+      accounts: []
+    };
+  }
+
+  componentDidMount() {
+    this.props.envelopeId && this.fetchEnvelope();
+    this.fetchAccounts();
+  }
+
+  fetchEnvelope = () => {
+    fetch(CONFIG.serverUrl+'/envelope/find/' + this.props.envelopeId)
+    .then(response => response.json())
+    .then(json => {
+      console.log('envelope', json.envelope);
+      this.setState({
+        descriptiontext: json.envelope.descriptiontext,
+        envelopedate: json.envelope.envelopedate.split('T')[0],
+        isopen: json.envelope.isopen ? 'open' : 'close',
+        account: json.envelope.accountid
+      })
+    })
+    .catch(error => console.log('error', error));
+  }
+
+  fetchAccounts = () => {
+    fetch(CONFIG.serverUrl+'/account/findAll')
+    .then(response => response.json())
+    .then(json => {
+      console.log('json', json);
+      const accounts = this.state.accounts;
+      
+      json.accounts.map((account, index) => {
+        accounts.push({
+          value: account.id,
+          label: account.descriptiontext
+        });
+        
+        if (!account.candelete) {
+          this.setState({
+            account: account.id
+          })
+        }
+        return null;
+      });
+
+      this.setState({
+        accounts
+      })
+    })
+    .catch(error => console.log('error', error));
+  }
+
+  handleSave = (event) => {
+    event.preventDefault();
+    const {
+      descriptiontext,
+      envelopedate,
+      isopen,
+      account
+    } = this.state
+
+    let envelope = {
+      descriptiontext,
+      envelopedate,
+      isopen: isopen === 'open',
+      accountid: account
+    }
+    let api = '/envelope/new';
+    if (this.props.hasOwnProperty('envelopeId')){
+      envelope = {
+        envelopeid: this.props.envelopeId,
+        descriptiontext,
+        envelopedate,
+        isopen: isopen === 'open',
+        accountid: account
+      }
+      api = '/envelope/update';
+    }
+
+    var options = {
+      method: 'POST',
+      url: CONFIG.serverUrl + api,
+      headers: 
+      { 
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      form: envelope
+    };
+
+    request(options, function (error, response, body) {
+      if (error) throw new Error(error);
+      this.setState({
+        notificationOpen: true
+      });
+      if (!this.props.hasOwnProperty('envelopeId')){
+        this.setState({
+          descriptiontext: '',
+          envelopedate: '',
+          isopen: 1
+        });
+      }
+      console.log(body);
+    }.bind(this));
+  }
+
+  handleDelete = (event) => {
+    event.preventDefault();
+    this.setState({
+      deleteAction: true
+    })
+  }
+
+  closeDelete = () => {
+    this.setState({
+      deleteAction: false
+    })
+  }
+
+  deleteAction = () => {
+    const envelope = {
+      envelopeid: this.props.envelopeId
+    }
+
+    var options = {
+      method: 'POST',
+      url: CONFIG.serverUrl+'/envelope/delete',
+      headers: 
+      { 
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      form: envelope
+    };
+
+    request(options, function (error, response, body) {
+      if (error) throw new Error(error);
+      this.setState({
+        notificationDeleteErrorOpen: response.statusCode !== 200,
+        deleteAction: false
+      });
+      response.statusCode === 200 && this.props.onClose();
+      console.log(body);
+    }.bind(this));
+  }
+
+  handleInputChange = (event, state) => {
+    this.setState({ [state]: event.target.value });
+  }
+
+  closeNotification = () => {
+    this.setState({
+      notificationOpen: false,
+      notificationDeleteErrorOpen: false
+    });
+  }
+
+  render () {
+    const {
+      descriptiontext,
+      envelopedate,
+      isopen,
+      notificationOpen,
+      notificationDeleteErrorOpen,
+
+      accounts,
+      account
+    } = this.state
+
+    const status = [
+      {
+        value: 'open',
+        label: 'Open',
+      },
+      {
+        value: 'close',
+        label: 'Close',
+      }
+    ];
+
+    return (
+      <GridContainer>
+        <Snackbar
+          message={
+            'SUCCESS - Update Successful!'
+          }
+          close
+          place="tc"
+          color="success"
+          open={notificationOpen}
+          closeNotification={this.closeNotification}
+        />
+        <Snackbar
+            message={
+              'ERROR - Cannot delete Envelope. Remove all donation entries first!'
+            }
+            close
+            place="tc"
+            color="danger"
+            open={notificationDeleteErrorOpen}
+            closeNotification={this.closeNotification}
+        />
+        <AlertDialog
+            open={this.state.deleteAction}
+            onClose={this.closeDelete}
+            onDecline={this.closeDelete}
+            onAccept={this.deleteAction}
+            acceptLabel={'Accept'}
+            declineLabel={'Decline'}
+            dialogTitle={'Deleting Envelope'}
+            dialogContent={'Are you sure you want to delete this envelope? This action is not reversible.'}
+        />
+        <GridItem xs={12} sm={12} md={12}>
+          <Card>
+            {
+              this.props.hasOwnProperty('envelopeId') ? (
+                null
+              ) : (
+                <CardHeader color={'info'}>
+                  <h5>Fill in the form below to create an Envelope</h5>
+                </CardHeader>
+              )
+            }
+            <CardBody>
+              <GridContainer>
+                <GridItem xs={12} sm={12} md={6}>
+                  <CustomInput
+                    labelText="Envelope Description"
+                    id="name"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      value: descriptiontext,
+                      onChange: (e) => this.handleInputChange(e, 'descriptiontext')
+                    }}
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={6}>
+                  <TextField
+                    id="select-account"
+                    select
+                    label="Account"
+                    value={account}
+                    onChange={(e) => this.handleInputChange(e, 'account')}
+                    margin="normal"
+                    fullWidth
+                    className="select-input"
+                  >
+                    {accounts.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </GridItem>
+                <GridItem xs={12} sm={12} md={6}>
+                  <CustomInput
+                    labelText="Date"
+                    id="date"
+                    formControlProps={{
+                      fullWidth: true
+                    }}
+                    inputProps={{
+                      type:"date",
+                      value: envelopedate,
+                      onChange: (e) => this.handleInputChange(e, 'envelopedate')
+                    }}
+                    labelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </GridItem>
+                <GridItem xs={12} sm={12} md={6}>
+                  <TextField
+                    id="select-status"
+                    select
+                    label="Status"
+                    value={isopen}
+                    onChange={(e) => this.handleInputChange(e, 'isopen')}
+                    margin="normal"
+                    fullWidth
+                    className="select-input"
+                  >
+                    {status.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </GridItem>
+              </GridContainer>
+            </CardBody>
+            <CardFooter>
+              {
+                this.props.hasOwnProperty('envelopeId') ? (
+                  <Button color="danger" className='add-button create' onClick={this.handleDelete}>
+                    Delete
+                  </Button>
+                ) : (
+                  <span />
+                )
+              }
+              <Button className="right" color="info" onClick={this.handleSave}>Save</Button>
+            </CardFooter>
+          </Card>
+          {
+                this.props.hasOwnProperty('envelopeId') ? (
+                  <DonationsList envelopeId={this.props.envelopeId} />
+                ) : null
+          }
+        </GridItem>
+      </GridContainer>
+    )
+  }
+}
+
+CreateEnvelope.propTypes = {
+  envelopeId: PropTypes.number,
+  onClose: PropTypes.func
+};
+
+export default CreateEnvelope;

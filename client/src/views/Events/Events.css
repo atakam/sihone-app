@@ -1,0 +1,80 @@
+#events #right-sidebar {
+  width: 20%;
+  margin-top: 73px;
+}
+#events #right-sidebar .fc-today-button {
+  display: none;
+}
+#events #right-sidebar .fc-button{
+  padding: 0;
+  font-size: 0.7em;
+}
+#events #right-sidebar .fc table {
+  font-size: 10px;
+}
+#events #right-sidebar .fc-toolbar h2{
+  font-size: 17px !important;
+}
+#events #right-sidebar h4{
+  margin-bottom: 0;
+}
+#events #right-sidebar button{
+  margin: 1.3em 0 0 0.5em;
+  width: 24px;
+  height: 24px;
+}
+#events #right-sidebar div>span{
+  width: 24px;
+  height: 24px;
+}
+#events #right-sidebar>span>span{
+  height: 100%;
+}
+#events #right-sidebar div>span>span>svg{
+  margin: 0;
+}
+#events #right-sidebar p{
+  margin: 0 0 0 8px;
+}
+#events #main-view {
+  width: 78%;
+}
+#events #main-view .fc-toolbar{
+  margin-left: -28%;
+}
+.calendar-entry{
+  margin: 8px 0;
+}
+.calendar-entry.color1 svg{
+  color: #039BE5;
+}
+.calendar-entry.color2 svg{
+  color: #33B679;
+}
+.calendar-entry.color3 svg{
+  color: #3F51B5;
+}
+.events-top-button {
+  position: absolute !important;
+  right: 0;
+  margin-right: 24px !important;
+}
+.repeat-select {
+  margin-left: 24px;
+}
+.event-tabs {
+  margin-top: 48px;
+}
+.event-tab {
+  width: 65% !important;
+}
+
+.clear {
+  clear: both;
+}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
