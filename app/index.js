@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 
 const donationRouter = require('./api/donation');
 const envelopeRouter = require('./api/envelope');
