@@ -17,7 +17,7 @@ import AddCalendarDialog from './AddCalendarDialog'
 import AddEventDialog from './AddEventDialog'
 import AddEventFullScreenDialog from './AddEventFullScreenDialog'
 
-import ApiCalendar from 'react-google-calendar-api';
+// import ApiCalendar from 'react-google-calendar-api';
 
 class Events extends React.Component {
   constructor(props) {
@@ -29,12 +29,12 @@ class Events extends React.Component {
       startValue: null,
       endValue: null,
 
-      sign: ApiCalendar.sign
+      sign: null
     };
 
-    ApiCalendar.onLoad(() => {
-        ApiCalendar.listenSign(this.signUpdate);
-    });
+    // ApiCalendar.onLoad(() => {
+    //     ApiCalendar.listenSign(this.signUpdate);
+    // });
   }
 
   signUpdate = (sign) => {
@@ -112,9 +112,9 @@ class Events extends React.Component {
         </div>
         {
           this.state.sign ? (
-            <Button color="" onClick={() => {ApiCalendar.handleSignoutClick();}}>Sign out</Button>
+            <Button color="" onClick={() => {/*ApiCalendar.handleSignoutClick();*/}}>Sign out</Button>
           ) : (
-            <Button color="danger" onClick={() => {ApiCalendar.handleAuthClick();}}>Sign in with Google</Button>
+            <Button color="danger" onClick={() => {/*ApiCalendar.handleAuthClick();*/}}>Sign in with Google</Button>
           )
         }
         h: {this.state.sign}

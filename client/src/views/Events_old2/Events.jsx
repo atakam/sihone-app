@@ -1,7 +1,5 @@
 import React from "react";
 
-import ApiCalendar from 'react-google-calendar-api';
-
 import Button from "components/CustomButtons/Button.jsx";
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -17,11 +15,6 @@ class Events extends React.Component {
   }
 
   handleItemClick = (event, name) => {
-    if (name === 'sign-in') {
-      ApiCalendar.handleAuthClick();
-    } else if (name === 'sign-out') {
-      ApiCalendar.handleSignoutClick();
-    }
   }
 
   render() {
