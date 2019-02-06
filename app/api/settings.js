@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const Settings = require('../domain/settings');
 const SettingsTable = require('../domain/settings/table');
+const mv = require('mv');
 var path = require('path');
 var appDir = path.dirname(require.main.filename);
 
@@ -82,18 +83,18 @@ router.post('/logo/update', (req, res, next) => {
     console.log('BODY', appDir);
     console.log('FILES', req.files);
     if (req.files) {
-        // let uploadFile = req.files.logo;
-        // const fileName = req.files.logo.name;
-        // mv(
-        //     uploadFile.path,
-        //     `${appDir}/data/files/images/logo/${fileName}`,
-        //     function (err) {
-        //         if (err) {
-        //             return res.status(500).send(err)
-        //         }
-        //         res.json({'message': 'file uploaded'})
-        //     },
-        // )
+        let uploadFile = req.files.logo;
+        const fileName = req.files.logo.name;
+        mv(
+            uploadFile.path,
+            `${appDir}/data/files/images/logo/${fileName}`,
+            function (err) {
+                if (err) {
+                    return res.status(500).send(err)
+                }
+                res.json({'message': 'file uploaded'})
+            },
+        )
     }
 });
 
