@@ -42,7 +42,7 @@ export const signin = ({email, password}) => fetchFromAccount({
         method: 'POST',
         body: JSON.stringify({email, password}),
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'text/plain'
         },
         credentials: 'include'
     },
