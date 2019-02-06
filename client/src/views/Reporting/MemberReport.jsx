@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CONFIG from "../../configs";
+
 import request from "request";
 // @material-ui/core components
 import MenuItem from '@material-ui/core/MenuItem';
@@ -257,7 +257,7 @@ class MemberReport extends React.Component {
 
     let options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/report/member',
+      url: '/report/member',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

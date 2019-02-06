@@ -1,5 +1,5 @@
 import React from "react";
-import CONFIG from "../../configs";
+
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -37,7 +37,7 @@ class EnvelopeList extends React.Component {
   }
 
   fetchEnvelopes = () => {
-    fetch(CONFIG.serverUrl+'/envelope/findAll')
+    fetch('/envelope/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -49,7 +49,7 @@ class EnvelopeList extends React.Component {
   }
 
   fetchEnvelopesByAccountId = () => {
-    fetch(CONFIG.serverUrl+'/envelope/findAll')
+    fetch('/envelope/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);

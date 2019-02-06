@@ -1,4 +1,4 @@
-import CONFIG from "../../configs";
+
 import request from "request";
 
 class Utils {
@@ -92,7 +92,7 @@ class Utils {
 
         var options = {
           method: 'POST',
-          url: CONFIG.serverUrl+'/activity/new',
+          url: '/activity/new',
           headers: 
           { 
             'Content-Type': 'application/x-www-form-urlencoded'

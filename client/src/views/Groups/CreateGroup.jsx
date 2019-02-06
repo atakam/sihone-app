@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CONFIG from "../../configs";
+
 import request from "request";
 // core components
 import CustomInput from "components/CustomInput/CustomInput.jsx";
@@ -62,7 +62,7 @@ class CreateGroup extends React.Component {
   };
 
   fetchGroup = () => {
-    fetch(CONFIG.serverUrl+'/group/find/' + this.props.groupId,)
+    fetch('/group/find/' + this.props.groupId,)
     .then(response => response.json())
     .then(json => {
       console.log('group', json.group);
@@ -89,7 +89,7 @@ class CreateGroup extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/group/update',
+      url: '/group/update',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -120,7 +120,7 @@ class CreateGroup extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/group/new',
+      url: '/group/new',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -139,7 +139,7 @@ class CreateGroup extends React.Component {
   }
 
   fetchGroupTypes = () => {
-    fetch(CONFIG.serverUrl+'/grouptype/findAll')
+    fetch('/grouptype/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -196,7 +196,7 @@ class CreateGroup extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/group/delete',
+      url: '/group/delete',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -220,7 +220,7 @@ class CreateGroup extends React.Component {
   }
 
   fetchMembersByGroup = () => {
-    fetch(CONFIG.serverUrl+'/member/findAll/g/' + this.props.groupId)
+    fetch('/member/findAll/g/' + this.props.groupId)
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -244,7 +244,7 @@ class CreateGroup extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/group/addMember',
+      url: '/group/addMember',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -271,7 +271,7 @@ class CreateGroup extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/group/removeMember',
+      url: '/group/removeMember',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

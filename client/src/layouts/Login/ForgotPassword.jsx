@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import CONFIG from "../../configs";
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
@@ -35,7 +34,7 @@ class ForgotPassword extends Component {
       email
     } = this.state;
 
-    fetch(`${CONFIG.serverUrl}/member/forgot/${email}`)
+    fetch(`/member/forgot/${email}`)
     .then(response => response.json())
     .then(json => {
       console.log('json', json);

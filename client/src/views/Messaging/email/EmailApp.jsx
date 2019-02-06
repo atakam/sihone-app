@@ -1,5 +1,5 @@
 import React from "react";
-import CONFIG from "../../../configs";
+
 import Mailbox from "./Mailbox";
 import MailboxList from "./MailboxList";
 import ComposeEditor from "./ComposeEditor";
@@ -28,7 +28,7 @@ class Email extends React.Component {
     }
 
     fetchEmails = () => {
-      fetch(CONFIG.serverUrl+'/email/findAll')
+      fetch('/email/findAll')
       .then(response => response.json())
       .then(json => {
         console.log('json', json);

@@ -1,5 +1,5 @@
 import React from "react";
-import CONFIG from "../../configs"
+
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -33,7 +33,7 @@ class FamilyList extends React.Component {
   }
 
   fetchFamilies = () => {
-    fetch(CONFIG.serverUrl+'/family/findAll')
+    fetch('/family/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);

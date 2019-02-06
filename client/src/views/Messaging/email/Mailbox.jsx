@@ -1,6 +1,6 @@
 import React from "react";
 import request from "request";
-import CONFIG from "../../../configs";
+
 import Email from "./Email";
 import EmailList from "./EmailList";
 import NoneSelected from "./NoneSelected";
@@ -48,7 +48,7 @@ class Mailbox extends React.Component {
   deleteEmail = (emailid) => {
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/email/delete',
+      url: '/email/delete',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

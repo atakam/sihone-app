@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CONFIG from "../../configs";
 import request from "request";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -35,7 +34,7 @@ class CreateAccount extends React.Component {
   }
 
   fetchAccount = () => {
-    fetch(CONFIG.serverUrl+'/account/find/' + this.props.accountId)
+    fetch('/account/find/' + this.props.accountId)
     .then(response => response.json())
     .then(json => {
       console.log('account', json.account);
@@ -67,7 +66,7 @@ class CreateAccount extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl + api,
+      url: api,
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -120,7 +119,7 @@ class CreateAccount extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/account/delete',
+      url: '/account/delete',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

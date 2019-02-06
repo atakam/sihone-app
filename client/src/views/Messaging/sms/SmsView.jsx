@@ -1,6 +1,6 @@
 import React from "react";
 import request from "request";
-import CONFIG from "../../../configs";
+
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -42,7 +42,7 @@ class SmsView extends React.Component {
     }
 
     fetchSmsByMember = () => {
-        fetch(CONFIG.serverUrl+'/sms/findAll/m/' + this.props.memberId)
+        fetch('/sms/findAll/m/' + this.props.memberId)
         .then(response => response.json())
         .then(json => {
           console.log('json', json);
@@ -56,7 +56,7 @@ class SmsView extends React.Component {
     }
 
     fetchSmsByGroup = () => {
-        fetch(CONFIG.serverUrl+'/sms/findAll/g/' + this.props.groupId)
+        fetch('/sms/findAll/g/' + this.props.groupId)
         .then(response => response.json())
         .then(json => {
           console.log('json', json);
@@ -70,7 +70,7 @@ class SmsView extends React.Component {
     }
 
     fetchSmsBySpecial = () => {
-        fetch(CONFIG.serverUrl+'/sms/findAll/s/' + this.props.special.value)
+        fetch('/sms/findAll/s/' + this.props.special.value)
         .then(response => response.json())
         .then(json => {
           console.log('json', json);
@@ -99,7 +99,7 @@ class SmsView extends React.Component {
 
         var options = {
             method: 'POST',
-            url: CONFIG.serverUrl+'/sms/new',
+            url: '/sms/new',
             headers: 
             { 
               'Content-Type': 'application/x-www-form-urlencoded'
@@ -137,7 +137,7 @@ class SmsView extends React.Component {
       
           var options = {
             method: 'POST',
-            url: CONFIG.serverUrl+'/settings/sms/balance',
+            url: '/settings/sms/balance',
             headers: 
             { 
               'Content-Type': 'application/x-www-form-urlencoded'

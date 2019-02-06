@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import CONFIG from "../../configs"
+
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
 // @material-ui/core
@@ -60,7 +60,7 @@ class Dashboard extends React.Component {
   }
 
   fetchMembers = () => {
-    fetch(CONFIG.serverUrl+'/member/findAll')
+    fetch('/member/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -85,7 +85,7 @@ class Dashboard extends React.Component {
   }
 
   fetchFamilies = () => {
-    fetch(CONFIG.serverUrl+'/family/findAll')
+    fetch('/family/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -101,7 +101,7 @@ class Dashboard extends React.Component {
   }
 
   fetchGroups = () => {
-    fetch(CONFIG.serverUrl+'/group/findAll')
+    fetch('/group/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -117,7 +117,7 @@ class Dashboard extends React.Component {
   }
 
   fetchSettings = () => {
-    fetch(CONFIG.serverUrl+'/settings/findAll')
+    fetch('/settings/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -129,7 +129,7 @@ class Dashboard extends React.Component {
   }
 
   getMonthlyBreakdown = () => {
-    fetch(CONFIG.serverUrl+'/donation/findAll')
+    fetch('/donation/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);

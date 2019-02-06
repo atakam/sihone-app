@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CONFIG from "../../configs";
+
 import request from "request";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -43,7 +43,7 @@ class EditFamily extends React.Component {
   }
 
   fetchFamily = () => {
-    fetch(CONFIG.serverUrl+'/family/find/' + this.props.familyId,)
+    fetch('/family/find/' + this.props.familyId,)
     .then(response => response.json())
     .then(json => {
       console.log('family', json.family);
@@ -62,7 +62,7 @@ class EditFamily extends React.Component {
   }
 
   fetchMembersByFamily = () => {
-    fetch(CONFIG.serverUrl+'/member/findAll/' + this.props.familyId)
+    fetch('/member/findAll/' + this.props.familyId)
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -100,7 +100,7 @@ class EditFamily extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/family/update',
+      url: '/family/update',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import CONFIG from "../../configs";
+
 import request from "request";
 // @material-ui/core components
 import MenuItem from '@material-ui/core/MenuItem';
@@ -46,7 +46,7 @@ class Identity extends React.Component {
   }
 
   fetchSettings = () => {
-    fetch(CONFIG.serverUrl+'/settings/findAll')
+    fetch('/settings/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -102,7 +102,7 @@ class Identity extends React.Component {
 
     let options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/settings/identity/update',
+      url: '/settings/identity/update',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

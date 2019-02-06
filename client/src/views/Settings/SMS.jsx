@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-import CONFIG from "../../configs";
+
 import request from "request";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -34,7 +34,7 @@ class SMS extends React.Component {
   }
 
   fetchSettings = () => {
-    fetch(CONFIG.serverUrl+'/settings/findAll')
+    fetch('/settings/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -66,7 +66,7 @@ class SMS extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/settings/sms/update',
+      url: '/settings/sms/update',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

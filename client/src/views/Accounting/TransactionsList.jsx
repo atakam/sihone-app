@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CONFIG from "../../configs";
 import request from "request";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -43,7 +42,7 @@ class TransactionsList extends React.Component {
   }
 
   fetchTransactions = () => {
-    fetch(CONFIG.serverUrl+'/transaction/findAll/'+this.props.accountId)
+    fetch('/transaction/findAll/'+this.props.accountId)
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -237,7 +236,7 @@ class TransactionsList extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl + api,
+      url: api,
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -270,7 +269,7 @@ class TransactionsList extends React.Component {
   deleteTransaction = (transactionid) => {
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/transaction/delete',
+      url: '/transaction/delete',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

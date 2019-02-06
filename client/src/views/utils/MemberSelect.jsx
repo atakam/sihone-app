@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CONFIG from "../../configs";
+
 import Select from 'react-select';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -162,7 +162,7 @@ class MemberSelect extends React.Component {
   }
 
   fetchMembers = () => {
-    fetch(CONFIG.serverUrl+'/member/findAll')
+    fetch('/member/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CONFIG from "../../configs";
+
 import request from "request";
 // @material-ui/core components
 import MenuItem from '@material-ui/core/MenuItem';
@@ -73,7 +73,7 @@ class CreateMember extends React.Component {
   }
 
   fetchFamilies = () => {
-    fetch(CONFIG.serverUrl+'/family/findAll')
+    fetch('/family/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -85,7 +85,7 @@ class CreateMember extends React.Component {
   }
 
   fetchGroups = () => {
-    fetch(CONFIG.serverUrl+'/group/findAll')
+    fetch('/group/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -97,7 +97,7 @@ class CreateMember extends React.Component {
   }
 
   fetchMember = () => {
-    fetch(CONFIG.serverUrl+'/member/find/' + this.props.memberId,)
+    fetch('/member/find/' + this.props.memberId,)
     .then(response => response.json())
     .then(json => {
       console.log('member', json.member);
@@ -183,7 +183,7 @@ class CreateMember extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/member/update',
+      url: '/member/update',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -250,7 +250,7 @@ class CreateMember extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/member/new',
+      url: '/member/new',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -335,7 +335,7 @@ class CreateMember extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/member/delete',
+      url: '/member/delete',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -362,7 +362,7 @@ class CreateMember extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/group/removeGroup',
+      url: '/group/removeGroup',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -383,7 +383,7 @@ class CreateMember extends React.Component {
   }
 
   fetchGroupsByMember = () => {
-    fetch(CONFIG.serverUrl+'/group/findAll/m/' + this.props.memberId)
+    fetch('/group/findAll/m/' + this.props.memberId)
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -402,7 +402,7 @@ class CreateMember extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/group/addMember',
+      url: '/group/addMember',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

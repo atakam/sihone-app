@@ -1,5 +1,5 @@
 import React from "react";
-import CONFIG from "../../configs";
+
 import request from "request";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -29,7 +29,7 @@ class Finance extends React.Component {
   }
 
   fetchPaymentTypes = () => {
-    fetch(CONFIG.serverUrl+'/paymenttype/findAll')
+    fetch('/paymenttype/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -43,7 +43,7 @@ class Finance extends React.Component {
   deletePaymentType = (paymenttypeid) => {
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/paymenttype/delete',
+      url: '/paymenttype/delete',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -75,7 +75,7 @@ class Finance extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/paymenttype/new',
+      url: '/paymenttype/new',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -94,7 +94,7 @@ class Finance extends React.Component {
   }
 
   fetchFunds = () => {
-    fetch(CONFIG.serverUrl+'/fund/findAll')
+    fetch('/fund/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -108,7 +108,7 @@ class Finance extends React.Component {
   deleteFund = (fundid) => {
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/fund/delete',
+      url: '/fund/delete',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -140,7 +140,7 @@ class Finance extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/fund/new',
+      url: '/fund/new',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

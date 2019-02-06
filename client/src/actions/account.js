@@ -1,5 +1,4 @@
 import { ACCOUNT } from './types';
-import CONFIG from "../configs";
 
 const fetchFromAccount = ({endpoint, options, SUCCESS_TYPE, errorMessage}) => dispatch => {
     dispatch({type: ACCOUNT.FETCH});

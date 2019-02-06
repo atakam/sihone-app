@@ -1,5 +1,5 @@
 import React from "react";
-import CONFIG from "../../configs";
+
 import request from "request";
 // @material-ui/core components
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -52,7 +52,7 @@ class Membership extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/grouptype/new',
+      url: '/grouptype/new',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -88,7 +88,7 @@ class Membership extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/settings/member/update',
+      url: '/settings/member/update',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -105,7 +105,7 @@ class Membership extends React.Component {
   }
 
   fetchGroupTypes = () => {
-    fetch(CONFIG.serverUrl+'/grouptype/findAll')
+    fetch('/grouptype/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -117,7 +117,7 @@ class Membership extends React.Component {
   }
 
   fetchSettings = () => {
-    fetch(CONFIG.serverUrl+'/settings/findAll')
+    fetch('/settings/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -150,7 +150,7 @@ class Membership extends React.Component {
   deleteGroupType = (grouptypeid) => {
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/grouptype/delete',
+      url: '/grouptype/delete',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CONFIG from "../../configs";
+
 import request from "request";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -69,7 +69,7 @@ class DonationsList extends React.Component {
   }
 
   fetchDonations = () => {
-    fetch(CONFIG.serverUrl+'/donation/findAll/'+this.props.envelopeId)
+    fetch('/donation/findAll/'+this.props.envelopeId)
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -81,7 +81,7 @@ class DonationsList extends React.Component {
   }
 
   fetchPaymentTypes = () => {
-    fetch(CONFIG.serverUrl+'/paymenttype/findAll')
+    fetch('/paymenttype/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -93,7 +93,7 @@ class DonationsList extends React.Component {
   }
 
   fetchFunds = () => {
-    fetch(CONFIG.serverUrl+'/fund/findAll')
+    fetch('/fund/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -308,7 +308,7 @@ class DonationsList extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl + api,
+      url: api,
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -341,7 +341,7 @@ class DonationsList extends React.Component {
   deleteDonation = (donationid) => {
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/donation/delete',
+      url: '/donation/delete',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

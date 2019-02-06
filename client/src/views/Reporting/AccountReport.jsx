@@ -1,5 +1,5 @@
 import React from "react";
-import CONFIG from "../../configs";
+
 import request from "request";
 // @material-ui/core components
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -104,7 +104,7 @@ class AccountReport extends React.Component {
 
     let options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/report/account',
+      url: '/report/account',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import CONFIG from "../../configs";
+
 import Utils from "../utils/Utils";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -72,7 +72,7 @@ class Statements extends React.Component {
     if (this.state.member.value) {
       memberId = this.state.member.value;
     }
-    fetch(`${CONFIG.serverUrl}/donation/find/quick/${memberId}/${this.state.quickFilter}`)
+    fetch(`/donation/find/quick/${memberId}/${this.state.quickFilter}`)
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -85,7 +85,7 @@ class Statements extends React.Component {
   }
 
   fetchCustomDonations = () => {
-    fetch(CONFIG.serverUrl+'/donation/find/custom/'+this.state.memberId+'/'+this.state.to+'/'+this.state.from)
+    fetch('/donation/find/custom/'+this.state.memberId+'/'+this.state.to+'/'+this.state.from)
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -98,7 +98,7 @@ class Statements extends React.Component {
   }
 
   fetchSettings = () => {
-    fetch(CONFIG.serverUrl+'/settings/findAll')
+    fetch('/settings/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);

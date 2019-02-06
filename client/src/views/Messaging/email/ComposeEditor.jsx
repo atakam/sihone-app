@@ -1,6 +1,6 @@
 import React from "react";
 import request from "request";
-import CONFIG from "../../../configs";
+
 import Utils from "../../utils/Utils";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
@@ -163,12 +163,12 @@ class ComposeEditor extends React.Component {
     const _specials = specials.map((special) => special.value);
 
     const website = window.location.protocol + '//' + window.location.host + window.location.pathname;
-    const template = Utils.getEmailTemplates(churchname, subject, emailfooter, website, CONFIG.serverUrl+'/settings/logo')[0];
+    const template = Utils.getEmailTemplates(churchname, subject, emailfooter, website, '/settings/logo')[0];
     const emailBody = template.before + emailContent + template.after;
     
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/email/new',
+      url: '/email/new',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -199,7 +199,7 @@ class ComposeEditor extends React.Component {
   }
 
   fetchSettings = () => {
-    fetch(CONFIG.serverUrl+'/settings/findAll')
+    fetch('/settings/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -220,7 +220,7 @@ class ComposeEditor extends React.Component {
       emailContent
     } = this.state;
     const website = window.location.protocol + '//' + window.location.host + window.location.pathname;
-    const template = Utils.getEmailTemplates(churchname, subject, emailfooter, website, CONFIG.serverUrl+'/settings/logo')[0];
+    const template = Utils.getEmailTemplates(churchname, subject, emailfooter, website, '/settings/logo')[0];
     const emailPreview = template.before + emailContent + template.after;
     var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=500,top="+(window.height-400)+",left="+(window.width-840));
 win.document.body.innerHTML = emailPreview;

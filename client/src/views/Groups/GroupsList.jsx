@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CONFIG from "../../configs";
+
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -40,7 +40,7 @@ class GroupsList extends React.Component {
   }
 
   fetchGroups = () => {
-    fetch(CONFIG.serverUrl+'/group/findAll')
+    fetch('/group/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);

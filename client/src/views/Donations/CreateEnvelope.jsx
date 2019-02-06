@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CONFIG from "../../configs";
+
 import request from "request";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -43,7 +43,7 @@ class CreateEnvelope extends React.Component {
   }
 
   fetchEnvelope = () => {
-    fetch(CONFIG.serverUrl+'/envelope/find/' + this.props.envelopeId)
+    fetch('/envelope/find/' + this.props.envelopeId)
     .then(response => response.json())
     .then(json => {
       console.log('envelope', json.envelope);
@@ -58,7 +58,7 @@ class CreateEnvelope extends React.Component {
   }
 
   fetchAccounts = () => {
-    fetch(CONFIG.serverUrl+'/account/findAll')
+    fetch('/account/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -114,7 +114,7 @@ class CreateEnvelope extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl + api,
+      url: api,
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -158,7 +158,7 @@ class CreateEnvelope extends React.Component {
 
     var options = {
       method: 'POST',
-      url: CONFIG.serverUrl+'/envelope/delete',
+      url: '/envelope/delete',
       headers: 
       { 
         'Content-Type': 'application/x-www-form-urlencoded'

@@ -1,5 +1,4 @@
 import React from "react";
-import CONFIG from "../../configs";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -37,7 +36,7 @@ class AccountList extends React.Component {
   }
 
   fetchAccounts = () => {
-    fetch(CONFIG.serverUrl+'/account/findAll')
+    fetch('/account/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
