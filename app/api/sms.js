@@ -6,7 +6,6 @@ const GroupSmsTable = require('../domain/groupsms/table');
 const MemberTable = require('../domain/member/table');
 const GroupTable = require('../domain/group/table');
 const SettingsTable = require('../domain/settings/table');
-//const request = require('request');
 
 const router = new Router();
 
