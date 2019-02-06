@@ -4,7 +4,7 @@ import CONFIG from "../configs";
 const fetchFromAccount = ({endpoint, options, SUCCESS_TYPE, errorMessage}) => dispatch => {
     dispatch({type: ACCOUNT.FETCH});
 
-    return fetch(`${CONFIG.serverUrl}/member/${endpoint}`, options)
+    return fetch(`/member/${endpoint}`, options)
       .then(response => response.json())
       .then(json => {
           if (json.type === 'error') {
@@ -42,7 +42,7 @@ export const signin = ({email, password}) => fetchFromAccount({
         method: 'POST',
         body: JSON.stringify({email, password}),
         headers: {
-            'Content-Type': 'text/plain'
+            'Content-Type': 'application/json'
         },
         credentials: 'include'
     },
