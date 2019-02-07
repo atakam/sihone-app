@@ -5,14 +5,10 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
-import Button from "components/CustomButtons/Button.jsx";
-
 import $ from 'jquery';
 import 'fullcalendar';
 import 'fullcalendar/dist/fullcalendar.css';
-import './Events.css'
-import Add from "@material-ui/icons/Add";
-import IconButton from '@material-ui/core/IconButton';
+import './Events.css';
 import AddCalendarDialog from './AddCalendarDialog'
 import AddEventDialog from './AddEventDialog'
 import AddEventFullScreenDialog from './AddEventFullScreenDialog'
@@ -26,10 +22,16 @@ class Events extends React.Component {
       openAddCalendar: false,
       openAddEvent: false,
       openAddEventFullScreen: false,
+      eventValue: '',
       startValue: null,
       endValue: null,
 
-      sign: null
+      sign: null,
+
+      events: [],
+
+      allDay: false,
+      eventId: null
     };
 
     // ApiCalendar.onLoad(() => {
@@ -55,28 +57,151 @@ class Events extends React.Component {
     this.setState({ openAddEvent: true });
   };
 
-  handleCloseAddEvent = () => {
-    this.setState({ openAddEvent: false });
+  handleCloseAddEvent = (shouldRefresh) => {
+    this.setState({
+      openAddEvent: false
+    });
+    shouldRefresh && this.reset();
   };
 
-  handleClickOpenAddEventFullScrenn = () => {
-    this.setState({ openAddEventFullScreen: true });
+  reset = () => {
+    this.setState({
+      openAddEvent: false,
+      eventValue: '',
+      startValue: '',
+      endValue: '',
+      allDay: false,
+      eventId: null
+    });
+    this.fetchEvents(true);
   };
 
-  handleCloseAddEventEventFullScreen = () => {
+  handleClickOpenAddEventFullScrenn = (event) => {
+    this.setState({
+      openAddEventFullScreen: true,
+      eventValue: event.eventValue,
+      startValue: event.startDate,
+      endValue: event.endDate
+    });
+  };
+
+  handleCloseAddEventEventFullScreen = (shouldRefresh) => {
     this.setState({ openAddEventFullScreen: false });
+    this.fetchEvents();
+    shouldRefresh && this.reset();
   };
 
-  componentDidMount () {
-    this.initCalendar();
+  fetchEvents = (shouldRefresh) => {
+    fetch('/event/findAll')
+    .then(response => response.json())
+    .then(json => {
+      //console.log('json', json);
+      let eventids = [];
+      let skippedids = [];
+      let events = json.events.map((event, index) => {
+        if (!eventids.includes(event.eventid)) {
+          var d = new Date('2019-02-08T07:30:00');
+          var n = d.getDay() -1;
+          eventids.push(event.eventid);
+          return {
+            title: event.description,
+            start: event.startdate,
+            end: event.enddate,
+            allDay: event.allday,
+            id: event.eventid,
+            location: event.location,
+            repeat: event.repeat,
+            daysOfWeek: event.repeat === 'daily' ? [0,1,2,3,4,5,6] : (event.repeat === 'weekly' ? [n] : null),
+            startRecur: event.startdate,
+            guests: event.memberid ? [{
+              id: event.memberid,
+              value: event.memberid,
+              label: event.firstname + ' ' + event.lastname
+            }] : [],
+            groups: event.groupid ? [{
+              id: event.groupid,
+              value: event.groupid,
+              label: event.groupname
+            }] : []
+          }
+        } 
+        else {
+          skippedids.push(index);
+        }
+        return null;
+      });
+      events = events.filter(function (el) {
+        return el != null;
+      });
+      
+      events = events.map((event) => {
+        skippedids.map((id, index) => {
+          if (event.id === json.events[id].eventid) {
+            const _e = json.events[id];
+            _e.memberid && !this.propInArray(event.guests, _e.memberid) && event.guests.push({
+              id: _e.memberid,
+              value: _e.memberid,
+              label: _e.firstname + ' ' + _e.lastname
+            });
+            _e.groupid && !this.propInArray(event.groups, _e.groupid) && event.groups.push({
+              id: _e.groupid,
+              value: _e.groupid,
+              label: _e.groupname
+            });
+            skippedids.splice(index, 1);
+          }
+          return null;
+        })
+        return event;
+      })
+
+      events = events.filter(function (el) {
+        return el != null;
+      });
+
+      this.setState({
+        events
+      }, this.initCalendar);
+
+      console.log(events);
+
+      shouldRefresh && window.location.reload();
+    })
+    .catch(error => console.log('error', error));
   }
 
-  componentDidUpdate () {
-    this.initCalendar();
+  propInArray=(arr, prop)=> {
+    let found = false;
+    for(let i = 0; i < arr.length; i++) {
+        if (arr[i].value === prop) {
+            found = true;
+            break;
+        }
+    }
+    return found;
+  }
+
+  componentDidMount () {
+    this.fetchEvents(false);
+  }
+
+  handleClickEditFullScreen = (event) => {
+    this.setState({
+      eventValue: event.title,
+      startValue: event.start.format(),
+      endValue: event.end ? event.end.format() : event.start.format(),
+      eventId: event.id,
+      location: event.location,
+      repeat: event.repeat,
+      guests: event.guests || [],
+      groups: event.groups || [],
+      allDay: event.allDay,
+      openAddEventFullScreen: true
+    })
   }
 
   initCalendar = () => {
-    let that = this
+    let that = this;
     $('#agenda').fullCalendar({
       defaultView: 'agendaWeek',
       selectable: true,
@@ -85,7 +210,9 @@ class Events extends React.Component {
         that.initStartEndTime(startDate, endDate);
         that.handleClickOpenAddEvent();
       },
-      dayClick: function() {}
+      dayClick: function() {},
+      events: that.state.events,
+      eventClick: that.handleClickEditFullScreen
     });
     $('#calendar').fullCalendar({
       height: 350
@@ -94,8 +221,8 @@ class Events extends React.Component {
 
   initStartEndTime = (startDate, endDate) => {
     this.setState({
-      startValue: startDate,
-      endValue: endDate
+      startValue: startDate.format(),
+      endValue: endDate.format()
     })
   }
 
@@ -110,32 +237,28 @@ class Events extends React.Component {
         <div id='main-view' className='right'>
           <div id='agenda'></div>
         </div>
-        {
-          this.state.sign ? (
-            <Button color="" onClick={() => {/*ApiCalendar.handleSignoutClick();*/}}>Sign out</Button>
-          ) : (
-            <Button color="danger" onClick={() => {/*ApiCalendar.handleAuthClick();*/}}>Sign in with Google</Button>
-          )
-        }
-        h: {this.state.sign}
+        <div className='clear'/>
 
         <AddCalendarDialog open={this.state.openAddCalendar} onClose={this.handleCloseAddCalendar}/>
         <AddEventDialog
           open={this.state.openAddEvent}
           onClose={this.handleCloseAddEvent}
-          startEnd={{
-            start: this.state.startValue,
-            end: this.state.endValue
-          }}
+          start={this.state.startValue}
+          end={this.state.endValue}
           openFullScreen={this.handleClickOpenAddEventFullScrenn}
         />
         <AddEventFullScreenDialog
           open={this.state.openAddEventFullScreen}
           onClose={this.handleCloseAddEventEventFullScreen}
-          startEnd={{
-            start: this.state.startValue,
-            end: this.state.endValue
-          }}
+          eventValue={this.state.eventValue}
+          start={this.state.startValue}
+          end={this.state.endValue}
+          eventId={this.state.eventId}
+          allday={this.state.allDay}
+          location={this.state.location}
+          repeat={this.state.repeat}
+          guests={this.state.guests}
+          groups={this.state.groups}
         />
       </div>
     );

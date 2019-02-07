@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from "prop-types";
+import axios from "axios";
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -24,41 +25,83 @@ export default class AddEventDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      eventValue: ''
+      eventValue: '',
+      startDate: '',
+      endDate: '',
+      opening: false
     };
   }
 
-  handleAddEvent = () => {
-    this.props.onClose && this.props.onClose();
-  }
-
-  handleChange = (event) => {
-    this.setState({eventValue: event.target.value})
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (!prevState.opening && nextProps.open) {
+      return {
+        opening: true,
+        startDate: nextProps.start,
+        endDate: nextProps.end
+      }
+    }
+    return null;
   }
 
   handleMoreDetails = () => {
-    this.props.onClose && this.props.onClose();
-    this.props.openFullScreen && this.props.openFullScreen();
+    this.props.openFullScreen && this.props.openFullScreen({
+      eventValue: this.state.eventValue,
+      startDate: this.state.startDate,
+      endDate: this.state.endDate
+    });
+    this.handleClose(false);
+  }
+
+  handleInputChange = (event, state) => {
+    this.setState({ [state]: event.target.value });
+  }
+
+  handleClose = (shouldRefresh) => {
+    this.setState({
+      eventValue: '',
+      opening: false
+    });
+    this.props.onClose && this.props.onClose(shouldRefresh);
+  }
+
+  handleSave = () => {
+    const {
+      eventValue,
+      location,
+      startDate,
+      endDate,
+      allday
+    } = this.state;
+
+    let event = {
+      description: eventValue,
+      location,
+      startdate: startDate,
+      enddate: endDate,
+      allday
+    }
+    let api = '/event/new';
+
+    axios({
+      method: 'post',
+      url: api,
+      data: event
+    })
+    .then(function(response) {
+      this.handleClose(true);
+    }.bind(this));
   }
 
   render() {
-    let startDate = this.props.startEnd.start && this.props.startEnd.start.format()
-    if (startDate && !startDate.includes('T')) {
-      startDate += 'T00:00';
-    }
-    let endDate = this.props.startEnd.end && this.props.startEnd.end.format()
-    if (endDate && !endDate.includes('T')) {
-      endDate += 'T00:00';
-    }
     return (
       <Dialog
         open={this.props.open}
-        onClose={this.props.onClose}
+        onClose={() => this.handleClose()}
         aria-labelledby="form-dialog-title"
         onEnter={this.handleEnter}
       >
         <DialogTitle id="form-dialog-title">{this.props.title}</DialogTitle>
-        <IconButton color="inherit" className="event close-button" onClick={this.props.onClose} aria-label="Close">
+        <IconButton color="inherit" className="event close-button" onClick={() => this.handleClose()} aria-label="Close">
           <CloseIcon />
         </IconButton>
         <DialogContent>
@@ -70,7 +113,8 @@ export default class AddEventDialog extends React.Component {
             }}
             inputProps={{
               autoFocus: true,
-              onChange: this.handleChange
+              value: this.state.eventValue,
+              onChange: (e) => this.handleInputChange(e, 'eventValue')
             }}
           />
         </DialogContent>
@@ -83,7 +127,8 @@ export default class AddEventDialog extends React.Component {
             }}
             inputProps={{
               type: "datetime-local",
-              defaultValue: startDate
+              value: this.state.startDate,
+              onChange: (e) => this.handleInputChange(e, 'startDate')
             }}
             labelProps={{
               shrink: true,
@@ -97,7 +142,8 @@ export default class AddEventDialog extends React.Component {
             }}
             inputProps={{
               type: "datetime-local",
-              defaultValue: endDate
+              value: this.state.endDate,
+              onChange: (e) => this.handleInputChange(e, 'endDate')
             }}
             labelProps={{
               shrink: true
@@ -109,7 +155,7 @@ export default class AddEventDialog extends React.Component {
             {this.props.moreLabel}
           </Button>
           <Button
-            onClick={this.handleAddEvent}
+            onClick={this.handleSave}
             color="info"
             disabled={!this.state.eventValue
               || this.state.eventValue.length === 0}

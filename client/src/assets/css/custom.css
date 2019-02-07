@@ -82,6 +82,15 @@
   border: 1px solid !important;
 }
 
+#events table {
+  margin-top: 0;
+}
+
+.fc-event {
+  cursor: pointer;
+}
+
+
 /** DIALOG **/
 .full-screen-dialog {
   width: calc(100% - 256px);

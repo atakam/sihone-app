@@ -11,6 +11,8 @@ const groupTypeRouter = require('./api/grouptype');
 const paymentTypeRouter = require('./api/paymenttype');
 const memberRouter = require('./api/member');
 
+const eventRouter = require('./api/event');
+
 const transactionRouter = require('./api/transaction');
 const accountRouter = require('./api/account');
 const activityRouter = require('./api/activity');
@@ -43,6 +45,8 @@ app.use('/group', groupRouter);
 app.use('/grouptype', groupTypeRouter);
 app.use('/paymenttype', paymentTypeRouter);
 app.use('/member', memberRouter);
+
+app.use('/event', eventRouter);
 
 app.use('/transaction', transactionRouter);
 app.use('/account', accountRouter);

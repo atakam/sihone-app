@@ -149,6 +149,30 @@ CREATE TABLE IF NOT EXISTS groupemail(
   FOREIGN KEY (groupid) REFERENCES groups(id)
 );
 
+CREATE TABLE IF NOT EXISTS events(
+  id               SERIAL PRIMARY KEY,
+  description      TEXT,
+  location         TEXT,
+  allday           BOOLEAN NOT NULL,
+  repeat           VARCHAR(10),
+  startdate        VARCHAR NOT NULL,
+  enddate          VARCHAR NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS memberevent(
+  memberid        INTEGER,
+  eventid         INTEGER,
+  FOREIGN KEY (eventid) REFERENCES events(id),
+  FOREIGN KEY (memberid) REFERENCES members(id)
+);
+
+CREATE TABLE IF NOT EXISTS groupevent(
+  groupid        INTEGER,
+  eventid         INTEGER,
+  FOREIGN KEY (eventid) REFERENCES events(id),
+  FOREIGN KEY (groupid) REFERENCES groups(id)
+);
+
 CREATE TABLE IF NOT EXISTS sms(
   id              SERIAL PRIMARY KEY,
   smstext       TEXT NOT NULL,

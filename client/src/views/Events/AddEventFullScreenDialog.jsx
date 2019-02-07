@@ -1,10 +1,12 @@
 import React from 'react';
+import axios from "axios";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import Slide from '@material-ui/core/Slide';
 import DialogContent from '@material-ui/core/DialogContent';
+import DialogActions from '@material-ui/core/DialogActions';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -13,12 +15,13 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import Save from "@material-ui/icons/Save";
-import Delete from "@material-ui/icons/Delete";
 import CloseIcon from '@material-ui/icons/Close';
+import Button from "components/CustomButtons/Button.jsx";
 
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import ToolBar from "components/ToolBar/ToolBar.jsx";
+import MemberSelect from '../utils/MemberSelect';
+import GroupSelect from '../utils/GroupSelect';
 
 const styles = {
   appBar: {
@@ -58,53 +61,201 @@ class AddEventFullScreenDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      repeat: 0,
-      tabValue: 'details'
+      repeat: 'none',
+      tabValue: 'details',
+
+      eventValue: '',
+      startDate: '',
+      endDate: '',
+
+      location: '',
+
+      guests: [],
+      groups: [],
+      opening: false,
+
+      allday: false
     };
   }
 
-  handleAddEvent = () => {
-    this.props.onClose && this.props.onClose();
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (!prevState.opening && nextProps.open) {
+      if (nextProps.eventId) {
+        return {
+          eventValue: nextProps.eventValue,
+          opening: true,
+          startDate: nextProps.start,
+          endDate: nextProps.end,
+          allday: nextProps.allday,
+          location: nextProps.location,
+          repeat: nextProps.repeat || 'none',
+          guests: nextProps.guests,
+          groups: nextProps.groups
+
+        }
+      } else {
+        return {
+          eventValue: nextProps.eventValue,
+          opening: true,
+          startDate: nextProps.start,
+          endDate: nextProps.end
+        }
+      }
+    }
+    return null;
   }
 
-  handleRepeatChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
+  handleClose = (shouldRefresh) => {
+    this.setState({
+      opening: false,
+      eventValue: '',
+      location: '',
+      startDate: '',
+      endDate: '',
+      allday: false,
+      repeat: 'none',
+      guests: [],
+      groups: []
+    });
+    this.props.onClose && this.props.onClose(shouldRefresh);
+  }
 
   handleTabChange = (event, value) => {
     this.setState({ tabValue: value });
   };
 
-  render() {
-    let startDate = this.props.startEnd.start && this.props.startEnd.start.format()
-    if (startDate && !startDate.includes('T')) {
-      startDate += 'T00:00';
+  handleInputChange = (event, state) => {
+    this.setState({ [state]: event.target.value });
+  }
+
+  handleOnCheck = (e, checked, state) => {
+    this.setState({
+      [state]: checked
+    });
+  }
+
+  handleMemberInvite = () => value => {
+    const guests = this.state.guests;
+    if (this.checkIfObjectInArray(value, guests) === -1) {
+      guests.push(value);
+      this.setState({
+        guests
+      });
     }
-    let endDate = this.props.startEnd.end && this.props.startEnd.end.format()
-    if (endDate && !endDate.includes('T')) {
-      endDate += 'T00:00';
+  }
+
+  deleteGuest = (guest) => {
+    const guests = this.state.guests;
+    const index = this.checkIfObjectInArray(guest, guests);
+    if (index > -1) {
+      guests.splice(index, 1);
+      this.setState({
+        guests
+      });
+    }
+  }
+
+  handleGroupInvite = () => value => {
+    const groups = this.state.groups;
+    if (this.checkIfObjectInArray(value, groups) === -1) {
+      groups.push(value);
+      this.setState({
+        groups
+      });
+    }
+  }
+
+  deleteGroup = (group) => {
+    const groups = this.state.groups;
+    const index = this.checkIfObjectInArray(group, groups);
+    if (index > -1) {
+      groups.splice(index, 1);
+      this.setState({
+        groups
+      });
+    }
+  }
+
+  checkIfObjectInArray = (obj, array) => {
+    let found = -1;
+    array.map((o, i) => {
+      if (o.id === obj.id) {
+        found = i;
+      }
+      return null;
+    });
+    return found;
+  }
+
+  handleDelete = () => {
+    let event = {
+      eventid: this.props.eventId
+    }
+    let api = '/event/delete';
+
+    axios({
+      method: 'post',
+      url: api,
+      data: event
+    })
+    .then(function(response) {
+      this.handleClose(true);
+    }.bind(this));
+  }
+
+  handleSave = () => {
+    const {
+      eventValue,
+      location,
+      startDate,
+      endDate,
+      allday,
+      repeat,
+      guests,
+      groups
+    } = this.state;
+
+    let event = {
+      description: eventValue,
+      location,
+      startdate: startDate,
+      enddate: endDate,
+      allday,
+      repeat,
+      guests,
+      groups
+    }
+    let api = '/event/new';
+    if (this.props.eventId){
+      event = {
+        eventid: this.props.eventId,
+        description: eventValue,
+        location,
+        startdate: startDate,
+        enddate: endDate,
+        allday,
+        repeat,
+        guests,
+        groups
+      }
+      api = '/event/update';
     }
 
+    axios({
+      method: 'post',
+      url: api,
+      data: event
+    })
+    .then(function(response) {
+      this.handleClose(true);
+    }.bind(this));
+  }
+
+  render() {
     const toolBarIcons = (
       <span>
-        <Tooltip title="Delete">
-          <IconButton
-            onClick={this.handleMenu}
-            color="inherit"
-          >
-            <Delete />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Save">
-          <IconButton
-            onClick={this.handleMenu}
-            color="inherit"
-          >
-            <Save />
-          </IconButton>
-        </Tooltip>
         <Tooltip title="Cancel">
-          <IconButton color="inherit" onClick={this.props.onClose} aria-label="Close">
+          <IconButton color="inherit" onClick={() => this.handleClose()} aria-label="Close">
             <CloseIcon />
           </IconButton>
         </Tooltip>
@@ -115,13 +266,13 @@ class AddEventFullScreenDialog extends React.Component {
       <Dialog
         fullScreen
         open={this.props.open}
-        onClose={this.props.onClose}
+        onClose={() => this.handleClose()}
         TransitionComponent={Transition}
         className="full-screen-dialog"
       >
         <ToolBar
           toolBarIcons={toolBarIcons}
-          title={this.props.title}
+          title={this.props.eventId ? 'Edit Event' : this.props.title}
         />
         <DialogContent>
           <CustomInput
@@ -131,9 +282,16 @@ class AddEventFullScreenDialog extends React.Component {
               fullWidth: true
             }}
             inputProps={{
-              autoFocus: true
+              autoFocus: true,
+              value: this.state.eventValue,
+              onChange: (e) => this.handleInputChange(e, 'eventValue')
             }}
           />
+          <Checkbox
+            onChange={(e, checked) => { this.handleOnCheck(e, checked, 'allday'); }}
+            checked={this.state.allday}
+          /> All day
+          
           <CustomInput
             labelText={this.props.startLabel}
             id="name"
@@ -141,11 +299,14 @@ class AddEventFullScreenDialog extends React.Component {
               fullWidth: false
             }}
             inputProps={{
+              style: {marginLeft: '40px'},
               type: "datetime-local",
-              defaultValue: startDate
+              value: this.state.startDate.includes('T') ? this.state.startDate : this.state.startDate + 'T00:00',
+              onChange: (e) => this.handleInputChange(e, 'startDate')
             }}
             labelProps={{
-              shrink: true,
+              style: {marginLeft: '40px'},
+              shrink: true
             }}
           />
           <CustomInput
@@ -156,28 +317,28 @@ class AddEventFullScreenDialog extends React.Component {
             }}
             inputProps={{
               type: "datetime-local",
-              defaultValue: endDate
+              value: this.state.endDate.includes('T') ? this.state.endDate : this.state.endDate + 'T00:00',
+              onChange: (e) => this.handleInputChange(e, 'endDate')
             }}
             labelProps={{
               shrink: true
             }}
           />
-          <Checkbox /> All day
           <Select
             value={this.state.repeat}
-            onChange={this.handleRepeatChange}
+            onChange={(e) => this.handleInputChange(e, 'repeat')}
             inputProps={{
               name: 'repeat',
-              id: 'repeat',
+              id: 'repeat'
             }}
             className="repeat-select"
           >
-            <MenuItem value={0}>Does Not repeat</MenuItem>
-            <MenuItem value={1}>Daily</MenuItem>
-            <MenuItem value={2}>Weekly</MenuItem>
-            <MenuItem value={3}>Bi Weekly</MenuItem>
-            <MenuItem value={4}>Monthly</MenuItem>
-            <MenuItem value={5}>Yearly</MenuItem>
+            <MenuItem value={'none'}>Does Not repeat</MenuItem>
+            <MenuItem value={'daily'}>Daily</MenuItem>
+            <MenuItem value={'weekly'}>Weekly</MenuItem>
+            {/* <MenuItem value={'biweekly'}>Bi Weekly</MenuItem>
+            <MenuItem value={'monthly'}>Monthly</MenuItem>
+            <MenuItem value={'yearly'}>Yearly</MenuItem> */}
           </Select>
           <div className="clear" />
           <Tabs
@@ -204,49 +365,76 @@ class AddEventFullScreenDialog extends React.Component {
               formControlProps={{
                 fullWidth: true
               }}
-            />
-            <CustomInput
-              labelText={'Event Description'}
-              id="description"
-              formControlProps={{
-                fullWidth: true
-              }}
               inputProps={{
-                multiline: true
+                value: this.state.location,
+                onChange: (e) => this.handleInputChange(e, 'location')
               }}
             />
           </TabContainer>}
           {this.state.tabValue === 'guests' && <TabContainer>
-            <CustomInput
-              labelText={'Add Guest (Group name or member name)'}
-              id="add-guest"
-              formControlProps={{
-                fullWidth: true
-              }}
-            />
-            <div>
-              <p>
-                <IconButton color="inherit" aria-label="Delete">
-                  <CloseIcon />
-                </IconButton>
-                Guest 1
-              </p>
-              <p>
-                <IconButton color="inherit" aria-label="Delete">
-                  <CloseIcon />
-                </IconButton>
-                Guest 2
-              </p>
-              <p>
-                <IconButton color="inherit" aria-label="Delete">
-                  <CloseIcon />
-                </IconButton>
-                Guest 3
-              </p>
+            <div style={{width: 'calc(50% - 20px)', float: 'left', padding: '0 10px'}}>
+              <MemberSelect
+                placeholder="Invite Members"
+                value={''}
+                onChange={this.handleMemberInvite()}
+              />
+              <div>
+                {
+                  this.state.guests.map((guest, index) => {
+                    return (
+                      <p key={index}>
+                        <IconButton color="inherit" aria-label="Delete" onClick={() => this.deleteGuest(guest)}>
+                          <CloseIcon />
+                        </IconButton>
+                        <span>{guest.label}</span>
+                      </p>
+                    )
+                  })
+                }
+              </div>
+            </div>
+
+            <div style={{width: 'calc(50% - 20px)', float: 'left', padding: '0 10px'}}>
+              <GroupSelect
+                placeholder="Invite Groups"
+                value={''}
+                onChange={this.handleGroupInvite()}
+              />
+              <div>
+                {
+                  this.state.groups.map((group, index) => {
+                    return (
+                      <p key={index}>
+                        <IconButton color="inherit" aria-label="Delete" onClick={() => this.deleteGroup(group, 'groups')}>
+                          <CloseIcon />
+                        </IconButton>
+                        <span>{group.label}</span>
+                      </p>
+                    )
+                  })
+                }
+              </div>
             </div>
           </TabContainer>}
           <div className="clear" />
         </DialogContent>
+        <DialogActions>
+          {
+            this.props.eventId && (
+              <Button onClick={this.handleDelete} color="danger" className="left">
+                Delete
+              </Button>
+            )
+          }
+          <Button
+            onClick={this.handleSave}
+            color="info"
+            disabled={!this.state.eventValue
+              || this.state.eventValue.length === 0}
+          >
+            Save
+          </Button>
+        </DialogActions>
       </Dialog>
     );
   }
@@ -261,7 +449,9 @@ AddEventFullScreenDialog.propTypes = {
   eventLabel: PropTypes.string,
   startLabel: PropTypes.string,
   endLabel: PropTypes.string,
-  startEnd: PropTypes.object
+  startEnd: PropTypes.object,
+  eventValue: PropTypes.string,
+  allDay: PropTypes.bool
 };
 
 export default withStyles(styles)(AddEventFullScreenDialog);
