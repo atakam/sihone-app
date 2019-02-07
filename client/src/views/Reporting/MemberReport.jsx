@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import request from "request";
+import axios from "axios";
 // @material-ui/core components
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
@@ -255,14 +255,10 @@ class MemberReport extends React.Component {
       grouptypeCheck
     } = this.state;
 
-    let options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/report/member',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: {
+      data: {
         gender,
         marital,
         role,
@@ -311,23 +307,13 @@ class MemberReport extends React.Component {
         groupnameCheck,
         grouptypeCheck
       }
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
-      if (response.statusCode === 200) {
-        this.setState({
-          notificationOpen: true
-        });
-        Utils.exportCSVFile(JSON.parse(body).header, JSON.parse(body).report, 'members');
-      } else {
-        this.setState({
-          notificationErrorOpen: true
-        });
-      }
-      //window.location.reload();
-      console.log(body);
-    }.bind(this));
+    })
+    .then(function(response, body) {
+      this.setState({
+        notificationOpen: true
+      });
+      Utils.exportCSVFile(JSON.parse(body).header, JSON.parse(body).report, 'members');
+    });
   }
 
   render () {

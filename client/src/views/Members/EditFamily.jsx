@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import request from "request";
+import axios from "axios";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -98,24 +98,17 @@ class EditFamily extends React.Component {
       phone: homephone
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/family/update',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: family
-    };
-
-    request (options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: family
+    })
+    .then(function(response, body) {
       this.setState({
         notificationOpen: true
       });
       this.props.familyId && this.fetchFamily();
       this.props.familyId && this.fetchMembersByFamily();
-      console.log(body);
     }.bind(this));
   }
 

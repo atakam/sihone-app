@@ -1,5 +1,5 @@
 import React from "react";
-import request from "request";
+import axios from "axios";
 
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -97,19 +97,12 @@ class SmsView extends React.Component {
             special
         } = this.props;
 
-        var options = {
-            method: 'POST',
+        axios({
+            method: 'post',
             url: '/sms/new',
-            headers: 
-            { 
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            form: {smstext: this.state.smstext, memberid: memberId, groupid: groupId, special: special ? special.value : null}
-        };
-      
-        request(options, function (error, response, body) {
-            if (error) throw new Error(error);
-            console.log(body);
+            data: {smstext: this.state.smstext, memberid: memberId, groupid: groupId, special: special ? special.value : null}
+          })
+          .then(function(response, body) {
             let json = JSON.parse(body)
             json = JSON.parse(json.result)
             if (json.messages[0].status === '0') {
@@ -126,7 +119,7 @@ class SmsView extends React.Component {
                     ' OR the phone number is not a valid North American number.'
                 });
             }
-        }.bind(this));
+          }.bind(this));
     }
 
     setBalance = (smsbalance) => {
@@ -134,18 +127,13 @@ class SmsView extends React.Component {
           const settings = {
             smsbalance
           }
-      
-          var options = {
-            method: 'POST',
+
+          axios({
+            method: 'post',
             url: '/settings/sms/balance',
-            headers: 
-            { 
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            form: settings
-          };
-      
-          request(options, function (error, response, body) {});
+            data: settings
+          })
+          .then(function(response, body) {});
     }
 
     render(){
@@ -185,7 +173,7 @@ class SmsView extends React.Component {
                             <Button
                             color="info"
                             className='add-button create right'
-                            onClick={() => this.handleSend()}
+                            onClick={this.handleSend.bind(this)}
                             disabled={this.state.smstext.length === 0}>
                             Send
                             </Button>

@@ -1,5 +1,5 @@
 
-import request from "request";
+import axios from "axios";
 
 class Utils {
     static arrayUnique(array) {
@@ -90,20 +90,13 @@ class Utils {
             descriptiontext
         }
 
-        var options = {
-          method: 'POST',
-          url: '/activity/new',
-          headers: 
-          { 
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          form: activity
-        };
-
-        request(options, function (error, response, body) {
-          if (error) throw new Error(error);
-          console.log(body);
-        });
+        axios({
+            method: 'post',
+            url: '/activity/new',
+            data: activity
+          })
+          .then(function(response, body) {}
+        );
     }
 
     static isAdministrator(role) {

@@ -1,6 +1,5 @@
 import React from "react";
-
-import request from "request";
+import axios from "axios";
 // @material-ui/core components
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -50,24 +49,17 @@ class Membership extends React.Component {
       grouptype
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/grouptype/new',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: grouptypeObj
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: grouptypeObj
+    })
+    .then(function(response, body) {
       this.setState({
         grouptype: ''
       });
       this.fetchGroupTypes();
-      console.log(body);
-    }.bind(this));
+    });
   }
 
   saveMemberSettings = (event) => {
@@ -86,22 +78,15 @@ class Membership extends React.Component {
       memberdefaultpassword
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/settings/member/update',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: settings
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: settings
+    })
+    .then(function(response, body) {
       this.props.openNotification && this.props.openNotification();
       this.fetchSettings();
-      console.log(body);
-    }.bind(this));
+    });
   }
 
   fetchGroupTypes = () => {
@@ -148,27 +133,14 @@ class Membership extends React.Component {
   }
 
   deleteGroupType = (grouptypeid) => {
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/grouptype/delete',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: { grouptypeid }
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: { grouptypeid }
+    })
+    .then(function(response, body) {
       this.fetchGroupTypes();
-
-      if (JSON.parse(body).error){
-        this.setState({
-          notificationGroupTypeError: true
-        });
-      }
-      console.log('body', body);
-    }.bind(this));
+    });
   }
 
   render () {

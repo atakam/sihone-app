@@ -1,5 +1,5 @@
 import React from "react";
-import request from "request";
+import axios from "axios";
 
 import Utils from "../../utils/Utils";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -165,36 +165,18 @@ class ComposeEditor extends React.Component {
     const website = window.location.protocol + '//' + window.location.host + window.location.pathname;
     const template = Utils.getEmailTemplates(churchname, subject, emailfooter, website, '/settings/logo')[0];
     const emailBody = template.before + emailContent + template.after;
-    
-    var options = {
-      method: 'POST',
+
+    axios({
+      method: 'post',
       url: '/email/new',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: {subject: subject, emailtext: emailBody, memberids, groupids, specials: _specials}
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
-      console.log(body);
-      const json = JSON.parse(body)
-      if (json.success) {
-        this.reset();
-        this.setState({
-          snackMessage: json.message,
-          openSuccess: true
-        });
-
-        // Activity
-        //Utils.addActivity(13, 'New email sent!');
-      } else {
-        this.setState({
-          snackMessage: json.message,
-          openError: true
-        });
-      }
+      data: {subject: subject, emailtext: emailBody, memberids, groupids, specials: _specials}
+    })
+    .then(function(response, body) {
+      this.reset();
+      this.setState({
+        snackMessage: 'Successfulluy sent.',
+        openSuccess: true
+      });
     }.bind(this));
   }
 

@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-
-import request from "request";
+import axios from "axios";
 // core components
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
@@ -87,22 +86,15 @@ class CreateGroup extends React.Component {
       grouptypeid
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/group/update',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: group
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: group
+    })
+    .then(function(response, body) {
       this.setState({
         notificationOpen: true
       });
-      console.log(body);
     }.bind(this));
   }
 
@@ -118,23 +110,16 @@ class CreateGroup extends React.Component {
       grouptypeid
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/group/new',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: group
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: group
+    })
+    .then(function(response, body) {
       this.setState({
         notificationNewOpen: true
       });
       this.reset();
-      console.log(body);
     }.bind(this));
   }
 
@@ -178,9 +163,12 @@ class CreateGroup extends React.Component {
 
   handleDelete = (event) => {
     event.preventDefault();
-    this.setState({
+    this.state.members.length === 0 && this.setState({
       deleteAction: true
     })
+    this.setState({
+      notificationDeleteErrorOpen: this.state.members.length > 0
+    });
   }
 
   closeDelete = () => {
@@ -194,24 +182,16 @@ class CreateGroup extends React.Component {
       groupid: this.props.groupId
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/group/delete',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: group
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: group
+    })
+    .then(function(response, body) {
       this.setState({
-        notificationDeleteErrorOpen: response.statusCode !== 200,
         deleteAction: false
       });
-      response.statusCode === 200 && this.props.onClose();
-      console.log(response);
+      this.props.onClose && this.props.onClose();
     }.bind(this));
   }
 
@@ -242,24 +222,17 @@ class CreateGroup extends React.Component {
       memberid: this.state.member.value
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/group/addMember',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: membergroup
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: membergroup
+    })
+    .then(function(response, body) {
       this.setState({
         notificationAddOpen: true,
         member: ''
       });
       this.fetchMembersByGroup();
-      console.log(body);
     }.bind(this));
   }
 
@@ -269,25 +242,18 @@ class CreateGroup extends React.Component {
       memberid
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/group/removeMember',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: membergroup
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: membergroup
+    })
+    .then(function(response, body) {
       this.setState({
         notificationRemoveOpen: true,
         deleteAction: false,
         member: ''
       });
       this.fetchMembersByGroup();
-      console.log(body);
     }.bind(this));
   }
 
@@ -420,7 +386,7 @@ class CreateGroup extends React.Component {
               <CardFooter>
                 {
                   this.props.hasOwnProperty('groupId') ? (
-                    <Button color="danger" className='add-button create' onClick={this.handleDelete}>
+                    <Button color="danger" className='add-button create' onClick={this.handleDelete.bind(this)}>
                       Delete
                     </Button>
                   ) : (

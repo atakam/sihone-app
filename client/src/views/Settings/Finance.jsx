@@ -1,6 +1,5 @@
 import React from "react";
-
-import request from "request";
+import axios from "axios";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -41,26 +40,17 @@ class Finance extends React.Component {
   }
 
   deletePaymentType = (paymenttypeid) => {
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/paymenttype/delete',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: { paymenttypeid }
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: { paymenttypeid }
+    })
+    .then(function(response, body) {
       this.fetchPaymentTypes();
-
-      if (JSON.parse(body).error){
-        this.setState({
-          notificationDeleteError: true
-        });
-      }
-    }.bind(this));
+      this.setState({
+        notificationDeleteError: true
+      });
+    });
   }
 
   handleSavePaymentType = (event) => {
@@ -72,25 +62,18 @@ class Finance extends React.Component {
     const paymenttypeObj = {
       paymenttype
     }
-
-    var options = {
-      method: 'POST',
+    
+    axios({
+      method: 'post',
       url: '/paymenttype/new',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: paymenttypeObj
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: paymenttypeObj
+    })
+    .then(function(response, body) {
       this.fetchPaymentTypes();
       this.setState({
         paymenttype: ''
       });
-      console.log(body);
-    }.bind(this));
+    });
   }
 
   fetchFunds = () => {
@@ -106,18 +89,12 @@ class Finance extends React.Component {
   }
 
   deleteFund = (fundid) => {
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/fund/delete',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: { fundid }
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: { fundid }
+    })
+    .then(function(response, body) {
       this.fetchFunds();
 
       if (JSON.parse(body).error){
@@ -125,7 +102,7 @@ class Finance extends React.Component {
           notificationDeleteError: true
         });
       }
-    }.bind(this));
+    });
   }
 
   handleSaveFund = (event) => {
@@ -138,25 +115,18 @@ class Finance extends React.Component {
       fundname: fund
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/fund/new',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: fundObj
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: fundObj
+    })
+    .then(function(response, body) {
       this.fetchFunds();
       this.setState({
         paymenttype: '',
         fund: ''
       });
-      console.log(body);
-    }.bind(this));
+    });
   }
 
   componentDidMount() {

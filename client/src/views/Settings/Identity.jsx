@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from 'prop-types';
-
-import request from "request";
+import axios from "axios";
 // @material-ui/core components
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
@@ -100,22 +99,14 @@ class Identity extends React.Component {
       welcome
     };
 
-    let options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/settings/identity/update',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: settings
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: settings
+    })
+    .then(function(response, body) {
       this.props.openNotification && this.props.openNotification();
-      //window.location.reload();
-      console.log(body);
-    }.bind(this));
+    });
   }
 
   render () {

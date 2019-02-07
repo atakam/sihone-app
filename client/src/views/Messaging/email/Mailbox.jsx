@@ -1,6 +1,5 @@
 import React from "react";
-import request from "request";
-
+import axios from "axios";
 import Email from "./Email";
 import EmailList from "./EmailList";
 import NoneSelected from "./NoneSelected";
@@ -46,23 +45,14 @@ class Mailbox extends React.Component {
   }
 
   deleteEmail = (emailid) => {
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/email/delete',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: { emailid }
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: { emailid }
+    })
+    .then(function(response, body) {
       this.closeDelete();
       this.props.onDelete && this.props.onDelete();
-
-      // Activity
-      //Utils.addActivity(13, 'Email was deleted!');
     }.bind(this));
   }
 

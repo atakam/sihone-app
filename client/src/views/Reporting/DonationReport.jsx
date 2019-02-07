@@ -1,6 +1,5 @@
 import React from "react";
-
-import request from "request";
+import axios from "axios";
 // @material-ui/core components
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -147,56 +146,42 @@ class DonationReport extends React.Component {
       accountCheck
     } = this.state;
 
-    let options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/report/donation',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: {
+      data: {
         firstname,
-      lastname,
-      paydatefrom,
-      paydateto,
-      paytype,
-      fundname,
-      amountfrom,
-      amountto,
-      envelope,
-      envelope_status,
-      envelope_datefrom,
-      envelope_dateto,
-      account,
+        lastname,
+        paydatefrom,
+        paydateto,
+        paytype,
+        fundname,
+        amountfrom,
+        amountto,
+        envelope,
+        envelope_status,
+        envelope_datefrom,
+        envelope_dateto,
+        account,
 
-      firstNameCheck,
-      lastNameCheck,
-      paydateCheck,
-      paytypeCheck,
-      fundnameCheck,
-      amountCheck,
-      envelopeCheck,
-      envelope_statusCheck,
-      envelope_dateCheck,
-      accountCheck
+        firstNameCheck,
+        lastNameCheck,
+        paydateCheck,
+        paytypeCheck,
+        fundnameCheck,
+        amountCheck,
+        envelopeCheck,
+        envelope_statusCheck,
+        envelope_dateCheck,
+        accountCheck
       }
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
-      if (response.statusCode === 200) {
-        this.setState({
-          notificationOpen: true
-        });
-        Utils.exportCSVFile(JSON.parse(body).header, JSON.parse(body).report, 'donations');
-      } else {
-        this.setState({
-          notificationErrorOpen: true
-        });
-      }
-      //window.location.reload();
-      console.log(body);
-    }.bind(this));
+    })
+    .then(function(response, body) {
+      this.setState({
+        notificationOpen: true
+      });
+      Utils.exportCSVFile(JSON.parse(body).header, JSON.parse(body).report, 'donations');
+    });
   }
 
   render () {

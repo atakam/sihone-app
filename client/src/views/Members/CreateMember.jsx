@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-
-import request from "request";
+import axios from "axios";
 // @material-ui/core components
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
@@ -181,22 +180,15 @@ class CreateMember extends React.Component {
       homephone
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/member/update',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: member
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: member
+    })
+    .then(function(response, body) {
       this.setState({
         notificationOpen: true
       });
-      console.log(body);
     }.bind(this));
   }
 
@@ -248,24 +240,16 @@ class CreateMember extends React.Component {
       homephone
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/member/new',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: member
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: member
+    })
+    .then(function(response, body) {
       this.setState({
         notificationNewOpen: true
       });
       this.reset();
-      //this.props.onSave && this.props.onSave();
-      console.log(body);
     }.bind(this));
   }
 
@@ -333,24 +317,17 @@ class CreateMember extends React.Component {
       memberid: this.props.memberId
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/member/delete',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: group
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: group
+    })
+    .then(function(response, body) {
       this.setState({
         notificationDeleteErrorOpen: response.statusCode !== 200,
         deleteAction: false
       });
-      response.statusCode === 200 && this.props.onClose();
-      console.log(body);
+      this.props.onClose && this.props.onClose();
     }.bind(this));
   }
 
@@ -360,25 +337,18 @@ class CreateMember extends React.Component {
       memberid: this.props.memberId,
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/group/removeGroup',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: membergroup
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: membergroup
+    })
+    .then(function(response, body) {
       this.setState({
         notificationRemoveOpen: true,
         deleteAction: false,
         member: ''
       });
       this.fetchGroupsByMember();
-      console.log(body);
     }.bind(this));
   }
 
@@ -400,24 +370,17 @@ class CreateMember extends React.Component {
       memberid: this.props.memberId
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/group/addMember',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: membergroup
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: membergroup
+    })
+    .then(function(response, body) {
       this.setState({
         notificationAddOpen: true,
         member: ''
       });
       this.fetchGroupsByMember();
-      console.log(body);
     }.bind(this));
   }
 

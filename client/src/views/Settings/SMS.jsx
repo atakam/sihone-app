@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types';
 
-import request from "request";
+import axios from "axios";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -63,23 +63,16 @@ class SMS extends React.Component {
       smsnumber,
       smsbalance
     }
-
-    var options = {
-      method: 'POST',
+    
+    axios({
+      method: 'post',
       url: '/settings/sms/update',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: settings
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: settings
+    })
+    .then(function(response, body) {
       this.props.openNotification && this.props.openNotification();
       this.fetchSettings();
-      console.log(body);
-    }.bind(this));
+    });
   }
 
   render () {

@@ -1,6 +1,6 @@
 import React from "react";
 
-import request from "request";
+import axios from "axios";
 // @material-ui/core components
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -102,14 +102,10 @@ class AccountReport extends React.Component {
       amountCheck
     } = this.state;
 
-    let options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/report/account',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: {
+      data: {
         description,
         transactiontype,
         transactiondatefrom,
@@ -122,23 +118,13 @@ class AccountReport extends React.Component {
         transactiondateCheck,
         amountCheck
       }
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
-      if (response.statusCode === 200) {
-        this.setState({
-          notificationOpen: true
-        });
-        Utils.exportCSVFile(JSON.parse(body).header, JSON.parse(body).report, 'accounts');
-      } else {
-        this.setState({
-          notificationErrorOpen: true
-        });
-      }
-      //window.location.reload();
-      console.log(body);
-    }.bind(this));
+    })
+    .then(function(response, body) {
+      this.setState({
+        notificationOpen: true
+      });
+      Utils.exportCSVFile(JSON.parse(body).header, JSON.parse(body).report, 'accounts');
+    });
   }
 
   render () {
@@ -342,7 +328,7 @@ class AccountReport extends React.Component {
                 <Button color="danger" className='add-button create' onClick={this.handleClear}>
                   Clear
                 </Button>
-                <Button color="info" className='add-button create'  onClick={this.generateReport} disabled={!enabled}>
+                <Button color="info" className='add-button create'  onClick={this.generateReport.bind(this)} disabled={!enabled}>
                   Generate
                 </Button>
               </CardFooter>

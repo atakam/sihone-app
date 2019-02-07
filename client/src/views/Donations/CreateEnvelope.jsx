@@ -161,6 +161,7 @@ class CreateEnvelope extends React.Component {
         deleteAction: false
       });
       this.props.onClose && this.props.onClose();
+      response.statusCode === 200 && this.props.onClose();
     }.bind(this));
   }
 
