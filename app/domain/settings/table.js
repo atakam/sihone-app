@@ -36,6 +36,29 @@ class SettingsTable {
     });
   }
 
+  static getCounts() {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT
+         (SELECT COUNT(*) FROM members) AS member,
+         (SELECT COUNT(*) FROM   groups) AS group,
+         (SELECT COUNT(*) FROM   families) AS family,
+         (SELECT COUNT(*) FROM members WHERE (birthdate > NOW() - interval '18 year') ) AS children
+        FROM settings`,
+        (error, response) => {
+          if (error) return reject(error);
+          console.log('COUNT:', response.rows)
+          resolve({
+            member: response.rows[0].member,
+            group: response.rows[0].group,
+            family: response.rows[0].family,
+            children: response.rows[0].children
+          });
+        }
+      )
+    });
+  }
+
   static updateSettings(settings) { 
     const {
       churchname,

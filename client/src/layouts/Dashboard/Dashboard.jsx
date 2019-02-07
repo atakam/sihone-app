@@ -99,7 +99,7 @@ const charts = [
         showGrid: false
       },
       low: 0,
-      high: 1000,
+      high: 0,
       chartPadding: {
         top: 0,
         right: 5,

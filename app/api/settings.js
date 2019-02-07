@@ -172,4 +172,13 @@ router.get('/logo', (req, res, next) => {
     });
 });
 
+router.get('/counts', (req, res, next) => {
+    SettingsTable.getCounts()
+    .then(({member, group, family, children}) => res.json({
+        message: 'successfully found all counts',
+        counts: {member, group, family, children}
+    }))
+    .catch(error => next(error));
+});
+
 module.exports = router;

@@ -52,62 +52,22 @@ class Dashboard extends React.Component {
   componentDidMount() {
     if (!Utils.isMember(this.props.account.role) && !Utils.isVisitor(this.props.account.role)){
       this.getMonthlyBreakdown();
-      this.fetchFamilies();
-      this.fetchGroups();
-      this.fetchMembers();
+      this.fetchCounts();
     }
     this.fetchSettings();
   }
 
-  fetchMembers = () => {
-    fetch('/member/findAll')
-    .then(response => response.json())
-    .then(json => {
-      console.log('json', json);
-      const children = (
-        json.members.filter((member) => {
-          if (member.birthdate) {
-            const bdate = member.birthdate.split('T')[0].split('-');
-            return Math.ceil((new Date() - new Date(Number(bdate[0]), Number(bdate[1])-1, Number(bdate[2]))) / (1000 * 3600 * 24)) / 365 < 18;
-          } else return false;
-        })
-      )
-
-      let dataCount = this.state.dataCount;
-      dataCount.members = json.members.length;
-      dataCount.children = children.length;
-
-      this.setState({
-        dataCount: dataCount
-      })
-    })
-    .catch(error => console.log('error', error));
-  }
-
-  fetchFamilies = () => {
-    fetch('/family/findAll')
+  fetchCounts = () => {
+    fetch('/settings/counts')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
 
       let dataCount = this.state.dataCount;
-      dataCount.families = json.families.length;
-
-      this.setState({
-        dataCount: dataCount
-      })
-    })
-    .catch(error => console.log('error', error));
-  }
-
-  fetchGroups = () => {
-    fetch('/group/findAll')
-    .then(response => response.json())
-    .then(json => {
-      console.log('json', json);
-
-      let dataCount = this.state.dataCount;
-      dataCount.groups = json.groups.length;
+      dataCount.members = json.counts.member;
+      dataCount.groups = json.counts.group;
+      dataCount.families = json.counts.family;
+      dataCount.children = json.counts.children;
 
       this.setState({
         dataCount: dataCount
@@ -140,8 +100,10 @@ class Dashboard extends React.Component {
         }
         return null;
       });
+
       this.setState({
-        dataSeries: series
+        dataSeries: series,
+        high: Math.max.apply(null, series) + 200
       })
     })
     .catch(error => console.log('error', error));
@@ -199,6 +161,7 @@ class Dashboard extends React.Component {
             { (this.state.dataSeries && this.state.dataSeries.length) > 0 && (
               charts.map((chart, key) => {
               chart.data.series = [this.state.dataSeries];
+              chart.options.high = this.state.high;
               return (
                 <GridItem xs={12} sm={12} md={6} key={key}>
                   <Card chart>
