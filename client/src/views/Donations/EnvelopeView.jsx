@@ -64,7 +64,7 @@ class EnvelopeView extends React.Component {
           title={this.props.title}
         />
         <DialogContent>
-          <CreateEnvelope envelopeId={this.props.envelopeId} onClose={this.props.onClose}/>
+        <CreateEnvelope envelopeId={this.props.envelopeId} onClose={this.props.onClose}/>
         </DialogContent>
       </Dialog>
     );

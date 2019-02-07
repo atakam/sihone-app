@@ -63,7 +63,10 @@ class AccountView extends React.Component {
           title={this.props.title}
         />
         <DialogContent>
-          <CreateAccount accountId={this.props.accountId} onClose={this.props.onClose}/>
+          <CreateAccount
+            accountId={this.props.accountId}
+            onClose={this.props.onClose}
+          />
         </DialogContent>
       </Dialog>
     );

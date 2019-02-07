@@ -42,7 +42,7 @@ class AccountList extends React.Component {
       console.log('json', json);
       this.setState({
         accounts: json.accounts
-      })
+      });
     })
     .catch(error => console.log('error', error));
   }

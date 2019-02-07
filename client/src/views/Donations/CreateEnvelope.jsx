@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-
-import request from "request";
+import axios from "axios";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -112,18 +111,12 @@ class CreateEnvelope extends React.Component {
       api = '/envelope/update';
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: api,
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: envelope
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: envelope
+    })
+    .then(function(response, body) {
       this.setState({
         notificationOpen: true
       });
@@ -134,15 +127,17 @@ class CreateEnvelope extends React.Component {
           isopen: 1
         });
       }
-      console.log(body);
     }.bind(this));
   }
 
   handleDelete = (event) => {
     event.preventDefault();
-    this.setState({
+    this.state.donationNumber === 0 && this.setState({
       deleteAction: true
     })
+    this.setState({
+      notificationDeleteErrorOpen: this.state.donationNumber > 0
+    });
   }
 
   closeDelete = () => {
@@ -156,24 +151,16 @@ class CreateEnvelope extends React.Component {
       envelopeid: this.props.envelopeId
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/envelope/delete',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: envelope
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: envelope
+    })
+    .then(function(response, body) {
       this.setState({
-        notificationDeleteErrorOpen: response.statusCode !== 200,
         deleteAction: false
       });
-      response.statusCode === 200 && this.props.onClose();
-      console.log(body);
+      this.props.onClose && this.props.onClose();
     }.bind(this));
   }
 
@@ -185,6 +172,12 @@ class CreateEnvelope extends React.Component {
     this.setState({
       notificationOpen: false,
       notificationDeleteErrorOpen: false
+    });
+  }
+
+  setDonationNumber = (donationNumber) => {
+    this.setState({
+      donationNumber
     });
   }
 
@@ -339,7 +332,10 @@ class CreateEnvelope extends React.Component {
           </Card>
           {
                 this.props.hasOwnProperty('envelopeId') ? (
-                  <DonationsList envelopeId={this.props.envelopeId} />
+                  <DonationsList
+                    envelopeId={this.props.envelopeId}
+                    setDonationNumber={this.setDonationNumber}
+                  />
                 ) : null
           }
         </GridItem>

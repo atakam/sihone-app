@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-
-import request from "request";
+import axios from "axios";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -75,7 +74,7 @@ class DonationsList extends React.Component {
       console.log('json', json);
       this.setState({
         donations: json.donations
-      })
+      }, this.props.setDonationNumber(json.donations.length))
     })
     .catch(error => console.log('error', error));
   }
@@ -306,22 +305,15 @@ class DonationsList extends React.Component {
 
     console.log("Donation", donation);
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: api,
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: donation
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: donation
+    })
+    .then(function(response, body) {
       this.fetchDonations();
       refresh && this.newDonation();
       this.setState({showForm: false});
-      console.log(body);
     }.bind(this));
   }
 
@@ -339,18 +331,12 @@ class DonationsList extends React.Component {
   }
 
   deleteDonation = (donationid) => {
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/donation/delete',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: { donationid }
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: { donationid }
+    })
+    .then(function(response, body) {
       this.closeDelete();
       this.newDonation();
       this.fetchDonations();

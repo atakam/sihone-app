@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import request from "request";
+import axios from "axios";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -48,7 +48,7 @@ class TransactionsList extends React.Component {
       console.log('json', json);
       this.setState({
         transactions: json.transactions
-      })
+      }, this.props.setTransactionNumber(json.transactions.length))
     })
     .catch(error => console.log('error', error));
   }
@@ -234,22 +234,15 @@ class TransactionsList extends React.Component {
       refresh = true;
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: api,
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: transaction
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: transaction
+    })
+    .then(function(response) {
       this.fetchTransactions();
       refresh && this.newTransaction();
       this.setState({showForm: false});
-      console.log(body);
     }.bind(this));
   }
 
@@ -267,18 +260,12 @@ class TransactionsList extends React.Component {
   }
 
   deleteTransaction = (transactionid) => {
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/transaction/delete',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: { transactionid }
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: { transactionid }
+    })
+    .then(function(response) {
       this.closeDelete();
       this.newTransaction();
       this.fetchTransactions();

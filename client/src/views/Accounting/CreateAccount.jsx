@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import request from "request";
+import axios from "axios";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -25,7 +25,8 @@ class CreateAccount extends React.Component {
       canDelete: false,
       notificationOpen: false,
       notificationDeleteErrorOpen: false,
-      deleteAction: false
+      deleteAction: false,
+      transactionNumber: 0
     };
   }
 
@@ -64,18 +65,12 @@ class CreateAccount extends React.Component {
       api = '/account/update';
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: api,
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: member
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: member
+    })
+    .then(function(response) {
       this.setState({
         notificationOpen: true
       });
@@ -84,8 +79,8 @@ class CreateAccount extends React.Component {
           descriptiontext: ''
         });
       }
-      console.log(body);
     }.bind(this));
+
   }
 
   handleInputChange = (event, state) => {
@@ -101,9 +96,12 @@ class CreateAccount extends React.Component {
 
   handleDelete = (event) => {
     event.preventDefault();
-    this.setState({
+    this.state.transactionNumber === 0 && this.setState({
       deleteAction: true
     })
+    this.setState({
+      notificationDeleteErrorOpen: this.state.transactionNumber > 0
+    });
   }
 
   closeDelete = () => {
@@ -117,25 +115,24 @@ class CreateAccount extends React.Component {
       accountid: this.props.accountId
     }
 
-    var options = {
-      method: 'POST',
+    axios({
+      method: 'post',
       url: '/account/delete',
-      headers: 
-      { 
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      form: account
-    };
-
-    request(options, function (error, response, body) {
-      if (error) throw new Error(error);
+      data: account
+    })
+    .then(function(response, body) {
       this.setState({
-        notificationDeleteErrorOpen: response.statusCode !== 200,
         deleteAction: false
       });
+      this.props.onClose && this.props.onClose();
       response.statusCode === 200 && this.props.onClose();
-      console.log(body);
     }.bind(this));
+  }
+
+  setTransactionNumber = (transactionNumber) => {
+    this.setState({
+      transactionNumber
+    });
   }
 
   render () {
@@ -209,7 +206,7 @@ class CreateAccount extends React.Component {
             <CardFooter>
               {
                 this.props.hasOwnProperty('accountId') && canDelete ? (
-                  <Button color="danger" className='add-button create' onClick={this.handleDelete}>
+                  <Button color="danger" className='add-button create' onClick={this.handleDelete.bind(this)}>
                     Delete
                   </Button>
                 ) : (
@@ -221,7 +218,7 @@ class CreateAccount extends React.Component {
           </Card>
           {
                 this.props.hasOwnProperty('accountId') ? (
-                  <TransactionsList accountId={this.props.accountId} />
+                  <TransactionsList accountId={this.props.accountId} setTransactionNumber={this.setTransactionNumber} />
                 ) : null
           }
           <EnvelopeList accountId={this.props.accountId} />
