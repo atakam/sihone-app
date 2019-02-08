@@ -176,12 +176,12 @@ class DonationReport extends React.Component {
         accountCheck
       }
     })
-    .then(function(response, body) {
+    .then(function(response) {
       this.setState({
         notificationOpen: true
       });
-      Utils.exportCSVFile(JSON.parse(body).header, JSON.parse(body).report, 'donations');
-    });
+      Utils.exportCSVFile(response.data.header, response.data.report, 'donations');
+    }.bind(this));
   }
 
   render () {

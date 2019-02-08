@@ -119,12 +119,12 @@ class AccountReport extends React.Component {
         amountCheck
       }
     })
-    .then(function(response, body) {
+    .then(function(response) {
       this.setState({
         notificationOpen: true
       });
-      Utils.exportCSVFile(JSON.parse(body).header, JSON.parse(body).report, 'accounts');
-    });
+      Utils.exportCSVFile(response.data.header, response.data.report, 'accounts');
+    }.bind(this));
   }
 
   render () {

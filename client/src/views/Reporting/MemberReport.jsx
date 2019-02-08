@@ -308,12 +308,12 @@ class MemberReport extends React.Component {
         grouptypeCheck
       }
     })
-    .then(function(response, body) {
+    .then(function(response) {
       this.setState({
         notificationOpen: true
       });
-      Utils.exportCSVFile(JSON.parse(body).header, JSON.parse(body).report, 'members');
-    });
+      Utils.exportCSVFile(response.data.header, response.data.report, 'members');
+    }.bind(this));
   }
 
   render () {
