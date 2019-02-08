@@ -12,6 +12,7 @@
     "@types/googlemaps": "3.30.11",
     "@types/markerclustererplus": "2.1.33",
     "ajv": "^5.0.0",
+    "axios": "^0.18.0",
     "chartist": "0.10.1",
     "classnames": "2.2.6",
     "fullcalendar": "^3.10.0",
@@ -53,7 +54,6 @@
     "prettier": "^1.13.7"
   },
   "devDependencies": {
-    "axios": "^0.18.0",
     "babel-cli": "^6.26.0",
     "babel-plugin-import-rename": "^1.0.1",
     "babel-plugin-module-resolver": "^3.1.1",
