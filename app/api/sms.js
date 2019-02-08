@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const request = require('request');
 const Sms = require('../domain/sms');
 const SmsTable = require('../domain/sms/table');
 const MemberSmsTable = require('../domain/membersms/table');
@@ -199,14 +200,26 @@ function sendSms(phone, smstext, res) {
             form: {api_key: smsapikey, api_secret: smsapisecret, from: smsnumber, to: phoneNumber, text: smstext}
         };
       
-        // request(options, function (error, response, body) {
-        //     if (error) throw new Error(error);
-        //     console.log(body);
-        //     res.json({
-        //         message: 'successfully added sms',
-        //         result: body
+        request(options, function (error, response, body) {
+            if (error) throw new Error(error);
+            console.log(body);
+            res.json({
+                message: 'successfully added sms',
+                result: body
+            });
+        }.bind(this));
+
+        // axios({
+        //     method: 'post',
+        //     url: 'https://rest.nexmo.com/sms/json',
+        //     data: {api_key: smsapikey, api_secret: smsapisecret, from: smsnumber, to: phoneNumber, text: smstext}
+        //   })
+        //   .then(function(response) {
+        //     this.setState({
+        //       notificationOpen: true
         //     });
-        // }.bind(this));
+        //     Utils.exportCSVFile(response.data.header, response.data.report, 'accounts');
+        //   }.bind(this));
 
     });
 }

@@ -103,22 +103,21 @@ class SmsView extends React.Component {
             data: {smstext: this.state.smstext, memberid: memberId, groupid: groupId, special: special ? special.value : null}
           })
           .then(function(response, body) {
-            let json = JSON.parse(body)
-            json = JSON.parse(json.result)
-            if (json.messages[0].status === '0') {
-                this.setBalance(json.messages[0]['remaining-balance']);
-                this.reset();
-                this.init();
-
-                // Activity
-                //Utils.addActivity(13, 'New sms sent!');
-            } else {
-                this.setState({
-                    error: 'Problem encountered during SMS send. ' + 
-                    'This could be because of insufficient balance (consult your account at www.nexmo.com)' + 
-                    ' OR the phone number is not a valid North American number.'
-                });
-            }
+              if (response.status === 200) {
+                  const json = JSON.parse(response.data.result);
+                if (json.messages[0].status === '0') {
+                    this.setBalance(json.messages[0]['remaining-balance']);
+                    this.reset();
+                    this.init();
+                } else {
+                    this.setState({
+                        error: 'Problem encountered during SMS send. ' + 
+                        'This could be because of insufficient balance (consult your account at www.nexmo.com)' + 
+                        ' OR the phone number is not a valid North American number.'
+                    });
+                }
+              }
+            
           }.bind(this));
     }
 
@@ -133,7 +132,7 @@ class SmsView extends React.Component {
             url: '/settings/sms/balance',
             data: settings
           })
-          .then(function(response, body) {});
+          .then(function(response) {});
     }
 
     render(){
@@ -173,7 +172,7 @@ class SmsView extends React.Component {
                             <Button
                             color="info"
                             className='add-button create right'
-                            onClick={this.handleSend.bind(this)}
+                            onClick={this.handleSend}
                             disabled={this.state.smstext.length === 0}>
                             Send
                             </Button>
