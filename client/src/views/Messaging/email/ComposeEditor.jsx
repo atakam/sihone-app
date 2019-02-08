@@ -162,8 +162,8 @@ class ComposeEditor extends React.Component {
     const groupids = groups.map((group) => group.value);
     const _specials = specials.map((special) => special.value);
 
-    const website = window.location.protocol + '//' + window.location.host + window.location.pathname;
-    const template = Utils.getEmailTemplates(churchname, subject, emailfooter, website, '/settings/logo')[0];
+    const website = window.location.protocol + '//' + window.location.host;
+    const template = Utils.getEmailTemplates(churchname, subject, emailfooter, website, `${website}/settings/logo`)[0];
     const emailBody = template.before + emailContent + template.after;
 
     axios({
@@ -201,8 +201,8 @@ class ComposeEditor extends React.Component {
       subject,
       emailContent
     } = this.state;
-    const website = window.location.protocol + '//' + window.location.host + window.location.pathname;
-    const template = Utils.getEmailTemplates(churchname, subject, emailfooter, website, '/settings/logo')[0];
+    const website = window.location.protocol + '//' + window.location.host;
+    const template = Utils.getEmailTemplates(churchname, subject, emailfooter, website, `${website}/settings/logo`)[0];
     const emailPreview = template.before + emailContent + template.after;
     var win = window.open("", "Title", "toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=500,top="+(window.height-400)+",left="+(window.width-840));
 win.document.body.innerHTML = emailPreview;

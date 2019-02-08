@@ -52,8 +52,7 @@ class Utils {
         return (
             [
                 {
-                    before: `<body style='margin: 0;background: #eee;padding: 20px 0;'><div class='content' style='width: 640px;
-                    min-width: 288px;
+                    before: `<body style='margin: 0;background: #eee;padding: 20px 0;'><div class='content' style='width: 100%;
                     margin: 2% auto;
                     background: #fff;'><div class='inner-content'><div class='subject' style='padding: 1.6em;
                     color: #414141;
