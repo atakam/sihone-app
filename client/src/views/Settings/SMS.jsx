@@ -70,9 +70,9 @@ class SMS extends React.Component {
       data: settings
     })
     .then(function(response, body) {
-      this.props.openNotification && this.props.openNotification();
-      this.fetchSettings();
-    });
+      if (response.status === 200)
+        this.props.openNotification && this.props.openNotification();
+    }.bind(this));
   }
 
   render () {

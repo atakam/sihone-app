@@ -29,7 +29,7 @@ router.post('/delete', (req, res, next) => {
 
      FundTable.deleteFund({ fundid })
         .then(() => res.json({ message: 'successfully deleted fund' }))
-        .catch(error => next(error));
+        .catch(error => res.json({ error: true, message: 'Cannot delete entry as it is being used' }));
 });
 
 router.get('/find', (req, res, next) => {

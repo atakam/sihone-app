@@ -104,9 +104,10 @@ class Identity extends React.Component {
       url: '/settings/identity/update',
       data: settings
     })
-    .then(function(response, body) {
-      this.props.openNotification && this.props.openNotification();
-    });
+    .then(function(response) {
+      if (response.status === 200)
+        this.props.openNotification && this.props.openNotification();
+    }.bind(this));
   }
 
   render () {
@@ -316,7 +317,7 @@ class Identity extends React.Component {
               </CardBody>
               <CardFooter>
                 <span />
-                <Button className="right" color="info" onClick={this.save}>Save</Button>
+                <Button className="right" color="info" onClick={this.save.bind(this)}>Save</Button>
               </CardFooter>
             </Card>
           </GridItem>

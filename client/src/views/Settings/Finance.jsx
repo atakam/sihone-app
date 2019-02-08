@@ -21,6 +21,7 @@ class Finance extends React.Component {
     this.state = {
       paymenttype: '',
       paymentTypes: [],
+      notificationMessage: null,
 
       fund: '',
       funds: []
@@ -45,12 +46,17 @@ class Finance extends React.Component {
       url: '/paymenttype/delete',
       data: { paymenttypeid }
     })
-    .then(function(response, body) {
-      this.fetchPaymentTypes();
-      this.setState({
-        notificationDeleteError: true
-      });
-    });
+    .then(function(response) {
+      if (response.data && response.data.error) {
+        this.setState({
+          notificationDeleteError: true,
+          notificationMessage: response.data.message
+        });
+      }
+      else if (response.status === 200)
+        this.fetchPaymentTypes();
+      
+    }.bind(this));
   }
 
   handleSavePaymentType = (event) => {
@@ -68,12 +74,14 @@ class Finance extends React.Component {
       url: '/paymenttype/new',
       data: paymenttypeObj
     })
-    .then(function(response, body) {
-      this.fetchPaymentTypes();
-      this.setState({
-        paymenttype: ''
-      });
-    });
+    .then(function(response) {
+      if (response.status === 200) {
+        this.fetchPaymentTypes();
+        this.setState({
+          paymenttype: ''
+        });
+      }
+    }.bind(this));
   }
 
   fetchFunds = () => {
@@ -94,15 +102,17 @@ class Finance extends React.Component {
       url: '/fund/delete',
       data: { fundid }
     })
-    .then(function(response, body) {
-      this.fetchFunds();
-
-      if (JSON.parse(body).error){
+    .then(function(response) {
+      if (response.data && response.data.error) {
         this.setState({
-          notificationDeleteError: true
+          notificationDeleteError: true,
+          notificationMessage: response.data.message
         });
       }
-    });
+      else if (response.status === 200)
+        this.fetchFunds();
+      
+    }.bind(this));
   }
 
   handleSaveFund = (event) => {
@@ -120,13 +130,15 @@ class Finance extends React.Component {
       url: '/fund/new',
       data: fundObj
     })
-    .then(function(response, body) {
-      this.fetchFunds();
-      this.setState({
-        paymenttype: '',
-        fund: ''
-      });
-    });
+    .then(function(response) {
+      if (response.status === 200) {
+        this.fetchFunds();
+        this.setState({
+          paymenttype: '',
+          fund: ''
+        });
+      }
+    }.bind(this));
   }
 
   componentDidMount() {
@@ -141,8 +153,7 @@ class Finance extends React.Component {
   closeNotification = () => {
     this.setState({
       notificationDeleteError: false,
-      paymenttype: '',
-      fund: ''
+      notificationMessage: null
     });
     this.fetchPaymentTypes();
     this.fetchFunds();
@@ -151,6 +162,7 @@ class Finance extends React.Component {
   render () {
     const {
       notificationDeleteError,
+      notificationMessage,
       paymenttype,
       paymentTypes,
       fund,
@@ -162,7 +174,7 @@ class Finance extends React.Component {
         <GridContainer>
           <Snackbar
             message={
-              'ERROR - Cannot Delete!'
+              notificationMessage || 'ERROR - Cannot Delete!'
             }
             close
             place="tc"

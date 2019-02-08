@@ -212,6 +212,7 @@ class Events extends React.Component {
       },
       dayClick: function() {},
       events: that.state.events,
+      eventColor: '#00bbb2',
       eventClick: that.handleClickEditFullScreen
     });
     $('#calendar').fullCalendar({

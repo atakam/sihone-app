@@ -26,6 +26,7 @@ class Membership extends React.Component {
       grouptypes: [],
       notificationGroupType: false,
       notificationGroupTypeError: false,
+      notificationMessage: null,
 
       memberidautomate: false,
       memberidprefix: '',
@@ -40,7 +41,6 @@ class Membership extends React.Component {
   }
 
   handleSaveGroupType = (event) => {
-    event.preventDefault();
     const {
       grouptype
     } = this.state
@@ -55,11 +55,13 @@ class Membership extends React.Component {
       data: grouptypeObj
     })
     .then(function(response, body) {
-      this.setState({
-        grouptype: ''
-      });
-      this.fetchGroupTypes();
-    });
+      if (response.status === 200) {
+        this.setState({
+          grouptype: ''
+        });
+        this.fetchGroupTypes();
+      }
+    }.bind(this));
   }
 
   saveMemberSettings = (event) => {
@@ -84,9 +86,9 @@ class Membership extends React.Component {
       data: settings
     })
     .then(function(response, body) {
-      this.props.openNotification && this.props.openNotification();
-      this.fetchSettings();
-    });
+      if (response.status === 200)
+        this.props.openNotification && this.props.openNotification();
+    }.bind(this));
   }
 
   fetchGroupTypes = () => {
@@ -127,7 +129,7 @@ class Membership extends React.Component {
   closeNotification = () => {
     this.setState({
       notificationGroupTypeError: false,
-      grouptype: ''
+      notificationMessage: null
     });
     this.fetchGroupTypes();
   }
@@ -139,8 +141,16 @@ class Membership extends React.Component {
       data: { grouptypeid }
     })
     .then(function(response, body) {
-      this.fetchGroupTypes();
-    });
+      if (response.data && response.data.error) {
+        this.setState({
+          notificationGroupTypeError: true,
+          notificationMessage: response.data.message
+        });
+      }
+      else if (response.status === 200)
+        this.fetchGroupTypes();
+      
+    }.bind(this));
   }
 
   render () {
@@ -148,6 +158,7 @@ class Membership extends React.Component {
       grouptypes,
       grouptype,
       notificationGroupTypeError,
+      notificationMessage,
 
       memberidautomate,
       memberidprefix,
@@ -159,7 +170,7 @@ class Membership extends React.Component {
         <GridContainer>
           <Snackbar
             message={
-              'ERROR - Cannot Delete!'
+              notificationMessage || 'ERROR - Cannot Delete!'
             }
             close
             place="tc"
@@ -232,54 +243,60 @@ class Membership extends React.Component {
                     <Button className="form-button" color="info" size="sm" onClick={this.saveMemberSettings}>Save</Button>
                   </GridItem>
                 </GridContainer>
-                <form  onSubmit={this.handleSaveGroupType}>
-                  <GridContainer>
-                    <GridItem xs={12} sm={12} md={12}>
-                      <h6 className="form-subtitle">Group Settings</h6>
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={4}>
-                      <CustomInput
-                        labelText="Add Group Type"
-                        id="group-type"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          value: grouptype,
-                          onChange: (e) => this.handleInputChange(e, 'grouptype')
-                        }}
-                      />
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={2}>
-                      <Button className="form-button" color="info" size="sm" type="submit" disabled={grouptype === ''}>Add</Button>
-                    </GridItem>
-                    <GridItem xs={12} sm={12} md={6}>
-                      <Table
-                        tableHeaderColor="warning"
-                        tableHead={["Group Types"]}
-                        tableData={
-                          grouptypes.map(
-                            (grouptype, index) => {
-                              return (
-                                [
-                                  grouptype.id,
-                                  grouptype.grouptype
-                                ]
-                              )
-                            }
-                          )
-                        }
-                        rowActions={[
-                          {
-                            type: 'delete',
-                            action: this.deleteGroupType,
-                            label: 'Remove'
+                <GridContainer>
+                  <GridItem xs={12} sm={12} md={12}>
+                    <h6 className="form-subtitle">Group Settings</h6>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={4}>
+                    <CustomInput
+                      labelText="Add Group Type"
+                      id="group-type"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        value: grouptype,
+                        onChange: (e) => this.handleInputChange(e, 'grouptype')
+                      }}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={2}>
+                    <Button
+                      className="form-button"
+                      color="info"
+                      size="sm"
+                      onClick={this.handleSaveGroupType}
+                      disabled={grouptype === ''}
+                    >
+                      Add
+                    </Button>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={6}>
+                    <Table
+                      tableHeaderColor="warning"
+                      tableHead={["Group Types"]}
+                      tableData={
+                        grouptypes.map(
+                          (grouptype, index) => {
+                            return (
+                              [
+                                grouptype.id,
+                                grouptype.grouptype
+                              ]
+                            )
                           }
-                        ]}
-                      />
-                    </GridItem>
-                  </GridContainer>
-                </form>
+                        )
+                      }
+                      rowActions={[
+                        {
+                          type: 'delete',
+                          action: this.deleteGroupType,
+                          label: 'Remove'
+                        }
+                      ]}
+                    />
+                  </GridItem>
+                </GridContainer>
               </CardBody>
             </Card>
           </GridItem>
