@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - '8'
+before_install:
+  - npm install
+install:
+  - npm run server
+before_script:
+  - cd client && npm install
+script:
+  - npm run build
