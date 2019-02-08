@@ -4,8 +4,4 @@ node_js:
 before_install:
   - npm install
 install:
-  - npm run server
-before_script:
   - cd client && npm install
-script:
-  - npm run build
