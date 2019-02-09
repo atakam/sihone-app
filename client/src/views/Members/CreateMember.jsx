@@ -408,6 +408,10 @@ class CreateMember extends React.Component {
   render () {
     const genderlist = [
       {
+        value: 'not specified',
+        label: 'Not Specified',
+      },
+      {
         value: 'female',
         label: 'Female',
       },

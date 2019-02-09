@@ -21,7 +21,7 @@
   {
     "type": "marital",
     "values": [
-      {"value": "Not Specified", "key": "none"},
+      {"value": "Not Specified", "key": "not specified"},
       {"value": "Single", "key": "single"},
       {"value": "Married", "key": "married"},
       {"value": "Divorced", "key": "divorced"},
@@ -40,7 +40,7 @@
   {
     "type": "gender",
     "values": [
-      {"value": "Not Specified", "key": "none"},
+      {"value": "Not Specified", "key": "not specified"},
       {"value": "Male", "key": "male"},
       {"value": "Female", "key": "female"}
     ]
