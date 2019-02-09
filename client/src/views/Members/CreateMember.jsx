@@ -38,6 +38,7 @@ class CreateMember extends React.Component {
       membershipdate: '',
       familyid: '',
 
+      subscribtion: false,
       familyname: '',
       familyemail: '',
       streetaddress: '',
@@ -108,6 +109,7 @@ class CreateMember extends React.Component {
         marital: json.member.marital.toLowerCase(),
         role: json.member.memberrole.toLowerCase(),
 
+        subscribtion: json.member.subscribtion,
         firstname: json.member.firstname,
         lastname: json.member.lastname,
         birthdate: json.member.birthdate ? json.member.birthdate.split('T')[0] : '',
@@ -134,12 +136,19 @@ class CreateMember extends React.Component {
     });
   }
 
+  subscribtionChange = (e, checked) => {
+    this.setState({
+      subscribtion: checked
+    });
+  }
+
   handleSave = (event) => {
     event.preventDefault();
     const {
       gender,
       marital,
       role,
+      subscribtion,
       firstname,
       lastname,
       birthdate,
@@ -164,6 +173,7 @@ class CreateMember extends React.Component {
       gender,
       marital,
       memberrole: role,
+      subscribtion,
       firstname,
       lastname,
       birthdate,
@@ -209,6 +219,7 @@ class CreateMember extends React.Component {
       gender,
       marital,
       role,
+      subscribtion,
       firstname,
       lastname,
       birthdate,
@@ -232,6 +243,7 @@ class CreateMember extends React.Component {
       gender,
       marital,
       memberrole: role,
+      subscribtion,
       firstname,
       lastname,
       birthdate,
@@ -277,6 +289,7 @@ class CreateMember extends React.Component {
       gender: '',
       marital: '',
       role: '',
+      subscribtion: false,
       firstname: '',
       lastname: '',
       birthdate: '',
@@ -491,6 +504,7 @@ class CreateMember extends React.Component {
       gender,
       marital,
       role,
+      subscribtion,
       firstname,
       lastname,
       birthdate,
@@ -726,165 +740,183 @@ class CreateMember extends React.Component {
                       }}
                     />
                   </GridItem>
-                </GridContainer>
-                <GridContainer>
-                  <GridItem xs={12} sm={12} md={12}>
-                    <h6 className="form-subtitle">Family Information</h6>
-                  </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
                     <FormControlLabel
                       control={
                         <Checkbox
-                          onChange={this.familyOption}
-                          checked={existingFamily}
+                          onChange={this.subscribtionChange}
+                          checked={subscribtion}
                         />
                       }
-                      label="Assign to Exisitng Family"
+                      label="Subscribed to receive emails"
                       className="form-checkbox"
                     />
                   </GridItem>
-                  </GridContainer>
-                  
-                  {
-                    (existingFamily) && (
+                </GridContainer>
+                {
+                  familyid && (
+                    <span>
                       <GridContainer>
-                        <GridItem xs={12} sm={8} md={10}>
-                          <TextField
-                            id="select-family"
-                            select
-                            label="Choose Family"
-                            value={familyid}
-                            onChange={(e) => this.handleInputChange(e, 'familyid')}
-                            margin="normal"
-                            fullWidth
-                            className="select-input"
-                          >
-                            {families.map(option => (
-                              <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                              </MenuItem>
-                            ))}
-                          </TextField>
+                        <GridItem xs={12} sm={12} md={12}>
+                          <h6 className="form-subtitle">Family Information</h6>
                         </GridItem>
-                        <GridItem xs={12} sm={4} md={2}>
-                          <div className='view-family-label'>
-                            <a onClick={() => this.handleViewFamily(familyid)}>
-                                View Family Info
-                            </a>
-                          </div>
+                        <GridItem xs={12} sm={12} md={4}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                onChange={this.familyOption}
+                                checked={existingFamily}
+                              />
+                            }
+                            label="Assign to Exisitng Family"
+                            className="form-checkbox"
+                          />
                         </GridItem>
                       </GridContainer>
-                    )
-                  }
-                
-                {
-                  (!existingFamily) && (
-                    <GridContainer>
-                      <GridItem xs={12} sm={12} md={4}>
-                        <CustomInput
-                          labelText="Family Name"
-                          id="familyname"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            value: familyname,
-                            onChange: (e) => this.handleInputChange(e, 'familyname')
-                          }}
-                        />
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={4}>
-                        <CustomInput
-                          labelText="Family Email"
-                          id="familyemail"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            value: familyemail,
-                            onChange: (e) => this.handleInputChange(e, 'familyemail')
-                          }}
-                        />
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={4}>
-                        <CustomInput
-                          labelText="Home Phone Number"
-                          id="home-phone"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            value: homephone,
-                            onChange: (e) => this.handleInputChange(e, 'homephone')
-                          }}
-                        />
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={4}>
-                        <CustomInput
-                          labelText="Street Address"
-                          id="address"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            value: streetaddress,
-                            onChange: (e) => this.handleInputChange(e, 'streetaddress')
-                          }}
-                        />
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={4}>
-                        <CustomInput
-                          labelText="City"
-                          id="city"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            value: city,
-                            onChange: (e) => this.handleInputChange(e, 'city')
-                          }}
-                        />
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={4}>
-                        <CustomInput
-                          labelText="Province"
-                          id="province"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            value: province,
-                            onChange: (e) => this.handleInputChange(e, 'province')
-                          }}
-                        />
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={4}>
-                        <CustomInput
-                          labelText="Postal Code"
-                          id="postal-code"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            value: postalcode,
-                            onChange: (e) => this.handleInputChange(e, 'postalcode')
-                          }}
-                        />
-                      </GridItem>
-                      <GridItem xs={12} sm={12} md={4}>
-                        <CustomInput
-                          labelText="Country"
-                          id="country"
-                          formControlProps={{
-                            fullWidth: true
-                          }}
-                          inputProps={{
-                            value: country,
-                            onChange: (e) => this.handleInputChange(e, 'country')
-                          }}
-                        />
-                      </GridItem>
-                    </GridContainer>
+                        
+                        {
+                          (existingFamily) && (
+                            <GridContainer>
+                              <GridItem xs={12} sm={8} md={10}>
+                                <TextField
+                                  id="select-family"
+                                  select
+                                  label="Choose Family"
+                                  value={familyid}
+                                  onChange={(e) => this.handleInputChange(e, 'familyid')}
+                                  margin="normal"
+                                  fullWidth
+                                  className="select-input"
+                                >
+                                  {families.map(option => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                      {option.label}
+                                    </MenuItem>
+                                  ))}
+                                </TextField>
+                              </GridItem>
+                              <GridItem xs={12} sm={4} md={2}>
+                                <div className='view-family-label'>
+                                  <a onClick={() => this.handleViewFamily(familyid)}>
+                                      View Family Info
+                                  </a>
+                                </div>
+                              </GridItem>
+                            </GridContainer>
+                          )
+                        }
+                      
+                      {
+                        (!existingFamily) && (
+                          <GridContainer>
+                            <GridItem xs={12} sm={12} md={4}>
+                              <CustomInput
+                                labelText="Family Name"
+                                id="familyname"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  value: familyname,
+                                  onChange: (e) => this.handleInputChange(e, 'familyname')
+                                }}
+                              />
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={4}>
+                              <CustomInput
+                                labelText="Family Email"
+                                id="familyemail"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  value: familyemail,
+                                  onChange: (e) => this.handleInputChange(e, 'familyemail')
+                                }}
+                              />
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={4}>
+                              <CustomInput
+                                labelText="Home Phone Number"
+                                id="home-phone"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  value: homephone,
+                                  onChange: (e) => this.handleInputChange(e, 'homephone')
+                                }}
+                              />
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={4}>
+                              <CustomInput
+                                labelText="Street Address"
+                                id="address"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  value: streetaddress,
+                                  onChange: (e) => this.handleInputChange(e, 'streetaddress')
+                                }}
+                              />
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={4}>
+                              <CustomInput
+                                labelText="City"
+                                id="city"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  value: city,
+                                  onChange: (e) => this.handleInputChange(e, 'city')
+                                }}
+                              />
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={4}>
+                              <CustomInput
+                                labelText="Province"
+                                id="province"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  value: province,
+                                  onChange: (e) => this.handleInputChange(e, 'province')
+                                }}
+                              />
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={4}>
+                              <CustomInput
+                                labelText="Postal Code"
+                                id="postal-code"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  value: postalcode,
+                                  onChange: (e) => this.handleInputChange(e, 'postalcode')
+                                }}
+                              />
+                            </GridItem>
+                            <GridItem xs={12} sm={12} md={4}>
+                              <CustomInput
+                                labelText="Country"
+                                id="country"
+                                formControlProps={{
+                                  fullWidth: true
+                                }}
+                                inputProps={{
+                                  value: country,
+                                  onChange: (e) => this.handleInputChange(e, 'country')
+                                }}
+                              />
+                            </GridItem>
+                          </GridContainer>
+                        )
+                      }
+                    </span>
                   )
                 }
                 <GridContainer>

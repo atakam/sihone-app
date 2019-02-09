@@ -158,11 +158,15 @@ class GroupSelect extends React.Component {
   }
 
   componentDidMount () {
-    this.fetchGroups();
+    setTimeout(() => this.fetchGroups(), 1000);
   }
 
   fetchGroups = () => {
-    fetch('/group/findAll')
+    let url = '/group/findAll';
+    if (this.props.emailOnly) {
+      url = '/group/findAllWithEmails';
+    }
+    fetch(url)
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -222,7 +226,8 @@ GroupSelect.propTypes = {
   theme: PropTypes.object.isRequired,
   placeholder: PropTypes.string,
   onChange: PropTypes.func,
-  excludeGroups: PropTypes.arrayOf(PropTypes.object)
+  excludeGroups: PropTypes.arrayOf(PropTypes.object),
+  emailOnly: PropTypes.bool
 };
 
 export default withStyles(styles, { withTheme: true })(GroupSelect);

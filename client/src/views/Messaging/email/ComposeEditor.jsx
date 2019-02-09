@@ -274,9 +274,7 @@ win.document.body.innerHTML = emailPreview;
               placeholder="Groups"
               value={''}
               onChange={this.handleAddGroup}
-              excludeGroups={this.state.groups.map((group) => {
-                return {id: group.value}
-              })}
+              emailOnly
               required
             />
           </GridItem>

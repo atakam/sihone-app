@@ -331,7 +331,8 @@ class MemberTable {
               `SELECT
                 email
               FROM members
-              WHERE memberrole = $1 OR memberrole = $2 OR memberrole = $3 OR memberrole = $4`,
+              WHERE (memberrole = $1 OR memberrole = $2 OR memberrole = $3 OR memberrole = $4)
+              AND email IS NOT NULL AND subscribtion IS TRUE`,
               ['administrator', 'assistant', 'accountant', 'group'],
               (error, response) => {
                 if (error) return reject(error);
@@ -344,7 +345,7 @@ class MemberTable {
               `SELECT
                 email
               FROM members
-              WHERE memberrole = $1`,
+              WHERE memberrole = $1 AND email IS NOT NULL AND subscribtion IS TRUE`,
               [special === 'members' ? 'member' : 'visitor'],
               (error, response) => {
                 if (error) return reject(error);
@@ -356,7 +357,7 @@ class MemberTable {
             pool.query(
               `SELECT
                 email
-              FROM members`,
+              FROM members WHERE email IS NOT NULL AND subscribtion IS TRUE`,
               (error, response) => {
                 if (error) return reject(error);
                 response.rows.length === 0 && resolve('')

@@ -143,6 +143,16 @@ router.get('/findAll', (req, res, next) => {
         .catch(error => next(error));
 });
 
+router.get('/findAllWithEmails', (req, res, next) => {
+    GroupTable.getGroupsWithEmails()
+        .then((groups) => 
+            res.json({
+            message: 'successfully found all groups',
+            groups
+        }))
+        .catch(error => next(error));
+});
+
 router.get('/findAll/m/:memberId', (req, res, next) => {
     const { 
         memberId

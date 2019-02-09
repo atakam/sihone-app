@@ -65,6 +65,29 @@ class GroupTable {
     });
   }
 
+  static getGroupsWithEmails() {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT
+        groups.id,
+        groupname,
+        grouptypeid,
+        grouptypes.grouptype,
+        members.email
+      FROM groups
+      LEFT JOIN grouptypes ON grouptypes.id = groups.grouptypeid
+      LEFT JOIN membergroup ON membergroup.groupid = groups.id
+      LEFT JOIN members ON members.id = membergroup.memberid
+      WHERE email IS NOT NULL AND members.subscribtion IS TRUE`,
+        (error, response) => {
+          if (error) return reject(error);
+
+          resolve(response.rows);
+        }
+      )
+    });
+  }
+
   static getPhones(groupid) {
     return new Promise((resolve, reject) => {
       pool.query(
@@ -92,7 +115,7 @@ class GroupTable {
               email
             FROM membergroup
             LEFT JOIN members ON memberid = members.id
-            WHERE groupid = $1`,
+            WHERE groupid = $1 AND email IS NOT NULL AND members.subscribtion IS TRUE`,
             [groupid],
             (error, response) => {
               if (error) return reject(error);

@@ -187,6 +187,7 @@ class MemberSelect extends React.Component {
           firstname: member.firstname,
           lastname: member.lastname,
           email: member.email,
+          subscribtion: member.subscribtion,
           phone: member.phone,
           streetaddress: member.streetaddress,
           city: member.city,
@@ -201,8 +202,8 @@ class MemberSelect extends React.Component {
 
     if (this.props.emailOnly) {
       suggestions = suggestions.map(member => {
-        console.log("MEMBER", member);
-        if (member.email) {
+        //console.log("MEMBER", member);
+        if (member.email && member.subscribtion) {
           return {
             id: member.id,
             value: member.value,
