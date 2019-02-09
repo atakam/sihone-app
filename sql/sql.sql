@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS members(
   gender           VARCHAR(64),
   birthdate        TIMESTAMP,
   marital          VARCHAR(64),
-  email            VARCHAR(64),
+  email            VARCHAR(64) UNIQUE NULL,
   phone            VARCHAR(64),
   familyid         INTEGER,
   familyrole       VARCHAR(64),

@@ -60,7 +60,10 @@ class CreateMember extends React.Component {
       group: '',
       notificationRemoveOpen: false,
 
-      notificationDeleteErrorOpen: false
+      notificationDeleteErrorOpen: false,
+
+      notificationError: false,
+      notificationErrorMessage: ''
     };
   }
 
@@ -185,10 +188,18 @@ class CreateMember extends React.Component {
       url: '/member/update',
       data: member
     })
-    .then(function(response, body) {
-      this.setState({
-        notificationOpen: true
-      });
+    .then(function(response) {
+      if (response.data && response.data.error) {
+        this.setState({
+          notificationError: true,
+          notificationErrorMessage: response.data.message
+        });
+      }
+      else if (response.status === 200)
+        this.setState({
+          notificationOpen: true
+        });
+      
     }.bind(this));
   }
 
@@ -245,11 +256,19 @@ class CreateMember extends React.Component {
       url: '/member/new',
       data: member
     })
-    .then(function(response, body) {
-      this.setState({
-        notificationNewOpen: true
-      });
-      this.reset();
+    .then(function(response) {
+      if (response.data && response.data.error) {
+        this.setState({
+          notificationError: true,
+          notificationErrorMessage: response.data.message
+        });
+      }
+      else if (response.status === 200) {
+        this.setState({
+          notificationNewOpen: true
+        });
+        this.reset();
+      }
     }.bind(this));
   }
 
@@ -286,7 +305,9 @@ class CreateMember extends React.Component {
       notificationOpen: false,
       notificationNewOpen: false,
       notificationRemoveOpen: false,
-      notificationDeleteErrorOpen: false
+      notificationDeleteErrorOpen: false,
+      notificationError: false,
+      notificationErrorMessage: ''
     });
   }
 
@@ -490,6 +511,8 @@ class CreateMember extends React.Component {
       notificationNewOpen,
       notificationRemoveOpen,
       notificationDeleteErrorOpen,
+      notificationError,
+      notificationErrorMessage,
 
       groups,
       allGroups,
@@ -518,6 +541,16 @@ class CreateMember extends React.Component {
             place="tc"
             color="success"
             open={notificationOpen}
+            closeNotification={this.closeNotification}
+          />
+          <Snackbar
+            message={
+              notificationErrorMessage
+            }
+            close
+            place="tc"
+            color="danger"
+            open={notificationError}
             closeNotification={this.closeNotification}
           />
           <Snackbar

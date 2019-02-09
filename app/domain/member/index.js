@@ -24,7 +24,7 @@ const DEFAULT_PROPERTIES = {
         });
         return value;
     },
-    email: '',
+    email: null,
     phone: '',
     familyid: undefined,
     get familyrole() {
@@ -82,6 +82,7 @@ class Member {
     password,
     sessionid
   } = {}) {
+    email = email && email === '' ? null : email;
     this.memberid = memberid || DEFAULT_PROPERTIES.memberid;
     this.memberuid = memberuid || DEFAULT_PROPERTIES.memberuid;
     this.firstname = firstname || DEFAULT_PROPERTIES.firstname;

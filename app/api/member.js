@@ -85,7 +85,15 @@ router.post('/new', (req, res, next) => {
             message: 'successfully added member',
             member
          }))
-        .catch(error => next(error));
+         .catch(error => {
+            console.log(error);
+            if (error.detail) {
+                res.json({ error: true, message: error.detail.replace(/\(/g, '').replace(/\)/g, '').replace('Key', '') });
+            }
+            else {
+                res.json({ error: true, message: error.error});
+            }
+        });
     }
     else {
         FamilyTable.addFamily(family)
@@ -100,7 +108,15 @@ router.post('/new', (req, res, next) => {
                 message: 'successfully added member',
                 member
              }))
-            .catch(error => next(error));
+             .catch(error => {
+                console.log(error);
+                if (error.detail) {
+                    res.json({ error: true, message: error.detail.replace(/\(/g, '').replace(/\)/g, '').replace('Key', '') });
+                }
+                else {
+                    res.json({ error: true, message: error.error});
+                }
+            });
         });
     }
 });
@@ -178,7 +194,15 @@ router.post('/update', (req, res, next) => {
     if (familyid) {
         MemberTable.updateMember(member)
         .then(() => res.json({ message: 'successfully updated member' }))
-        .catch(error => next(error));
+        .catch(error => {
+            console.log(error);
+            if (error.detail) {
+                res.json({ error: true, message: error.detail.replace(/\(/g, '').replace(/\)/g, '').replace('Key', '') });
+            }
+            else {
+                res.json({ error: true, message: error.error});
+            }
+        });
     }
     else {
         FamilyTable.addFamily(family)
@@ -190,7 +214,15 @@ router.post('/update', (req, res, next) => {
             member.familyid = familyid;
             MemberTable.updateMember(member)
             .then(() => res.json({ message: 'successfully updated member' }))
-            .catch(error => next(error));
+            .catch(error => {
+                console.log(error);
+                if (error.detail) {
+                    res.json({ error: true, message: error.detail.replace(/\(/g, '').replace(/\)/g, '').replace('Key', '') });
+                }
+                else {
+                    res.json({ error: true, message: error.error});
+                }
+            });
         });
     }
 });
