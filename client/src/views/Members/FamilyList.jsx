@@ -54,7 +54,9 @@ class FamilyList extends React.Component {
           family.count++;
           skippedFamilies.push(j);
         }
+        return null;
       })
+      return null;
     });
     families = families.map((family, i) => {
       let found = false;

@@ -548,6 +548,8 @@ class CreateMember extends React.Component {
 
     allGroupsModified = allGroupsModified.filter((obj) => obj );
 
+    const showFamily = familyid || !this.props.hasOwnProperty('memberId');
+
     return (
       <form onSubmit={this.props.hasOwnProperty('memberId') ? this.handleSave : this.handleSaveNew}>
         <GridContainer>
@@ -754,7 +756,7 @@ class CreateMember extends React.Component {
                   </GridItem>
                 </GridContainer>
                 {
-                  familyid && (
+                  showFamily && (
                     <span>
                       <GridContainer>
                         <GridItem xs={12} sm={12} md={12}>

@@ -227,6 +227,104 @@ router.post('/update', (req, res, next) => {
     }
 });
 
+router.post('/import', (req, res, next) => {
+    let { 
+        data,
+        enforcefamily
+     } = req.body;
+
+     console.log(req.body);
+
+     let families = [];
+     let members = [];
+     const enforcer = [];
+     const skipped = [];
+
+     //data.shift();
+
+     data.map((member) => {
+        families.push(new Family({
+          familyname: member.familyname,
+          email: member.familyemail,
+          phone: member.homephone,
+          streetaddress: member.streetaddress,
+          city: member.city,
+          province: member.province,
+          postalcode: member.postalcode,
+          country: member.country
+        }));
+
+        members.push(new Member({
+            memberuid: member.memberid,
+            firstname: member.firstname,
+            lastname: member.lastname,
+            gender: member.gender,
+            birthdate: isValidDate(member.birthdate) ? member.birthdate : null,
+            marital: member.marital,
+            email: member.email,
+            phone: member.phone,
+            familyid: null,
+            memberrole: member.memberrole,
+            membershipdate: isValidDate(member.membershipdate) ? member.membershipdate : null,
+            access: true,
+            subscribtion: member.subscribtion,
+            active: true
+          }));
+    })
+
+    console.log(families);
+
+    if (enforcefamily) {
+        families.map((family, i) => {
+            families.map((family2, j) => {
+                if (i < j && family.streetaddress === family2.streetaddress
+                    && family.city === family2.city
+                    && family.province === family2.province
+                    && family.postalcode === family2.postalcode) {
+                    enforcer.push({i, j});
+                    skipped.push(j);
+                }
+            })
+        });
+    }
+
+    console.log(skipped);
+
+    const familyids = [];
+
+    Promise.all(
+        families.map((family, i) => {
+            return FamilyTable.addFamily(family)
+            .then(({familyid}) =>{
+                console.log('IDX', familyid);
+                familyids.push(familyid);
+                return true;
+            })
+        })
+    )
+    .then(() => {
+        console.log('IDSS', familyids);
+        Promise.all(
+            members.map((member, i) => {
+                let familyid = familyids[i];
+                if (enforcefamily && skipped.includes(i)) {
+                    const newIndex = enforcer.map((map) => {
+                        if (map.j === i)
+                            return map.i;
+                        else 
+                            return i
+                    });
+                    familyid = familyids[newIndex];
+                }
+                member.familyid = familyid;
+                return MemberTable.addMember(member);
+            })
+        )
+    })
+    .then(() => res.json({ message: 'successfully updated member' }))
+    .catch(error => res.json({ error: true, message: 'Error occured during import' }));
+});
+
 router.post('/delete', (req, res, next) => {
     const { 
         memberid
@@ -440,6 +538,20 @@ function makepassword(length) {
             });
         });
     })
+}
+
+function sleep(ms){
+    return new Promise(resolve=>{
+        setTimeout(resolve,ms)
+    })
+}
+
+function isValidDate(string) {
+    var timestamp = Date.parse(string);
+    if (isNaN(timestamp)) {
+        return false;
+    }
+    return true;
 }
 
 module.exports = router;

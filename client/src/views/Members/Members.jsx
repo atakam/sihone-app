@@ -4,6 +4,7 @@ import './Members.css'
 import MembersList from './MembersList.jsx'
 import FamilyList from './FamilyList.jsx'
 import CreateMember from './CreateMember.jsx'
+import ImportMembers from './ImportMembers.jsx'
 import TabContainer from 'components/TabContainer/TabContainer.jsx'
 
 import Tabs from '@material-ui/core/Tabs';
@@ -57,6 +58,11 @@ class Members extends React.Component {
             disableRipple
             label="Add Member"
           />
+          <Tab
+            value='import'
+            disableRipple
+            label="Import Members"
+          />
         </Tabs>
         {this.state.tabValue === 'members' && <TabContainer>
           <MembersList />
@@ -69,6 +75,9 @@ class Members extends React.Component {
         </TabContainer>}
         {this.state.tabValue === 'create' && <TabContainer>
           <CreateMember onSave={(e) => {this.handleTabChange(e, 'members')}} />
+        </TabContainer>}
+        {this.state.tabValue === 'import' && <TabContainer>
+          <ImportMembers onSave={(e) => {this.handleTabChange(e, 'members')}} />
         </TabContainer>}
       </div>
     );
