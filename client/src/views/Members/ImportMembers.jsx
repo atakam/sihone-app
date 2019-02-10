@@ -184,7 +184,7 @@ class CreateMember extends React.Component {
                       keys={keys}
                       onDataUploaded={this.handleData}
                       onError={this.handleError}
-                      render={onChange => <input type="file" onChange={onChange} />}
+                      render={onChange => <input type="file" onChange={onChange} accept=".csv" />}
                     />
                     <FormControlLabel
                       control={
