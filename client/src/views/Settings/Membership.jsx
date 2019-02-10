@@ -184,7 +184,7 @@ class Membership extends React.Component {
                 <p>Configure member id, predefined member options, family roles and group types.</p>
               </CardHeader>
               <CardBody>
-                <GridContainer>
+                {/* <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     <h6 className="form-subtitle">Membership Settings</h6>
                   </GridItem>
@@ -242,7 +242,7 @@ class Membership extends React.Component {
                   <GridItem xs={12} sm={12} md={3}>
                     <Button className="form-button" color="info" size="sm" onClick={this.saveMemberSettings}>Save</Button>
                   </GridItem>
-                </GridContainer>
+                </GridContainer> */}
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     <h6 className="form-subtitle">Group Settings</h6>
