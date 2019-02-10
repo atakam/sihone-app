@@ -66,17 +66,6 @@ router.get('/find/:id', (req, res, next) => {
 
 router.get('/findAll', (req, res, next) => {
     FamilyTable.getFamilies()
-        .then((families) => {
-            return Promise.all(
-                families.map(family => {
-                    return MemberTable.getMembersByFamilyId(family.id)
-                    .then((members) => {
-                        family.count = members.length;
-                        return family
-                    })
-                })
-            );
-        })
         .then((families) => 
             res.json({
             message: 'successfully found all families',

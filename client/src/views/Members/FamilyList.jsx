@@ -45,7 +45,31 @@ class FamilyList extends React.Component {
   }
 
   render() {
-    const families = this.state.families.filter((family) => { return family.count > 0 } );
+    let skippedFamilies = [];
+    let families = this.state.families;
+    families.map((family, i) => {
+      family.count = 1;
+      families.map((family2, j) => {
+        if (i < j && family.id === family2.id) {
+          family.count++;
+          skippedFamilies.push(j);
+        }
+      })
+    });
+    families = families.map((family, i) => {
+      let found = false;
+      skippedFamilies.map((j) => {
+        if (i === j) {
+          found = true;
+        }
+        return null;
+      })
+      return found ? null : family;
+    });
+    families = families.filter(function (el) {
+      return el != null;
+    });
+
     return (
       <GridContainer>
         Count: {families.length}

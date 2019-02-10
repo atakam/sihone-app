@@ -77,16 +77,18 @@ class FamilyTable {
     return new Promise((resolve, reject) => {
       pool.query(
         `SELECT
-          id,
+          families.id,
           familyname,
-          email,
-          phone,
+          families.email,
+          families.phone,
           streetaddress,
           city,
           province,
           postalcode,
-          country
-        FROM families`,
+          country,
+          members.id as memberid
+        FROM families
+        LEFT JOIN members ON members.familyid = families.id`,
         (error, response) => {
           if (error) return reject(error);
 
