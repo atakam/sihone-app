@@ -243,6 +243,7 @@ class Statements extends React.Component {
     footer2.appendChild(message);
 
     var signature = document.createElement('p');
+    signature.setAttribute('class', 'signature');
     signature.appendChild(document.createTextNode('Authorized Signature:'));
     footer2.appendChild(signature);
 
@@ -255,6 +256,7 @@ class Statements extends React.Component {
     styles += ' .print {float: right; margin-bottom: 20px; }';
     styles += ' p { margin: 2px; }';
     styles += ' .summary { width: 50%; float: left;margin-top: 40px; }';
+    styles += ' .signature { margin-bottom: 150px !important; }';
     styles += ' .footer1 { width: 50%; float: left;margin-top: 40px; font-weight: bold; }';
     styles += ' .footer2 { width: 50%; float: right;margin-top: 40px; }';
     styles += ' .footer2 p { margin-bottom: 20px; }';

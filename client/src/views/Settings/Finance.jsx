@@ -188,6 +188,15 @@ class Finance extends React.Component {
                 <p>Configure payment types, payment types, account categories and funds.</p>
               </CardHeader>
               <CardBody>
+              <GridContainer>
+                  <GridItem xs={12} sm={12} md={12}>
+                    <h6 className="form-subtitle">Donation Receipt Authorized Signature</h6>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={12}>
+                    <br />
+                    <i>Contact us to place your 'Donation Receipt Authorized Signature' directly on every generated receipt.</i>
+                  </GridItem>
+                </GridContainer>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     <h6 className="form-subtitle">Payment Configuration</h6>
