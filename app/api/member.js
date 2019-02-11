@@ -391,18 +391,18 @@ router.post('/login', (req, res, next) => {
   
     MemberTable.getMemberByEmail({ email })
       .then((members) => {
-        console.log("COUNT: ", members.length);
+        console.log("COUNT: ", members);
         if (members.length > 0 && members[0].password === hash(password)) {
           const { sessionid } = members[0];
         
-          return setSession({ email, res, sessionid, role: members[0].memberrole, memberid: members[0].id });
+          return setSession({ email, res, sessionid, role: members[0].memberrole, memberid: members[0].id, firstname: members[0].firstname });
         } else {
             return ({message: 'Incorrect email/password!', type: 'error'});
         }
       })
-      .then(({ message, role, memberid, type }) => {
+      .then(({ message, role, memberid, type, firstname }) => {
           if (type === 'error') res.json({ message, type });
-          else res.json({ message, role, memberid });
+          else res.json({ message, role, memberid, firstname });
       })
       .catch(error => {
           next(error);
@@ -425,7 +425,7 @@ router.post('/login', (req, res, next) => {
   router.get('/authenticated', (req, res, next) => {
     authenticatedMember({ sessionString: req.cookies.sessionString })
       .then(({ authenticated, member }) => {
-        authenticated ? res.json({ authenticated, role: member.memberrole, memberid: member.id }) :
+        authenticated ? res.json({ authenticated, role: member.memberrole, memberid: member.id, firtname: member.firstname }) :
         res.json({authenticated: false});
       })
       .catch(error => next(error));

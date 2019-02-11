@@ -1,7 +1,7 @@
 const Session = require('../domain/member/session');
 const MemberTable = require('../domain/member/table');
 
-const setSession = ({ email, res, sessionid, role, memberid }) => {
+const setSession = ({ email, res, sessionid, role, memberid, firstname }) => {
   return new Promise((resolve, reject) => {
     let session, sessionString;
 
@@ -22,7 +22,7 @@ const setSession = ({ email, res, sessionid, role, memberid }) => {
       .then(() => {
         setSessionCookie({ sessionString, res });
 
-        resolve({ message: 'session created', role, memberid });
+        resolve({ message: 'session created', role, memberid, firstname });
       })
       .catch(error => reject(error));
     }

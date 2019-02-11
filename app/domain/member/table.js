@@ -120,7 +120,7 @@ class MemberTable {
   static getMemberByEmail({ email }) {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT id, password, sessionid, memberrole FROM members
+        `SELECT id, password, sessionid, memberrole, firstname FROM members
          WHERE "email" = $1`,
         [email],
         (error, response) => {

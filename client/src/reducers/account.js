@@ -23,7 +23,8 @@ const account = (state = DEFAULT_ACCOUNT, action) => {
                 message: action.message,
                 loggedIn: true,
                 role: action.role,
-                memberid: action.memberid
+                memberid: action.memberid,
+                firstname: action.firstname
             }
         case ACCOUNT.FETCH_LOGOUT_SUCCESS:
             return {
@@ -39,7 +40,8 @@ const account = (state = DEFAULT_ACCOUNT, action) => {
                 message: action.message,
                 loggedIn: action.authenticated,
                 role: action.role,
-                memberid: action.memberid
+                memberid: action.memberid,
+                firstname: action.firstname
             }
         default:
             return state;

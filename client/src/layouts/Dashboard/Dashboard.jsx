@@ -27,6 +27,7 @@ import SupervisorAccount from "@material-ui/icons/SupervisorAccount";
 import AccessTime from "@material-ui/icons/AccessTime";
 
 import Login from "../Login/Login.jsx";
+import MemberView from "../../views/Members/MemberView.jsx";
 
 const topData = [
   {
@@ -217,6 +218,15 @@ class App extends React.Component {
   componentWillUnmount() {
     window.removeEventListener("resize", this.resizeFunction);
   }
+
+  openMemberDialog = () => {
+    this.setState({ openMemberDialog: true });
+  }
+
+  closeMemberDialog = () => {
+    this.setState({ openMemberDialog: false });
+  }
+
   render() {
     const { classes, ...rest } = this.props;
     return (
@@ -237,6 +247,8 @@ class App extends React.Component {
             <Header
               routes={dashboardRoutes}
               handleDrawerToggle={this.handleDrawerToggle}
+              openMemberDialog={this.openMemberDialog}
+              name={this.props.account.firstname}
               {...rest}
             />
             {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
@@ -249,6 +261,11 @@ class App extends React.Component {
             )}
             {this.getRoute() ? <Footer /> : null}
           </div>
+          <MemberView
+            open={this.state.openMemberDialog}
+            onClose={this.closeMemberDialog}
+            memberId={this.props.account.memberid}
+          />
         </div>
       ) : (<Login />)
     );

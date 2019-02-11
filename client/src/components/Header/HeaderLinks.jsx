@@ -143,6 +143,7 @@ class HeaderLinks extends React.Component {
             )}
           </Poppers>
         </div> */}
+        <div>Hi {this.props.name},</div>
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
           justIcon={window.innerWidth > 959}
@@ -150,6 +151,7 @@ class HeaderLinks extends React.Component {
           aria-label="Person"
           title='My Profile'
           className={classes.buttonLink}
+          onClick={this.props.openMemberDialog}
         >
           <Person className={classes.icons} />
           <Hidden mdUp implementation="css">

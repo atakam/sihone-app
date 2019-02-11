@@ -40,7 +40,10 @@ function Header({ ...props }) {
           </Button>
         </div>
         <Hidden smDown implementation="css">
-          <HeaderLinks />
+          <HeaderLinks
+            name={props.name}
+            openMemberDialog={props.openMemberDialog}
+          />
         </Hidden>
         <Hidden mdUp implementation="css">
           <IconButton
@@ -58,7 +61,8 @@ function Header({ ...props }) {
 
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
-  color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"])
+  color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
+  openMemberDialog: PropTypes.func
 };
 
 export default withStyles(headerStyle)(Header);
