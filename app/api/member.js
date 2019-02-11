@@ -425,7 +425,7 @@ router.post('/login', (req, res, next) => {
   router.get('/authenticated', (req, res, next) => {
     authenticatedMember({ sessionString: req.cookies.sessionString })
       .then(({ authenticated, member }) => {
-        authenticated ? res.json({ authenticated, role: member.memberrole, memberid: member.id, firtname: member.firstname }) :
+        authenticated ? res.json({ authenticated, role: member.memberrole, memberid: member.id, firstname: member.firstname }) :
         res.json({authenticated: false});
       })
       .catch(error => next(error));

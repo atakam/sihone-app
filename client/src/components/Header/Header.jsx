@@ -43,6 +43,7 @@ function Header({ ...props }) {
           <HeaderLinks
             name={props.name}
             openMemberDialog={props.openMemberDialog}
+            openNewMemberDialog={props.openNewMemberDialog}
           />
         </Hidden>
         <Hidden mdUp implementation="css">
@@ -62,7 +63,8 @@ function Header({ ...props }) {
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
   color: PropTypes.oneOf(["primary", "info", "success", "warning", "danger"]),
-  openMemberDialog: PropTypes.func
+  openMemberDialog: PropTypes.func,
+  openNewMemberDialog: PropTypes.func
 };
 
 export default withStyles(headerStyle)(Header);

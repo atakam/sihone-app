@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
-// @material-ui/core components
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+// // @material-ui/core components
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Checkbox from '@material-ui/core/Checkbox';
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -160,10 +160,10 @@ class Membership extends React.Component {
       notificationGroupTypeError,
       notificationMessage,
 
-      memberidautomate,
-      memberidprefix,
-      memberidlength,
-      memberdefaultpassword
+      // memberidautomate,
+      // memberidprefix,
+      // memberidlength,
+      // memberdefaultpassword
     } = this.state;
     return (
       <div>

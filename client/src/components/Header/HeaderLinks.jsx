@@ -2,12 +2,13 @@ import React from "react";
 import { connect } from "react-redux";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import Hidden from "@material-ui/core/Hidden";
-// @material-ui/icons
-import Person from "@material-ui/icons/Person";
-import ExitToApp from "@material-ui/icons/ExitToApp";
-// core components
-import Button from "components/CustomButtons/Button.jsx";
+// import Hidden from "@material-ui/core/Hidden";
+// // @material-ui/icons
+// import Person from "@material-ui/icons/Person";
+// import PersonAdd from "@material-ui/icons/PersonAdd";
+// import ExitToApp from "@material-ui/icons/ExitToApp";
+// // core components
+// import Button from "components/CustomButtons/Button.jsx";
 
 import headerLinksStyle from "assets/jss/material-dashboard-react/components/headerLinksStyle";
 
@@ -30,7 +31,7 @@ class HeaderLinks extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    // const { classes } = this.props;
     // const { open } = this.state;
     return (
       <div>
@@ -143,21 +144,10 @@ class HeaderLinks extends React.Component {
             )}
           </Poppers>
         </div> */}
-        <div>Hi {this.props.name},</div>
-        <Button
-          color={window.innerWidth > 959 ? "transparent" : "white"}
-          justIcon={window.innerWidth > 959}
-          simple={!(window.innerWidth > 959)}
-          aria-label="Person"
-          title='My Profile'
-          className={classes.buttonLink}
-          onClick={this.props.openMemberDialog}
-        >
-          <Person className={classes.icons} />
-          <Hidden mdUp implementation="css">
-            <p className={classes.linkText}>My Profile</p>
-          </Hidden>
-        </Button>
+        <span><a className={'click'} onClick={this.props.openMemberDialog}>My Profile ({this.props.name})</a></span> | 
+        <span><a className={'click'} onClick={this.props.openNewMemberDialog}> Add Visitor</a></span> | 
+        <span><a className={'click'} onClick={this.props.logout}> Logout</a></span>
+{/*         
         <Button
           color={window.innerWidth > 959 ? "transparent" : "white"}
           justIcon={window.innerWidth > 959}
@@ -172,7 +162,7 @@ class HeaderLinks extends React.Component {
           <Hidden mdUp implementation="css">
             <p className={classes.linkText}>Logout</p>
           </Hidden>
-        </Button>
+        </Button> */}
       </div>
     );
   }

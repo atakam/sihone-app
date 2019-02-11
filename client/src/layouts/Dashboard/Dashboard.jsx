@@ -29,6 +29,15 @@ import AccessTime from "@material-ui/icons/AccessTime";
 import Login from "../Login/Login.jsx";
 import MemberView from "../../views/Members/MemberView.jsx";
 
+import VisitorForm from "../../views/Members/VisitorForm.jsx";
+import Dialog from '@material-ui/core/Dialog';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import DialogContent from '@material-ui/core/DialogContent';
+import Tooltip from '@material-ui/core/Tooltip';
+
+import ToolBar from "components/ToolBar/ToolBar.jsx";
+
 const topData = [
   {
     title: 'Total Members',
@@ -227,6 +236,14 @@ class App extends React.Component {
     this.setState({ openMemberDialog: false });
   }
 
+  openNewMemberDialog = () => {
+    this.setState({ openNewMemberDialog: true });
+  }
+
+  closeNewMemberDialog = () => {
+    this.setState({ openNewMemberDialog: false });
+  }
+
   render() {
     const { classes, ...rest } = this.props;
     return (
@@ -248,6 +265,7 @@ class App extends React.Component {
               routes={dashboardRoutes}
               handleDrawerToggle={this.handleDrawerToggle}
               openMemberDialog={this.openMemberDialog}
+              openNewMemberDialog={this.openNewMemberDialog}
               name={this.props.account.firstname}
               {...rest}
             />
@@ -266,6 +284,27 @@ class App extends React.Component {
             onClose={this.closeMemberDialog}
             memberId={this.props.account.memberid}
           />
+          <Dialog
+            fullScreen
+            open={this.state.openNewMemberDialog}
+            onClose={this.closeNewMemberDialog}
+          >
+            <ToolBar
+              toolBarIcons={
+                <span>
+                  <Tooltip title="Cancel">
+                    <IconButton color="inherit" onClick={this.closeNewMemberDialog} aria-label="Close">
+                      <CloseIcon />
+                    </IconButton>
+                  </Tooltip>
+                </span>
+              }
+              title={'New Visitor Entry'}
+            />
+            <DialogContent>
+              <VisitorForm onClose={this.closeNewMemberDialog} />
+            </DialogContent>
+          </Dialog>
         </div>
       ) : (<Login />)
     );
