@@ -39,7 +39,7 @@ class CreateMember extends React.Component {
       membershipdate: '',
       familyid: '',
 
-      subscribtion: false,
+      subscribtion: true,
       familyname: '',
       familyemail: '',
       streetaddress: '',
@@ -1036,7 +1036,7 @@ class CreateMember extends React.Component {
               </CardBody>
               <CardFooter>
                 {
-                  this.props.hasOwnProperty('memberId') ? (
+                  this.props.hasOwnProperty('memberId') && this.props.memberId !== this.props.account.memberid ? (
                     <Button color="danger" className='add-button create' onClick={this.handleDelete}>
                       Delete
                     </Button>

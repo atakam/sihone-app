@@ -35,6 +35,24 @@ CREATE TABLE IF NOT EXISTS members(
   
 );
 
+CREATE TABLE IF NOT EXISTS accounts(
+  id              SERIAL PRIMARY KEY,
+  descriptiontext TEXT NOT NULL,
+  accountdate    VARCHAR,
+  isopen          BOOLEAN NOT NULL,
+  candelete          BOOLEAN NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS transactions(
+  id            SERIAL PRIMARY KEY,
+  accountid    INTEGER,
+  descriptiontext TEXT NOT NULL,
+  transactiontype       VARCHAR(64),
+  transactiondate       TIMESTAMP NOT NULL,
+  amount     FLOAT,
+  FOREIGN KEY (accountid) REFERENCES accounts(id)
+);
+
 CREATE TABLE IF NOT EXISTS envelopes(
   id              SERIAL PRIMARY KEY,
   descriptiontext TEXT NOT NULL,
@@ -42,6 +60,11 @@ CREATE TABLE IF NOT EXISTS envelopes(
   isopen          BOOLEAN NOT NULL,
   accountid       INTEGER,
   FOREIGN KEY (accountid) REFERENCES accounts(id)
+);
+
+CREATE TABLE IF NOT EXISTS paymenttypes(
+  id              SERIAL PRIMARY KEY,
+  paymenttype        VARCHAR NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS donations(
@@ -54,11 +77,6 @@ CREATE TABLE IF NOT EXISTS donations(
   FOREIGN KEY (envelopeid) REFERENCES envelopes(id),
   FOREIGN KEY (memberid) REFERENCES members(id),
   FOREIGN KEY (paytype) REFERENCES paymenttypes(id)
-);
-
-CREATE TABLE IF NOT EXISTS paymenttypes(
-  id              SERIAL PRIMARY KEY,
-  paymenttype        VARCHAR NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS funds(
@@ -91,24 +109,6 @@ CREATE TABLE IF NOT EXISTS membergroup(
   groupid  INTEGER,
   FOREIGN KEY (memberid)  REFERENCES members(id),
   FOREIGN KEY (groupid) REFERENCES groups(id)
-);
-
-CREATE TABLE IF NOT EXISTS accounts(
-  id              SERIAL PRIMARY KEY,
-  descriptiontext TEXT NOT NULL,
-  accountdate    VARCHAR,
-  isopen          BOOLEAN NOT NULL,
-  candelete          BOOLEAN NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS transactions(
-  id            SERIAL PRIMARY KEY,
-  accountid    INTEGER,
-  descriptiontext TEXT NOT NULL,
-  transactiontype       VARCHAR(64),
-  transactiondate       TIMESTAMP NOT NULL,
-  amount     FLOAT,
-  FOREIGN KEY (accountid) REFERENCES accounts(id)
 );
 
 CREATE TABLE IF NOT EXISTS activities(
