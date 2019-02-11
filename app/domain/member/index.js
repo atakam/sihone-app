@@ -101,7 +101,7 @@ class Member {
     this.avatar = avatar || DEFAULT_PROPERTIES.avatar;
     this.hearaboutus = hearaboutus || DEFAULT_PROPERTIES.hearaboutus;
     this.subscribtion = subscribtion || DEFAULT_PROPERTIES.subscribtion;
-    this.active = active || DEFAULT_PROPERTIES.active;
+    this.active = active != undefined ? active : DEFAULT_PROPERTIES.active;
     this.password = password || DEFAULT_PROPERTIES.password;
     this.sessionid = sessionid || DEFAULT_PROPERTIES.sessionid;
   }

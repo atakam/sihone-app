@@ -293,3 +293,7 @@ table{
   max-height: 500px;
   overflow: auto;
 }
+
+.MuiTabs-flexContainer-203 {
+  flex-wrap: wrap;
+}

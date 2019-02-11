@@ -37,7 +37,8 @@ class MembersList extends React.Component {
   }
 
   fetchMembers = () => {
-    fetch('/member/findAll')
+    let url = this.props.active ? '/member/findAll' : '/member/findInactive';
+    fetch(url)
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
@@ -112,7 +113,8 @@ class MembersList extends React.Component {
 }
 
 MembersList.propTypes = {
-  isChildren: PropTypes.bool
+  isChildren: PropTypes.bool,
+  active: PropTypes.bool
 };
 
 export default MembersList;

@@ -40,10 +40,10 @@ class SettingsTable {
     return new Promise((resolve, reject) => {
       pool.query(
         `SELECT
-         (SELECT COUNT(*) FROM members) AS member,
-         (SELECT COUNT(*) FROM   groups) AS group,
-         (SELECT COUNT(*) FROM   families) AS family,
-         (SELECT COUNT(*) FROM members WHERE (birthdate > NOW() - interval '18 year') ) AS children
+          (SELECT COUNT(*) FROM members WHERE active = true) AS member,
+          (SELECT COUNT(*) FROM   groups) AS group,
+          (SELECT COUNT(*) FROM (SELECT DISTINCT families.id FROM families LEFT JOIN members ON members.familyid = families.id WHERE members.id IS NOT NULL AND members.active = true) AS ufamily) AS family,
+          (SELECT COUNT(*) FROM members WHERE (birthdate > NOW() - interval '18 year') AND active = true) AS children
         FROM settings`,
         (error, response) => {
           if (error) return reject(error);

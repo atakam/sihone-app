@@ -138,7 +138,7 @@ class FamilyTable {
           members.id as memberid
         FROM families
         LEFT JOIN members ON members.familyid = families.id
-        WHERE members.id > 0`,
+        WHERE members.id > 0 AND members.active = true`,
         (error, response) => {
           if (error) return reject(error);
 

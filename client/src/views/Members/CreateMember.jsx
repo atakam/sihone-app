@@ -60,6 +60,7 @@ class CreateMember extends React.Component {
       groups: [],
       allGroups: [],
       group: '',
+      active: true,
       notificationRemoveOpen: false,
 
       notificationDeleteErrorOpen: false,
@@ -120,7 +121,8 @@ class CreateMember extends React.Component {
         phone: json.member.phone,
         uid: json.member.memberuid,
         membershipdate: json.member.membershipdate ? json.member.membershipdate.split('T')[0] : '',
-        familyid: json.member.familyid
+        familyid: json.member.familyid,
+        active: json.member.active
       })
     })
     .catch(error => console.log('error', error));
@@ -168,7 +170,8 @@ class CreateMember extends React.Component {
       province,
       postalcode,
       country,
-      homephone
+      homephone,
+      active
     } = this.state
 
     const member = {
@@ -193,7 +196,8 @@ class CreateMember extends React.Component {
       province,
       postalcode,
       country,
-      homephone
+      homephone,
+      active
     }
 
     axios({
@@ -239,7 +243,8 @@ class CreateMember extends React.Component {
       province,
       postalcode,
       country,
-      homephone
+      homephone,
+      active
     } = this.state
 
     const member = {
@@ -263,7 +268,8 @@ class CreateMember extends React.Component {
       province,
       postalcode,
       country,
-      homephone
+      homephone,
+      active
     }
 
     axios({
@@ -311,6 +317,7 @@ class CreateMember extends React.Component {
       postalcode: '',
       country: '',
       homephone: '',
+      active: true,
 
       existingFamily: this.props.memberId > 0
     });
@@ -537,7 +544,9 @@ class CreateMember extends React.Component {
 
       groups,
       allGroups,
-      group
+      group,
+
+      active
     } = this.state
 
     const excludes = groups.map((group) => group.id);
@@ -557,6 +566,17 @@ class CreateMember extends React.Component {
       this.props.account.role === 'assistant' ||
       this.props.account.role === 'accountant' ||
       this.props.account.role === 'group');
+
+    const actives = [
+      {
+        value: true,
+        label: 'Active'
+      },
+      {
+        value: false,
+        label: 'Inactive'
+      }
+    ];
 
     const hasAdminAccess = (this.props.account.role === 'administrator');
     const hasSecureAccess = (this.props.account.role === 'administrator'|| 
@@ -942,7 +962,7 @@ class CreateMember extends React.Component {
                   <GridItem xs={12} sm={12} md={12}>
                     <h6 className="form-subtitle">Organization Information</h6>
                   </GridItem>
-                  <GridItem xs={12} sm={12} md={4}>
+                  <GridItem xs={12} sm={12} md={3}>
                     <CustomInput
                       labelText="Member ID"
                       id="memberId"
@@ -956,7 +976,7 @@ class CreateMember extends React.Component {
                       }}
                     />
                   </GridItem>
-                  <GridItem xs={12} sm={12} md={4}>
+                  <GridItem xs={12} sm={12} md={3}>
                     <TextField
                       id="select-role"
                       className="select-input"
@@ -975,7 +995,7 @@ class CreateMember extends React.Component {
                       ))}
                     </TextField>
                   </GridItem>
-                  <GridItem xs={12} sm={12} md={4}>
+                  <GridItem xs={12} sm={12} md={3}>
                     <CustomInput
                       labelText="Membership Date"
                       id="member-date"
@@ -992,6 +1012,25 @@ class CreateMember extends React.Component {
                         shrink: true,
                       }}
                     />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={3}>
+                    <TextField
+                      id="select-type"
+                      select
+                      label="Active"
+                      value={active}
+                      onChange={(e) => this.handleInputChange(e, 'active')}
+                      margin="normal"
+                      fullWidth
+                      className="select-input"
+                      disabled={!hasSecureAccess}
+                    >
+                      {actives.map((option, i) => (
+                        <MenuItem key={i} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
                   </GridItem>
                 </GridContainer>
               </CardBody>

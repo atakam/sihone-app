@@ -1,9 +1,11 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { logout } from "../../actions/account";
 
 class Logout extends Component {
 
   componentDidMount() {
-    document.getElementById('logout').click();
+    this.props.logout();
   }
 
   render() {
@@ -13,4 +15,7 @@ class Logout extends Component {
   }
 }
 
-export default Logout;
+export default connect(
+  ({ account }) => ({ account }), 
+  { logout }
+)(Logout);

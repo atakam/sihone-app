@@ -31,7 +31,7 @@ class HeaderLinks extends React.Component {
   };
 
   render() {
-    // const { classes } = this.props;
+    const { classes } = this.props;
     // const { open } = this.state;
     return (
       <div>
@@ -144,7 +144,7 @@ class HeaderLinks extends React.Component {
             )}
           </Poppers>
         </div> */}
-        <span><a className={'click'} onClick={this.props.openMemberDialog}>My Profile ({this.props.name})</a></span> | 
+        <span className={classes.buttonLink}><a className={'click'} onClick={this.props.openMemberDialog}>My Profile ({this.props.name})</a></span> | 
         {
           (this.props.account.role === 'administrator' || 
           this.props.account.role === 'assistant' ||

@@ -166,7 +166,7 @@ router.post('/update', (req, res, next) => {
         country
     });
 
-     console.log('update password', password);
+     console.log('active', active);
 
     const member = new Member({
         memberid,
@@ -190,6 +190,9 @@ router.post('/update', (req, res, next) => {
         active,
         password: password ? hash(password) : null
     });
+
+    console.log('MM', member);
+
 
     if (familyid) {
         MemberTable.updateMember(member)
@@ -354,7 +357,16 @@ router.get('/find/:id', (req, res, next) => {
 });
 
 router.get('/findAll', (req, res, next) => {
-    MemberTable.getMembers()
+    MemberTable.getMembers(true)
+        .then((members) => res.json({
+            message: 'successfully found all members',
+            members
+        }))
+        .catch(error => next(error));
+});
+
+router.get('/findInactive', (req, res, next) => {
+    MemberTable.getMembers(false)
         .then((members) => res.json({
             message: 'successfully found all members',
             members

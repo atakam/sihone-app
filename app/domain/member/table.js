@@ -131,7 +131,7 @@ class MemberTable {
     });
   }
 
-  static getMembers() {
+  static getMembers(active) {
     return new Promise((resolve, reject) => {
       pool.query(
         `SELECT
@@ -161,7 +161,9 @@ class MemberTable {
           postalcode,
           country
         FROM members
-        LEFT JOIN families ON families.id = familyid`,
+        LEFT JOIN families ON families.id = familyid
+        WHERE active = $1`,
+        [active],
         (error, response) => {
           if (error) return reject(error);
 

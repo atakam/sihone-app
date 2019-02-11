@@ -41,7 +41,12 @@ class Members extends React.Component {
           <Tab
             value='members'
             disableRipple
-            label={"ALL MEMBERS"}
+            label={"ACTIVE MEMBERS"}
+          />
+          <Tab
+            value='nonmembers'
+            disableRipple
+            label={"INACTIVE MEMBERS"}
           />
           <Tab
             value='families'
@@ -65,7 +70,10 @@ class Members extends React.Component {
           />
         </Tabs>
         {this.state.tabValue === 'members' && <TabContainer>
-          <MembersList />
+          <MembersList active/>
+        </TabContainer>}
+        {this.state.tabValue === 'nonmembers' && <TabContainer>
+          <MembersList active={false} />
         </TabContainer>}
         {this.state.tabValue === 'families' && <TabContainer>
           <FamilyList />
