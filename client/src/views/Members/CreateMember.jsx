@@ -257,7 +257,7 @@ class CreateMember extends React.Component {
       birthdate,
       email,
       phone,
-      password,
+      password: password === '' ? 'abc123' : password,
       memberuid: uid,
       membershipdate,
       familyid,
