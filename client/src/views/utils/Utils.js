@@ -127,20 +127,26 @@ class Utils {
     }
 
     static searchTable(input, tableId) {
-        var filter, table, tr, td, i, txtValue;
+        var filter, table, tr, td, i, j, txtValue, found;
         filter = input.value.toUpperCase();
         table = document.getElementById(tableId);
         tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-          td = tr[i].getElementsByTagName("td")[0];
-          if (td) {
-            txtValue = td.textContent || td.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-              tr[i].style.display = "";
-            } else {
-              tr[i].style.display = "none";
+        for (i = 1; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td");
+          found = false;
+          for (j = 0; j < td.length; j++) {
+            if (td[j]) {
+                txtValue = td[j].textContent || td[j].innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                  found = true;
+                }
             }
-          }       
+          }
+          if (found) {
+            tr[i].style.display = "";
+          } else {
+            tr[i].style.display = "none";
+          }
         }
     }
 
