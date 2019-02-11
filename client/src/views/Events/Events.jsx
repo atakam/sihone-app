@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -202,14 +203,17 @@ class Events extends React.Component {
 
   initCalendar = () => {
     let that = this;
+    const hasAccess = (this.props.account.role === 'administrator' || 
+      this.props.account.role === 'assistant' ||
+      this.props.account.role === 'accountant');
     $('#agenda').fullCalendar({
       defaultView: 'agendaWeek',
       selectable: true,
       selectHelper: true,
-      select: function(startDate, endDate) {
+      select: hasAccess ? function(startDate, endDate) {
         that.initStartEndTime(startDate, endDate);
         that.handleClickOpenAddEvent();
-      },
+      } : () => {},
       dayClick: function() {},
       events: that.state.events,
       eventColor: '#00bbb2',
@@ -270,4 +274,7 @@ Events.propTypes = {
   classes: PropTypes.object
 };
 
-export default withStyles(dashboardStyle)(Events);
+export default connect(
+  ({ account }) => ({ account }),
+  null
+)( withStyles(dashboardStyle)(Events) );

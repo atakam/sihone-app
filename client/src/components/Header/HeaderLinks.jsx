@@ -145,7 +145,12 @@ class HeaderLinks extends React.Component {
           </Poppers>
         </div> */}
         <span><a className={'click'} onClick={this.props.openMemberDialog}>My Profile ({this.props.name})</a></span> | 
-        <span><a className={'click'} onClick={this.props.openNewMemberDialog}> Add Visitor</a></span> | 
+        {
+          (this.props.account.role === 'administrator' || 
+          this.props.account.role === 'assistant' ||
+          this.props.account.role === 'accountant') && 
+            (<span><a className={'click'} onClick={this.props.openNewMemberDialog}> Add Visitor</a> |</span> )
+        }
         <span><a className={'click'} onClick={this.props.logout}> Logout</a></span>
 {/*         
         <Button

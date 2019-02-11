@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from "axios";
 import PropTypes from 'prop-types';
+import { connect } from "react-redux";
 import { withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
@@ -262,6 +263,10 @@ class AddEventFullScreenDialog extends React.Component {
       </span>
     );
 
+    const hasAccess = (this.props.account.role === 'administrator' || 
+      this.props.account.role === 'assistant' ||
+      this.props.account.role === 'accountant');
+
     return (
       <Dialog
         fullScreen
@@ -283,6 +288,7 @@ class AddEventFullScreenDialog extends React.Component {
             }}
             inputProps={{
               autoFocus: true,
+              disabled: !hasAccess,
               value: this.state.eventValue,
               onChange: (e) => this.handleInputChange(e, 'eventValue')
             }}
@@ -290,6 +296,7 @@ class AddEventFullScreenDialog extends React.Component {
           <Checkbox
             onChange={(e, checked) => { this.handleOnCheck(e, checked, 'allday'); }}
             checked={this.state.allday}
+            disabled={!hasAccess}
           /> All day
           
           <CustomInput
@@ -300,6 +307,7 @@ class AddEventFullScreenDialog extends React.Component {
             }}
             inputProps={{
               style: {marginLeft: '40px'},
+              disabled: !hasAccess,
               type: "datetime-local",
               value: this.state.startDate.includes('T') ? this.state.startDate : this.state.startDate + 'T00:00',
               onChange: (e) => this.handleInputChange(e, 'startDate')
@@ -317,6 +325,7 @@ class AddEventFullScreenDialog extends React.Component {
             }}
             inputProps={{
               type: "datetime-local",
+              disabled: !hasAccess,
               value: this.state.endDate.includes('T') ? this.state.endDate : this.state.endDate + 'T00:00',
               onChange: (e) => this.handleInputChange(e, 'endDate')
             }}
@@ -329,7 +338,8 @@ class AddEventFullScreenDialog extends React.Component {
             onChange={(e) => this.handleInputChange(e, 'repeat')}
             inputProps={{
               name: 'repeat',
-              id: 'repeat'
+              id: 'repeat',
+              disabled: !hasAccess,
             }}
             className="repeat-select"
           >
@@ -352,11 +362,15 @@ class AddEventFullScreenDialog extends React.Component {
               disableRipple
               label="EVENT DETAILS"
             />
-            <Tab
-              value='guests'
-              disableRipple
-              label="GUESTS"
-            />
+            {
+              hasAccess && (
+                <Tab
+                  value='guests'
+                  disableRipple
+                  label="GUESTS"
+                />
+              )
+            }
           </Tabs>
           {this.state.tabValue === 'details' && <TabContainer>
             <CustomInput
@@ -366,12 +380,13 @@ class AddEventFullScreenDialog extends React.Component {
                 fullWidth: true
               }}
               inputProps={{
+                disabled: !hasAccess,
                 value: this.state.location,
                 onChange: (e) => this.handleInputChange(e, 'location')
               }}
             />
           </TabContainer>}
-          {this.state.tabValue === 'guests' && <TabContainer>
+          {this.state.tabValue === 'guests' && hasAccess && <TabContainer>
             <div style={{width: 'calc(50% - 20px)', float: 'left', padding: '0 10px'}}>
               <MemberSelect
                 placeholder="Invite Members"
@@ -418,23 +433,25 @@ class AddEventFullScreenDialog extends React.Component {
           </TabContainer>}
           <div className="clear" />
         </DialogContent>
-        <DialogActions>
-          {
-            this.props.eventId && (
-              <Button onClick={this.handleDelete} color="danger" className="left">
-                Delete
-              </Button>
-            )
-          }
-          <Button
-            onClick={this.handleSave}
-            color="info"
-            disabled={!this.state.eventValue
-              || this.state.eventValue.length === 0}
-          >
-            Save
-          </Button>
-        </DialogActions>
+        {hasAccess && (
+          <DialogActions>
+            {
+              this.props.eventId && (
+                <Button onClick={this.handleDelete} color="danger" className="left">
+                  Delete
+                </Button>
+              )
+            }
+            <Button
+              onClick={this.handleSave}
+              color="info"
+              disabled={!this.state.eventValue
+                || this.state.eventValue.length === 0}
+            >
+              Save
+            </Button>
+          </DialogActions>
+        )}
       </Dialog>
     );
   }
@@ -454,4 +471,7 @@ AddEventFullScreenDialog.propTypes = {
   allDay: PropTypes.bool
 };
 
-export default withStyles(styles)(AddEventFullScreenDialog);
+export default connect(
+  ({ account }) => ({ account }),
+  null
+)( withStyles(styles)(AddEventFullScreenDialog) );

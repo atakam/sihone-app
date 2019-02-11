@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 
 import TabContainer from 'components/TabContainer/TabContainer.jsx';
 
@@ -38,8 +39,16 @@ class Settings extends React.Component {
 
   componentWillMount () {
     const view = new URL(window.location.href).searchParams.get("view");
+    const hasAccess = (this.props.account.role === 'administrator' || 
+      this.props.account.role === 'assistant' ||
+      this.props.account.role === 'accountant');
+    
+    let tabValue = view || 'identity';
+    if (!hasAccess) {
+      tabValue = 'membership';
+    }
     this.setState({
-      tabValue: view || 'identity'
+      tabValue
     });
   }
 
@@ -59,6 +68,10 @@ class Settings extends React.Component {
     const {
       notificationOpen
     } = this.state
+
+    const hasAccess = (this.props.account.role === 'administrator' || 
+      this.props.account.role === 'assistant' ||
+      this.props.account.role === 'accountant');
 
     return (
       <div>
@@ -80,50 +93,66 @@ class Settings extends React.Component {
           scrollButtons="on"
           indicatorColor="primary"
         >
-          <Tab
-            value='identity'
-            disableRipple
-            label="IDENTITY"
-            icon={<Home />}
-          />
-          <Tab
-            value='email'
-            disableRipple
-            label="EMAIL SETUP"
-            icon={<Mail />}
-          />
-          <Tab
-            value='sms'
-            disableRipple
-            label="SMS SETUP"
-            icon={<Message />}
-          />
+          {
+            hasAccess && (
+              <Tab
+                value='identity'
+                disableRipple
+                label="IDENTITY"
+                icon={<Home />}
+              />
+            )
+          }
+          {
+            hasAccess && (
+              <Tab
+                value='email'
+                disableRipple
+                label="EMAIL SETUP"
+                icon={<Mail />}
+              />
+            )
+          }
+          {
+            hasAccess && (
+              <Tab
+                value='sms'
+                disableRipple
+                label="SMS SETUP"
+                icon={<Message />}
+              />
+            )
+          }
           <Tab
             value='membership'
             disableRipple
             label="membership / Group"
             icon={<Person />}
           />
-          <Tab
-            value='finance'
-            disableRipple
-            label="Donations / Accounting"
-            icon={<AttachMoney />}
-          />
+          {
+            hasAccess && (
+              <Tab
+                value='finance'
+                disableRipple
+                label="Donations / Accounting"
+                icon={<AttachMoney />}
+              />
+            )
+          }
         </Tabs>
-        {this.state.tabValue === 'identity' && <TabContainer>
+        {this.state.tabValue === 'identity' && hasAccess && <TabContainer>
           <Identity openNotification={this.openNotification} />
         </TabContainer>}
-        {this.state.tabValue === 'email' && <TabContainer>
+        {this.state.tabValue === 'email' && hasAccess && <TabContainer>
           <Email openNotification={this.openNotification} />
         </TabContainer>}
-        {this.state.tabValue === 'sms' && <TabContainer>
+        {this.state.tabValue === 'sms' && hasAccess && <TabContainer>
           <SMS openNotification={this.openNotification} />
         </TabContainer>}
         {this.state.tabValue === 'membership' && <TabContainer>
           <Membership openNotification={this.openNotification} />
         </TabContainer>}
-        {this.state.tabValue === 'finance' && <TabContainer>
+        {this.state.tabValue === 'finance' && hasAccess && <TabContainer>
           <Finance openNotification={this.openNotification} />
         </TabContainer>}
       </div>
@@ -131,4 +160,7 @@ class Settings extends React.Component {
   }
 }
 
-export default Settings;
+export default connect(
+  ({ account }) => ({ account }),
+  null
+)( Settings );

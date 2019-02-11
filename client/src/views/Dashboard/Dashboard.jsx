@@ -115,10 +115,15 @@ class Dashboard extends React.Component {
       topData,
       charts
     } = this.props;
+
+    const hasAccess = (this.props.account.role === 'administrator' || 
+      this.props.account.role === 'assistant' ||
+      this.props.account.role === 'accountant');
+
     return (
       <div>
         {
-          (Utils.isMember(this.props.account.role) || Utils.isVisitor(this.props.account.role)) ? (
+          (!hasAccess) ? (
             <GridContainer>
               <GridItem xs={12} sm={12} md={12}>
                 <Card>

@@ -511,7 +511,7 @@ class MemberTable {
         (error, response) => {
           if (error) return reject(error);
 
-          resolve();
+          resolve(true);
         }
       )
     });

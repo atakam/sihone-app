@@ -118,10 +118,12 @@ const Sidebar = ({ ...props }) => {
             case 'Home':
             case 'Events':
             case 'Members':
+            case 'Groups':
             case 'Donations':
             case 'Accounting':
             case 'Messaging':
             case 'Reporting':
+            case 'Activity':
             case 'Settings':
             case 'Logout':
               return renderNavigation(key, prop);
@@ -138,6 +140,7 @@ const Sidebar = ({ ...props }) => {
             case 'Members':
             case 'Donations':
             case 'Messaging':
+            case 'Settings':
             case 'Logout':
               return renderNavigation(key, prop);
             default:

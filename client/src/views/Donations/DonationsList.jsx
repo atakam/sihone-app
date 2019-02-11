@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
+import { connect } from "react-redux";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -433,18 +434,26 @@ class DonationsList extends React.Component {
       )
     );
 
-    let actions = this.props.isPrintable ? [] : [
-      {
-        type: 'edit',
-        action: this.editDonation,
-        label: 'Edit'
-      },
-      {
-        type: 'delete',
-        action: this.handleDelete,
-        label: 'Delete'
-      }
-    ];
+    let actions = [];
+
+    const hasAccess = (this.props.account.role === 'administrator' || 
+      this.props.account.role === 'assistant' ||
+      this.props.account.role === 'accountant');
+    
+    hasAccess && (
+      actions = this.props.isPrintable ? [] : [
+        {
+          type: 'edit',
+          action: this.editDonation,
+          label: 'Edit'
+        },
+        {
+          type: 'delete',
+          action: this.handleDelete,
+          label: 'Delete'
+        }
+      ]
+    )
 
     return (
       <GridContainer>
@@ -501,4 +510,7 @@ DonationsList.propTypes = {
   isPrintable: PropTypes.bool
 };
 
-export default DonationsList;
+export default connect(
+  ({ account }) => ({ account }),
+  null
+)( DonationsList );

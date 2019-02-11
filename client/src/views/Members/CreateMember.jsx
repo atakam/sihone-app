@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import axios from "axios";
 // @material-ui/core components
 import MenuItem from '@material-ui/core/MenuItem';
@@ -88,15 +89,17 @@ class CreateMember extends React.Component {
   }
 
   fetchGroups = () => {
-    fetch('/group/findAll')
-    .then(response => response.json())
-    .then(json => {
-      console.log('json', json);
-      this.setState({
-        allGroups: json.groups
+    setTimeout(() => {
+      fetch('/group/findAll')
+      .then(response => response.json())
+      .then(json => {
+        console.log('json', json);
+        this.setState({
+          allGroups: json.groups
+        })
       })
-    })
-    .catch(error => console.log('error', error));
+      .catch(error => console.log('error', error));
+    }, 2000);
   }
 
   fetchMember = () => {
@@ -550,6 +553,15 @@ class CreateMember extends React.Component {
 
     const showFamily = familyid || !this.props.hasOwnProperty('memberId');
 
+    const hasAccess = (this.props.account.role === 'administrator' || 
+      this.props.account.role === 'assistant' ||
+      this.props.account.role === 'accountant' ||
+      this.props.account.role === 'group');
+
+    const hasAdminAccess = (this.props.account.role === 'administrator');
+    const hasSecureAccess = (this.props.account.role === 'administrator'|| 
+      this.props.account.role === 'assistant');
+
     return (
       <form onSubmit={this.props.hasOwnProperty('memberId') ? this.handleSave : this.handleSaveNew}>
         <GridContainer>
@@ -762,18 +774,22 @@ class CreateMember extends React.Component {
                         <GridItem xs={12} sm={12} md={12}>
                           <h6 className="form-subtitle">Family Information</h6>
                         </GridItem>
-                        <GridItem xs={12} sm={12} md={4}>
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                onChange={this.familyOption}
-                                checked={existingFamily}
+                        {
+                          hasAccess && (
+                            <GridItem xs={12} sm={12} md={4}>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    onChange={this.familyOption}
+                                    checked={existingFamily}
+                                  />
+                                }
+                                label="Assign to Exisitng Family"
+                                className="form-checkbox"
                               />
-                            }
-                            label="Assign to Exisitng Family"
-                            className="form-checkbox"
-                          />
-                        </GridItem>
+                            </GridItem>
+                          )
+                        }
                       </GridContainer>
                         
                         {
@@ -789,6 +805,7 @@ class CreateMember extends React.Component {
                                   margin="normal"
                                   fullWidth
                                   className="select-input"
+                                  disabled={!hasAccess}
                                 >
                                   {families.map(option => (
                                     <MenuItem key={option.value} value={option.value}>
@@ -934,6 +951,7 @@ class CreateMember extends React.Component {
                       }}
                       inputProps={{
                         value: uid,
+                        disabled: !hasSecureAccess,
                         onChange: (e) => this.handleInputChange(e, 'uid')
                       }}
                     />
@@ -948,6 +966,7 @@ class CreateMember extends React.Component {
                       onChange={(e) => this.handleInputChange(e, 'role')}
                       margin="normal"
                       fullWidth
+                      disabled={!hasAdminAccess}
                     >
                       {roles.map(option => (
                         <MenuItem key={option.value} value={option.value}>
@@ -966,6 +985,7 @@ class CreateMember extends React.Component {
                       inputProps={{
                         type:"date",
                         value: membershipdate,
+                        disabled: !hasSecureAccess,
                         onChange: (e) => this.handleInputChange(e, 'membershipdate')
                       }}
                       labelProps={{
@@ -1012,35 +1032,42 @@ class CreateMember extends React.Component {
                                 }
                               )
                             }
-                            rowActions={[
-                              {
-                                type: 'delete',
-                                action: this.deleteGroupFromMember,
-                                label: 'Remove'
-                              }
-                            ]}
+                            rowActions={
+                              hasAccess ?[
+                                {
+                                  type: 'delete',
+                                  action: this.deleteGroupFromMember,
+                                  label: 'Remove'
+                                }
+                              ] : []
+                          }
                           />
                         </GridItem>
-                        <GridItem xs={12} sm={12} md={6}>
-                          <h6 className="form-subtitle">Add Group</h6>
-                            <TextField
-                              id="select-group"
-                              className="select-input"
-                              select
-                              label="Select Group"
-                              value={group}
-                              onChange={(e) => this.handleInputChange(e, 'group')}
-                              margin="normal"
-                              fullWidth
-                            >
-                              {allGroupsModified.map(option => (
-                                <MenuItem key={option.id} value={option.id}>
-                                  {option.groupname}
-                                </MenuItem>
-                              ))}
-                            </TextField>
-                            <Button className="form-button" color="info" size="sm" onClick={this.handleAddMemberToGroup}>Add</Button>
-                        </GridItem>
+                        {
+                          hasAccess && (
+                            <GridItem xs={12} sm={12} md={6}>
+                              <h6 className="form-subtitle">Add Group</h6>
+                                <TextField
+                                  id="select-group"
+                                  className="select-input"
+                                  select
+                                  label="Select Group"
+                                  value={group}
+                                  onChange={(e) => this.handleInputChange(e, 'group')}
+                                  margin="normal"
+                                  fullWidth
+                                >
+                                  {allGroupsModified.map(option => (
+                                    <MenuItem key={option.id} value={option.id}>
+                                      {option.groupname}
+                                    </MenuItem>
+                                  ))}
+                                </TextField>
+                                <Button className="form-button" color="info" size="sm" onClick={this.handleAddMemberToGroup}>Add</Button>
+                            </GridItem>
+                          )
+                        }
+                        
                       </GridContainer>
                   </CardBody>
                   ) : (
@@ -1076,4 +1103,7 @@ CreateMember.propTypes = {
   onSave: PropTypes.func
 };
 
-export default CreateMember;
+export default connect(
+  ({ account }) => ({ account }),
+  null
+)( CreateMember );

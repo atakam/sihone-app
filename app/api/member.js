@@ -446,6 +446,7 @@ router.post('/login', (req, res, next) => {
             }
         })
         .then(({type, error}) => {
+            console.log('PASSED 2');
             if (type === 'error') res.json({ error, type });
             else {
                 sendForgotPasswordEmail(email, password);

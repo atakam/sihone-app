@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
-import Utils from "../utils/Utils";
+import { connect } from "react-redux";
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -18,6 +17,11 @@ import MemberSelect from '../utils/MemberSelect.jsx';
 import DonationsList from './DonationsList.jsx';
 import StatementSummary from './StatementSummary';
 
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import combineReducers from "../../reducers";
+
 class Statements extends React.Component {
 
   constructor(props) {
@@ -32,7 +36,8 @@ class Statements extends React.Component {
       filterRange: '',
       donations: [],
 
-      member: ''
+      member: '',
+      fetchedMember: {}
     };
   }
 
@@ -80,6 +85,21 @@ class Statements extends React.Component {
         donations: json.donations,
         filterRange: json.quickFilterRange
       })
+      this.fetchMember();
+    })
+    .catch(error => console.log('error', error));
+  }
+
+  fetchMember = () => {
+    let memberId = this.state.memberId;
+
+    fetch(`/member/find/${memberId}`)
+    .then(response => response.json())
+    .then(json => {
+      console.log('json', json);
+      this.setState({
+        fetchedMember: json.member
+      })
     })
     .catch(error => console.log('error', error));
   }
@@ -93,6 +113,7 @@ class Statements extends React.Component {
         donations: json.donations,
         filterRange: this.state.from + ' - ' + this.state.to
       })
+      this.fetchMember();
     })
     .catch(error => console.log('error', error));
   }
@@ -133,7 +154,7 @@ class Statements extends React.Component {
       from,
       to,
       filterRange,
-      member
+      fetchedMember
     } = this.state;
 
     const rangeValue = filter === 'cutom' ? (from + ' - ' + to) : filterRange;
@@ -164,22 +185,22 @@ class Statements extends React.Component {
 
     var membername = document.createElement('p');
     membername.setAttribute('class', 'membername');
-    membername.appendChild(document.createTextNode(member.firstname + ' ' + member.lastname));
+    membername.appendChild(document.createTextNode((fetchedMember.firstname || '') + ' ' + (fetchedMember.lastname || '')));
     title.appendChild(membername);
 
     var memberaddess = document.createElement('p');
     memberaddess.setAttribute('class', 'memberaddress');
-    memberaddess.appendChild(document.createTextNode(member.streetaddress));
+    memberaddess.appendChild(document.createTextNode(fetchedMember.streetaddress || ''));
     title.appendChild(memberaddess);
 
     var memberaddess2 = document.createElement('p');
     memberaddess2.setAttribute('class', 'memberaddress');
-    memberaddess2.appendChild(document.createTextNode(member.city + ' ' + member.province + ' ' + member.postalcode));
+    memberaddess2.appendChild(document.createTextNode((fetchedMember.city || '') + ' ' + (fetchedMember.province || '') + ' ' + (fetchedMember.postalcode || '')));
     title.appendChild(memberaddess2);
 
     var memberaddess3 = document.createElement('p');
     memberaddess3.setAttribute('class', 'memberaddress');
-    memberaddess3.appendChild(document.createTextNode(member.country));
+    memberaddess3.appendChild(document.createTextNode(fetchedMember.country || ''));
     title.appendChild(memberaddess3);
 
     var dates = document.createElement('div');
@@ -195,12 +216,23 @@ class Statements extends React.Component {
     dates.appendChild(today);
 
     var memberid = document.createElement('p');
-    memberid.appendChild(document.createTextNode(member.memberuid));
+    memberid.appendChild(document.createTextNode(fetchedMember.memberuid));
     dates.appendChild(memberid);
 
     var donationElement = document.createElement('div');
     donationElement.setAttribute('class', 'table');
-    ReactDOM.render( donationsView, donationElement );
+
+    const store = createStore(
+      combineReducers,
+      applyMiddleware(thunk)
+    );
+
+    ReactDOM.render(
+      <Provider store={store}>
+          {donationsView}
+      </Provider>,
+      donationElement
+  );
     view.appendChild(donationElement);
 
     var summary = document.createElement('div');
@@ -336,6 +368,10 @@ class Statements extends React.Component {
       }
     ];
 
+    const hasAccess = (this.props.account.role === 'administrator' || 
+      this.props.account.role === 'assistant' ||
+      this.props.account.role === 'accountant');
+
     return (
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
@@ -347,7 +383,7 @@ class Statements extends React.Component {
               <GridContainer>
                 <GridItem xs={12} sm={12} md={5}>
                   {
-                    Utils.isMoneyHandler(this.props.memberRole) ? (
+                    hasAccess ? (
                       <GridItem xs={12} sm={12} md={12}>
                         <MemberSelect
                           placeholder="Search member"
@@ -446,7 +482,7 @@ class Statements extends React.Component {
                         color="info"
                         className='add-button'
                         onClick={this.handleSearch}
-                        disabled={this.state.member === '' ||
+                        disabled={(this.state.member === '' && hasAccess) ||
                           (this.state.filter === 'custom' && (this.state.from === '' || this.state.to === '')) ||
                           (new Date(this.state.from) > new Date(this.state.to))}
                       >
@@ -486,4 +522,7 @@ class Statements extends React.Component {
   }
 }
 
-export default Statements;
+export default connect(
+  ({ account }) => ({ account }),
+  null
+)( Statements );
