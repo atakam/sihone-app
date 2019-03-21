@@ -152,7 +152,7 @@ class CreateMember extends React.Component {
                     <h6 className="form-subtitle">Import Format</h6>
                     <br />
                     The import file must <b>ONLY</b> be of type .csv (Comma-separated values) file. 
-                    <a href="/template.xlsx" download> Download Template</a>
+                    <a href="/template.xlsx" download> Download Import File Template</a>
                     <br /><br />
                     Your spreadsheet must follow the following format in this particular order to get a smooth import of your members:<br /><br />
                     <b>NB: All fields are mandatory, even if there are empty.</b>
