@@ -10,7 +10,7 @@ const setSession = ({ email, res, sessionid, role, memberid, firstname }) => {
 
       setSessionCookie({ sessionString, res });
 
-      resolve({ message: 'session restored' });
+      resolve({ message: 'session restored', role, memberid, firstname });
     } else {
       session = new Session({ email });
       sessionString = session.toString();

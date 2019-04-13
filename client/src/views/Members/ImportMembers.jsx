@@ -151,11 +151,12 @@ class CreateMember extends React.Component {
                   <GridItem xs={12} sm={12} md={6}>
                     <h6 className="form-subtitle">Import Format</h6>
                     <br />
-                    The import file must <b>ONLY</b> be of type .csv (Comma-separated values) file.<br /><br />
+                    The import file must <b>ONLY</b> be of type .csv (Comma-separated values) file. 
+                    <a href="/template.xlsx" download> Download Import File Template</a>
+                    <br /><br />
                     Your spreadsheet must follow the following format in this particular order to get a smooth import of your members:<br /><br />
                     <b>NB: All fields are mandatory, even if there are empty.</b>
                     <ul>
-                        <li>First Name</li>
                         <li>First Name</li>
                         <li>Last Name</li>
                         <li>Gender</li>
