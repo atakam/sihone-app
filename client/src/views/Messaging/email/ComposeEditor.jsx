@@ -186,8 +186,8 @@ class ComposeEditor extends React.Component {
     .then(json => {
       console.log('json', json);
       this.setState({
-        churchname: json.settings.churchname,
-        emailfooter: json.settings.emailfooter,
+        churchname: json.settings.churchname || Utils.DEFAULT_NAME,
+        emailfooter: json.settings.emailfooter || Utils.DEFAULT_FOOTER,
         logo: json.settings.logo
       })
     })
