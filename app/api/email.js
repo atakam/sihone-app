@@ -286,6 +286,9 @@ function sendEmail(to, subject, body) {
                 auth: {
                     user: smtpuser, // generated ethereal user
                     pass: smtppass // generated ethereal password
+                },
+                tls: {
+                    rejectUnauthorized:false
                 }
             });
     
