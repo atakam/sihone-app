@@ -238,7 +238,6 @@ router.get('/group_status', (req, res, next) => {
 });
 
 function sendEmail(to, subject, body) {
-    let response = '';
     const nodemailer = require('nodemailer');
     SettingsTable.getSettings()
     .then((settings) => {
@@ -307,15 +306,13 @@ function sendEmail(to, subject, body) {
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                     console.log(error);
-                    response = {status: false, error};
                 }
                 console.log('Message sent: %s', info.messageId);
                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                response = {status: true};
             });
         });
     });
-    return Promise.resolve(response);
+    return Promise.resolve({status: true});
 }
 
 function arrayUnique(array) {
