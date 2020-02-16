@@ -11,9 +11,9 @@ const router = new Router();
 
 const DEFAULT_NAME = "JadeSoft";
 const DEFAULT_FOOTER = "Thanks for using the JadeSoft Management Software!";
-const DEFAULT_EMAIL = "_no_reply@jadesoft.ca";
+const DEFAULT_EMAIL = "support@jadesoft.ca";
 const DEFAULT_HOST = "mail.jadesoft.ca";
-const DEFAULT_USER = "_no_reply@jadesoft.ca";
+const DEFAULT_USER = "support@jadesoft.ca";
 const DEFAULT_PASSWORD = "Qwert54321!@";
 const DEFAULT_PORT = "465";
 const DEFAULT_SECURITY = "tls";
