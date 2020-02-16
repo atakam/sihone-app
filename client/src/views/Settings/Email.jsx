@@ -14,8 +14,6 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
-import Utils from "../utils/Utils";
-
 import './Settings.css';
 
 class Email extends React.Component {
@@ -47,14 +45,14 @@ class Email extends React.Component {
     .then(json => {
       console.log('json', json);
       this.setState({
-        smtpname: json.settings.smtpname || Utils.DEFAULT_NAME,
-        smtpemail: json.settings.smtpemail || Utils.DEFAULT_EMAIL,
-        smtphost: json.settings.smtphost || Utils.DEFAULT_HOST,
-        smtpuser: json.settings.smtpuser || Utils.DEFAULT_USER,
-        smtppass: json.settings.smtppass || Utils.DEFAULT_PASSWORD,
-        smtpport: json.settings.smtpport || Utils.DEFAULT_PORT,
-        smtpsecure: json.settings.smtpsecure || Utils.DEFAULT_SECURITY,
-        emailfooter: json.settings.emailfooter || Utils.DEFAULT_FOOTER
+        smtpname: json.settings.smtpname,
+        smtpemail: json.settings.smtpemail,
+        smtphost: json.settings.smtphost,
+        smtpuser: json.settings.smtpuser,
+        smtppass: json.settings.smtppass,
+        smtpport: json.settings.smtpport,
+        smtpsecure: json.settings.smtpsecure,
+        emailfooter: json.settings.emailfooter
       })
     })
     .catch(error => console.log('error', error));
@@ -131,7 +129,7 @@ class Email extends React.Component {
             <Card>
               <CardHeader color="info">
                 <p>Email setup must be done before the system can send any email.</p>
-                <p><i>Will use JadeSoft default settings if a field is left empty</i></p>
+                <p><i>Will use JadeSoft default settings if a field is left empty.</i></p>
               </CardHeader>
               <CardBody>
                 <GridContainer>
