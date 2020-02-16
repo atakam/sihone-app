@@ -52,35 +52,34 @@ router.post('/new', (req, res, next) => {
                 console.log('MERGED', arrayUnique(merge2.filter(Boolean)));
 
                 if (arrayUnique(merge2.filter(Boolean)).length > 0) {
-                    sendEmail(arrayUnique(merge2.filter(Boolean)).toString(), subject, emailtext).then((response) => {
-                        console.log('SEND EMAIL RESPONSE', response);
-                        if (response.status) {
-                            EmailTable.addEmail(email)
-                            .then(({ emailid }) => {
-                                return Promise.all(
-                                    [
-                                        MemberEmailTable.addMemberEmail({memberids, emailid}),
-                                        GroupEmailTable.addGroupEmail({groupids, emailid}),
-                                        EmailTable.addSpecialEmail({specials, emailid})
-                                    ]
-                                );
-                            })
-                            .then(() => {
-                                res.json({
-                                    message: 'Email successfully sent!',
-                                    email,
-                                    success: true
-                                });
-                            })
-                            .catch(error => next(error));
-                        } else {
+                    const emailResponse = sendEmail(arrayUnique(merge2.filter(Boolean)).toString(), subject, emailtext);
+                    console.log('SEND EMAIL RESPONSE', emailResponse);
+                    if (emailResponse.status) {
+                        EmailTable.addEmail(email)
+                        .then(({ emailid }) => {
+                            return Promise.all(
+                                [
+                                    MemberEmailTable.addMemberEmail({memberids, emailid}),
+                                    GroupEmailTable.addGroupEmail({groupids, emailid}),
+                                    EmailTable.addSpecialEmail({specials, emailid})
+                                ]
+                            );
+                        })
+                        .then(() => {
                             res.json({
-                                message: response.error,
-                                success: false
+                                message: 'Email successfully sent!',
+                                email,
+                                success: true
                             });
-                            return;
-                        }
-                    });
+                        })
+                        .catch(error => next(error));
+                    } else {
+                        res.json({
+                            message: emailResponse.error,
+                            success: false
+                        });
+                        return;
+                    }
                 } else {
                     res.json({
                         message: 'Selected members or group members do not have an email defined',
