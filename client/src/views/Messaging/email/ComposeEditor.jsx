@@ -172,10 +172,11 @@ class ComposeEditor extends React.Component {
       data: {subject: subject, emailtext: emailBody, memberids, groupids, specials: _specials}
     })
     .then(function(response, body) {
-      this.reset();
+      response.data.success && this.reset();
       this.setState({
-        snackMessage: 'Successfulluy sent.',
-        openSuccess: true
+        snackMessage: response.data.success ? 'Successfully sent.' : 'Message was not sent!',
+        openSuccess: response.data.success,
+        openError: !response.data.success
       });
     }.bind(this));
   }
