@@ -313,7 +313,6 @@ function sendEmail(to, subject, body) {
             });
         });
     });
-    response = {status: false, error: "Unkown error"};
     return Promise.resolve(response);
 }
 
