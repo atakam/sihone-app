@@ -286,7 +286,11 @@ function sendEmail(to, subject, body) {
                 auth: {
                     user: smtpuser, // generated ethereal user
                     pass: smtppass // generated ethereal password
-                }
+                },
+                tls: {
+                    // do not fail on invalid certs
+                    rejectUnauthorized: false
+                  }
             });
     
             // setup email data with unicode symbols
