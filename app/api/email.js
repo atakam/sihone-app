@@ -15,7 +15,7 @@ const DEFAULT_EMAIL = "_no_reply@jadesoft.ca";
 const DEFAULT_HOST = "mail.jadesoft.ca";
 const DEFAULT_USER = "_no_reply@jadesoft.ca";
 const DEFAULT_PASSWORD = "Qwert54321!@";
-const DEFAULT_PORT = "587";
+const DEFAULT_PORT = "465";
 const DEFAULT_SECURITY = "tls";
 
 router.post('/new', (req, res, next) => {
@@ -286,9 +286,6 @@ function sendEmail(to, subject, body) {
                 auth: {
                     user: smtpuser, // generated ethereal user
                     pass: smtppass // generated ethereal password
-                },
-                tls: {
-                    rejectUnauthorized:false
                 }
             });
     
