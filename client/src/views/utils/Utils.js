@@ -81,7 +81,7 @@ class Utils {
                     line-height: 1.3;'><div class='footer-message' style='text-align: center;
                     margin-top: -2.5em;
                     margin-bottom: 1.5em;
-                    font-style: oblique;'>${emailfooter}</div>This message is from ${churchname}. ${churchname} treats your personal information with the utmost care. To report abuse related to this email, please contact us at contact@sihone.com.<br><br><span class='unsubscribe'><a href='${website}/unsubscribe'>Unsubscribe</a> from the email list.</span><span class='footer-logo' style='float:right;'><img width='100' src='${logo}' alt='${churchname}'/></span></div></div></div></body>`
+                    font-style: oblique;'>${emailfooter}</div>This message is from ${churchname}. ${churchname} treats your personal information with the utmost care. To report abuse related to this email, please contact us at contact@jadesoft.com.<br><br><span class='unsubscribe'><a href='${website}/unsubscribe'>Unsubscribe</a> from the email list.</span><span class='footer-logo' style='float:right;'><img width='100' src='${logo}' alt='${churchname}'/></span></div></div></div></body>`
                 }
             ]
         );
