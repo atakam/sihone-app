@@ -306,9 +306,11 @@ function sendEmail(to, subject, body) {
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                     console.log(error);
+
                 }
                 console.log('Message sent: %s', info.messageId);
                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                response = {status: true};
             });
         });
     });
