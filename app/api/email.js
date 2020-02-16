@@ -16,7 +16,7 @@ const DEFAULT_HOST = "mail.jadesoft.ca";
 const DEFAULT_USER = "_no_reply@jadesoft.ca";
 const DEFAULT_PASSWORD = "Qwert54321!@";
 const DEFAULT_PORT = "587";
-const DEFAULT_SECURITY = "";
+const DEFAULT_SECURITY = "tls";
 
 router.post('/new', (req, res, next) => {
     let {
@@ -259,7 +259,7 @@ function sendEmail(to, subject, body) {
           smtpuser = smtpuser || DEFAULT_USER;
           smtppass = smtppass || DEFAULT_PASSWORD;
           smtpport = smtpport || DEFAULT_PORT;
-          smtpsecure = smtphost === DEFAULT_HOST ? DEFAULT_SECURITY : smtpsecure;
+          smtpsecure = smtpsecure || DEFAULT_SECURITY;
           emailfooter = emailfooter || DEFAULT_FOOTER;
 
           const emailSettings = {
