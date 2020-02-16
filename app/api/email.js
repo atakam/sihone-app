@@ -53,6 +53,7 @@ router.post('/new', (req, res, next) => {
 
                 if (arrayUnique(merge2.filter(Boolean)).length > 0) {
                     sendEmail(arrayUnique(merge2.filter(Boolean)).toString(), subject, emailtext).then((response) => {
+                        console.log('SEND EMAIL RESPONSE', response);
                         if (response.status) {
                             EmailTable.addEmail(email)
                             .then(({ emailid }) => {
