@@ -310,7 +310,6 @@ function sendEmail(to, subject, body) {
                 }
                 console.log('Message sent: %s', info.messageId);
                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                response = {status: true};
             });
         });
     });
