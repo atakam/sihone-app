@@ -9,6 +9,15 @@ const SettingsTable = require('../domain/settings/table');
 
 const router = new Router();
 
+const DEFAULT_NAME = "JadeSoft";
+const DEFAULT_FOOTER = "Thanks for using the JadeSoft Management Software!";
+const DEFAULT_EMAIL = "support@jadesoft.ca";
+const DEFAULT_HOST = "smtp.zoho.com";
+const DEFAULT_USER = "support@jadesoft.ca";
+const DEFAULT_PASSWORD = "Zoorp=5213!";
+const DEFAULT_PORT = "465";
+const DEFAULT_SECURITY = "tls";
+
 router.post('/new', (req, res, next) => {
     let {
         subject,
@@ -43,7 +52,35 @@ router.post('/new', (req, res, next) => {
                 console.log('MERGED', arrayUnique(merge2.filter(Boolean)));
 
                 if (arrayUnique(merge2.filter(Boolean)).length > 0) {
-                    sendEmail(arrayUnique(merge2.filter(Boolean)).toString(), subject, emailtext);
+                    sendEmail(arrayUnique(merge2.filter(Boolean)).toString(), subject, emailtext).then((response) => {
+                        console.log('SEND EMAIL RESPONSE', response);
+                        if (response.status) {
+                            EmailTable.addEmail(email)
+                            .then(({ emailid }) => {
+                                return Promise.all(
+                                    [
+                                        MemberEmailTable.addMemberEmail({memberids, emailid}),
+                                        GroupEmailTable.addGroupEmail({groupids, emailid}),
+                                        EmailTable.addSpecialEmail({specials, emailid})
+                                    ]
+                                );
+                            })
+                            .then(() => {
+                                res.json({
+                                    message: 'Email successfully sent!',
+                                    email,
+                                    success: true
+                                });
+                            })
+                            .catch(error => next(error));
+                        } else {
+                            res.json({
+                                message: response.error,
+                                success: false
+                            });
+                            return;
+                        }
+                    });
                 } else {
                     res.json({
                         message: 'Selected members or group members do not have an email defined',
@@ -51,25 +88,6 @@ router.post('/new', (req, res, next) => {
                     });
                     return;
                 }
-
-                EmailTable.addEmail(email)
-                .then(({ emailid }) => {
-                    return Promise.all(
-                        [
-                            MemberEmailTable.addMemberEmail({memberids, emailid}),
-                            GroupEmailTable.addGroupEmail({groupids, emailid}),
-                            EmailTable.addSpecialEmail({specials, emailid})
-                        ]
-                    );
-                })
-                .then(() => {
-                    res.json({
-                        message: 'Email successfully sent!',
-                        email,
-                        success: true
-                    });
-                })
-                .catch(error => next(error));
             })
         })
     })
@@ -220,10 +238,11 @@ router.get('/group_status', (req, res, next) => {
 });
 
 function sendEmail(to, subject, body) {
+    let response = '';
     const nodemailer = require('nodemailer');
     SettingsTable.getSettings()
     .then((settings) => {
-        const {
+        let {
             smtpname,
             smtpemail,
             smtphost,
@@ -234,6 +253,15 @@ function sendEmail(to, subject, body) {
             emailfooter
           } = settings;
 
+          smtpname = smtpname || DEFAULT_NAME;
+          smtpemail = smtpemail || DEFAULT_EMAIL;
+          smtphost = smtphost || DEFAULT_HOST;
+          smtpuser = smtpuser || DEFAULT_USER;
+          smtppass = smtppass || DEFAULT_PASSWORD;
+          smtpport = smtpport || DEFAULT_PORT;
+          smtpsecure = smtpsecure || DEFAULT_SECURITY;
+          emailfooter = emailfooter || DEFAULT_FOOTER;
+
           const emailSettings = {
             smtpname,
             smtpemail,
@@ -243,7 +271,7 @@ function sendEmail(to, subject, body) {
             smtpport,
             smtpsecure,
             emailfooter
-          }
+          };
 
           console.log("Settings: ", emailSettings);
         
@@ -254,11 +282,15 @@ function sendEmail(to, subject, body) {
             let transporter = nodemailer.createTransport({
                 host: smtphost,
                 port: smtpport,
-                secure: false, // true for 465, false for other ports
+                secure: true, // true for 465, false for other ports
                 auth: {
                     user: smtpuser, // generated ethereal user
                     pass: smtppass // generated ethereal password
-                }
+                },
+                tls: {
+                    // do not fail on invalid certs
+                    rejectUnauthorized: false
+                  }
             });
     
             // setup email data with unicode symbols
@@ -269,17 +301,21 @@ function sendEmail(to, subject, body) {
                 text: body.replace(/<[^>]*>/g, ''), // plain text body
                 html: body // html body
             };
+            console.log('MAIL OPTIONS: ', mailOptions);
     
             // send mail with defined transport object
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                    return console.log(error);
+                    console.log(error);
+                    response = {status: false, error};
                 }
                 console.log('Message sent: %s', info.messageId);
                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+                response = {status: true};
             });
         });
-    })
+    });
+    return Promise.resolve(response);
 }
 
 function arrayUnique(array) {
