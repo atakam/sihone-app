@@ -71,6 +71,12 @@ class Email extends React.Component {
       emailfooter
     } = this.state
 
+    // check if mandatory is set for email settings
+    if (this.isMandatory() && this.checkMandatory()) {
+      this.props.openWarning('You must set ALL or NONE of the email settings.');
+      return;
+    }
+
     const settings = {
       smtpname,
       smtpemail,
@@ -103,6 +109,17 @@ class Email extends React.Component {
       smtpport
     } = this.state;
     return smtpemail !== "" || smtphost !== "" || smtpuser !== "" || smtppass !== "" || smtpport !== "";
+  }
+
+  checkMandatory = () => {
+    const {
+      smtpemail,
+      smtphost,
+      smtpuser,
+      smtppass,
+      smtpport
+    } = this.state;
+    return smtpemail === "" || smtphost === "" || smtpuser === "" || smtppass === "" || smtpport === "";
   }
 
   render () {
