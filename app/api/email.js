@@ -300,6 +300,7 @@ function sendEmail(to, subject, body) {
                 text: body.replace(/<[^>]*>/g, ''), // plain text body
                 html: body // html body
             };
+            console.log('MAIL OPTIONS: ', mailOptions);
     
             // send mail with defined transport object
             transporter.sendMail(mailOptions, (error, info) => {
