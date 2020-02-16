@@ -259,7 +259,7 @@ function sendEmail(to, subject, body) {
           smtpuser = smtpuser || DEFAULT_USER;
           smtppass = smtppass || DEFAULT_PASSWORD;
           smtpport = smtpport || DEFAULT_PORT;
-          smtpsecure = smtpsecure || DEFAULT_SECURITY;
+          smtpsecure = smtphost === DEFAULT_HOST ? DEFAULT_SECURITY : smtpsecure;
           emailfooter = emailfooter || DEFAULT_FOOTER;
 
           const emailSettings = {
