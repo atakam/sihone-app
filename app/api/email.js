@@ -52,34 +52,35 @@ router.post('/new', (req, res, next) => {
                 console.log('MERGED', arrayUnique(merge2.filter(Boolean)));
 
                 if (arrayUnique(merge2.filter(Boolean)).length > 0) {
-                    const emailResponse = sendEmail(arrayUnique(merge2.filter(Boolean)).toString(), subject, emailtext);
-                    console.log('SEND EMAIL RESPONSE', emailResponse);
-                    if (emailResponse.status) {
-                        EmailTable.addEmail(email)
-                        .then(({ emailid }) => {
-                            return Promise.all(
-                                [
-                                    MemberEmailTable.addMemberEmail({memberids, emailid}),
-                                    GroupEmailTable.addGroupEmail({groupids, emailid}),
-                                    EmailTable.addSpecialEmail({specials, emailid})
-                                ]
-                            );
-                        })
-                        .then(() => {
+                    sendEmail(arrayUnique(merge2.filter(Boolean)).toString(), subject, emailtext).then((response) => {
+                        console.log('SEND EMAIL RESPONSE', response);
+                        if (response.status) {
+                            EmailTable.addEmail(email)
+                            .then(({ emailid }) => {
+                                return Promise.all(
+                                    [
+                                        MemberEmailTable.addMemberEmail({memberids, emailid}),
+                                        GroupEmailTable.addGroupEmail({groupids, emailid}),
+                                        EmailTable.addSpecialEmail({specials, emailid})
+                                    ]
+                                );
+                            })
+                            .then(() => {
+                                res.json({
+                                    message: 'Email successfully sent!',
+                                    email,
+                                    success: true
+                                });
+                            })
+                            .catch(error => next(error));
+                        } else {
                             res.json({
-                                message: 'Email successfully sent!',
-                                email,
-                                success: true
+                                message: response.error,
+                                success: false
                             });
-                        })
-                        .catch(error => next(error));
-                    } else {
-                        res.json({
-                            message: emailResponse.error,
-                            success: false
-                        });
-                        return;
-                    }
+                            return;
+                        }
+                    });
                 } else {
                     res.json({
                         message: 'Selected members or group members do not have an email defined',
@@ -237,6 +238,7 @@ router.get('/group_status', (req, res, next) => {
 });
 
 function sendEmail(to, subject, body) {
+    let response = '';
     const nodemailer = require('nodemailer');
     SettingsTable.getSettings()
     .then((settings) => {
@@ -300,15 +302,16 @@ function sendEmail(to, subject, body) {
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                     console.log(error);
-                    return {status: false, error};
+                    response = {status: false, error};
                 }
                 console.log('Message sent: %s', info.messageId);
                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-                return {status: true};
+                response = {status: true};
             });
         });
     });
-    return {status: false, error: "Unkown error"};
+    response = {status: false, error: "Unkown error"};
+    return Promise.resolve(response);
 }
 
 function arrayUnique(array) {
