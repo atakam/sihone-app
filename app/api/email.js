@@ -9,6 +9,15 @@ const SettingsTable = require('../domain/settings/table');
 
 const router = new Router();
 
+const DEFAULT_NAME = "JadeSoft";
+const DEFAULT_FOOTER = "Thanks for using the JadeSoft Management Software!";
+const DEFAULT_EMAIL = "_no_reply@jadesoft.ca";
+const DEFAULT_HOST = "mail.jadesoft.ca";
+const DEFAULT_USER = "_no_reply@jadesoft.ca";
+const DEFAULT_PASSWORD = "Qwert54321!@";
+const DEFAULT_PORT = "587";
+const DEFAULT_SECURITY = "";
+
 router.post('/new', (req, res, next) => {
     let {
         subject,
@@ -223,7 +232,7 @@ function sendEmail(to, subject, body) {
     const nodemailer = require('nodemailer');
     SettingsTable.getSettings()
     .then((settings) => {
-        const {
+        let {
             smtpname,
             smtpemail,
             smtphost,
@@ -234,6 +243,15 @@ function sendEmail(to, subject, body) {
             emailfooter
           } = settings;
 
+          smtpname = smtpname || DEFAULT_NAME;
+          smtpemail = smtpemail || DEFAULT_EMAIL;
+          smtphost = smtphost || DEFAULT_HOST;
+          smtpuser = smtpuser || DEFAULT_USER;
+          smtppass = smtppass || DEFAULT_PASSWORD;
+          smtpport = smtpport || DEFAULT_PORT;
+          smtpsecure = smtpsecure || DEFAULT_SECURITY;
+          emailfooter = emailfooter || DEFAULT_FOOTER;
+
           const emailSettings = {
             smtpname,
             smtpemail,
@@ -243,7 +261,7 @@ function sendEmail(to, subject, body) {
             smtpport,
             smtpsecure,
             emailfooter
-          }
+          };
 
           console.log("Settings: ", emailSettings);
         

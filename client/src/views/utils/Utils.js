@@ -5,12 +5,6 @@ class Utils {
 
     static DEFAULT_NAME = "JadeSoft";
     static DEFAULT_FOOTER = "Thanks for using the JadeSoft Management Software!";
-    static DEFAULT_EMAIL = "_no_reply@jadesoft.ca";
-    static DEFAULT_HOST = "mail.jadesoft.ca";
-    static DEFAULT_USER = "_no_reply@jadesoft.ca";
-    static DEFAULT_PASSWORD = "Qwert54321!@";
-    static DEFAULT_PORT = "587";
-    static DEFAULT_SECURITY = "";
 
     static arrayUnique(array) {
         var a = array.concat();
