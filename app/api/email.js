@@ -12,9 +12,9 @@ const router = new Router();
 const DEFAULT_NAME = "JadeSoft";
 const DEFAULT_FOOTER = "Thanks for using the JadeSoft Management Software!";
 const DEFAULT_EMAIL = "support@jadesoft.ca";
-const DEFAULT_HOST = "mail.jadesoft.ca";
+const DEFAULT_HOST = "smtp.zoho.com";
 const DEFAULT_USER = "support@jadesoft.ca";
-const DEFAULT_PASSWORD = "Qwert54321!@";
+const DEFAULT_PASSWORD = "Zoorp=5213!";
 const DEFAULT_PORT = "465";
 const DEFAULT_SECURITY = "tls";
 
