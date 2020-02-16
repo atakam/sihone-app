@@ -282,7 +282,7 @@ function sendEmail(to, subject, body) {
             let transporter = nodemailer.createTransport({
                 host: smtphost,
                 port: smtpport,
-                secure: false, // true for 465, false for other ports
+                secure: true, // true for 465, false for other ports
                 auth: {
                     user: smtpuser, // generated ethereal user
                     pass: smtppass // generated ethereal password
