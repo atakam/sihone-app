@@ -15,12 +15,12 @@ function Footer({ ...props }) {
         <div className={classes.left}>
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
-              <a href="#home" className={classes.block}>
-                About Sihone
+              <a href="https://jadesoft.com" target="_black" className={classes.block}>
+                About JadeSoft
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
-              <a href="#company" className={classes.block}>
+              <a href="https://jadesoft.com/contact" target="_black" className={classes.block}>
                 Contact us
               </a>
             </ListItem>
@@ -29,7 +29,7 @@ function Footer({ ...props }) {
         <p className={classes.right}>
           <span>
             &copy; {1900 + new Date().getYear()}{" "}
-            Sihone | All rights reserved. Powered by <a href='https://sihone.com'>Sihone</a>.
+            JadeSoft | All rights reserved. Powered by <a href='https://sihone.com'>Sihone</a>.
           </span>
         </p>
       </div>

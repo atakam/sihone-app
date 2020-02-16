@@ -5,7 +5,7 @@ class Footer extends React.Component {
     return (
       <div className="footer">
         &copy; {1900 + new Date().getYear()}{" "}
-        Sihone | All rights reserved. Powered by <a href='https://sihone.com'>Sihone</a>.
+        JadeSoft | All rights reserved. Powered by <a href='https://sihone.com'>Sihone</a>.
       </div>
     )
   }
