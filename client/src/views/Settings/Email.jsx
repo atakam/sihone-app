@@ -71,6 +71,12 @@ class Email extends React.Component {
       emailfooter
     } = this.state
 
+    // check if mandatory is set for email settings
+    if (this.isMandatory() && this.checkMandatory()) {
+      this.props.openWarning('You must set ALL or NONE of the email settings.');
+      return;
+    }
+
     const settings = {
       smtpname,
       smtpemail,
@@ -92,6 +98,28 @@ class Email extends React.Component {
         this.props.openNotification && this.props.openNotification();
       }
     }.bind(this));
+  }
+
+  isMandatory = () => {
+    const {
+      smtpemail,
+      smtphost,
+      smtpuser,
+      smtppass,
+      smtpport
+    } = this.state;
+    return smtpemail !== "" || smtphost !== "" || smtpuser !== "" || smtppass !== "" || smtpport !== "";
+  }
+
+  checkMandatory = () => {
+    const {
+      smtpemail,
+      smtphost,
+      smtpuser,
+      smtppass,
+      smtpport
+    } = this.state;
+    return smtpemail === "" || smtphost === "" || smtpuser === "" || smtppass === "" || smtpport === "";
   }
 
   render () {
@@ -129,6 +157,7 @@ class Email extends React.Component {
             <Card>
               <CardHeader color="info">
                 <p>Email setup must be done before the system can send any email.</p>
+                <p><i>Will use JadeSoft default settings if a field is left empty.</i></p>
               </CardHeader>
               <CardBody>
                 <GridContainer>
@@ -154,7 +183,8 @@ class Email extends React.Component {
                       }}
                       inputProps={{
                         value: smtpemail,
-                        onChange: (e) => this.handleInputChange(e, 'smtpemail')
+                        onChange: (e) => this.handleInputChange(e, 'smtpemail'),
+                        required: this.isMandatory()
                       }}
                     />
                   </GridItem>
@@ -167,7 +197,8 @@ class Email extends React.Component {
                       }}
                       inputProps={{
                         value: smtphost,
-                        onChange: (e) => this.handleInputChange(e, 'smtphost')
+                        onChange: (e) => this.handleInputChange(e, 'smtphost'),
+                        required: this.isMandatory()
                       }}
                     />
                   </GridItem>
@@ -180,7 +211,8 @@ class Email extends React.Component {
                       }}
                       inputProps={{
                         value: smtpuser,
-                        onChange: (e) => this.handleInputChange(e, 'smtpuser')
+                        onChange: (e) => this.handleInputChange(e, 'smtpuser'),
+                        required: this.isMandatory()
                       }}
                     />
                   </GridItem>
@@ -193,7 +225,8 @@ class Email extends React.Component {
                       }}
                       inputProps={{
                         value: smtppass,
-                        onChange: (e) => this.handleInputChange(e, 'smtppass')
+                        onChange: (e) => this.handleInputChange(e, 'smtppass'),
+                        required: this.isMandatory()
                       }}
                     />
                   </GridItem>
@@ -206,7 +239,8 @@ class Email extends React.Component {
                       }}
                       inputProps={{
                         value: smtpport,
-                        onChange: (e) => this.handleInputChange(e, 'smtpport')
+                        onChange: (e) => this.handleInputChange(e, 'smtpport'),
+                        required: this.isMandatory()
                       }}
                     />
                   </GridItem>

@@ -25,7 +25,8 @@ class Settings extends React.Component {
     super(props);
     this.state = {
       tabValue: 'identity',
-      notificationOpen: false
+      notificationOpen: false,
+      warningOpen: false
     };
   }
 
@@ -58,15 +59,25 @@ class Settings extends React.Component {
     });
   }
 
+  openWarning = (warningMessage) => {
+    this.setState({
+      warningOpen: true,
+      warningMessage
+    });
+  }
+
   closeNotification = () => {
     this.setState({
-      notificationOpen: false
+      notificationOpen: false,
+      warningOpen: false
     });
   }
 
   render () {
     const {
-      notificationOpen
+      notificationOpen,
+      warningOpen,
+      warningMessage
     } = this.state
 
     const hasAccess = (this.props.account.role === 'administrator' || 
@@ -83,6 +94,14 @@ class Settings extends React.Component {
           place="tc"
           color="success"
           open={notificationOpen}
+          closeNotification={this.closeNotification}
+        />
+        <Snackbar
+          message={warningMessage}
+          close
+          place="tc"
+          color="warning"
+          open={warningOpen}
           closeNotification={this.closeNotification}
         />
         <Tabs
@@ -144,7 +163,7 @@ class Settings extends React.Component {
           <Identity openNotification={this.openNotification} />
         </TabContainer>}
         {this.state.tabValue === 'email' && hasAccess && <TabContainer>
-          <Email openNotification={this.openNotification} />
+          <Email openNotification={this.openNotification} openWarning={this.openWarning} />
         </TabContainer>}
         {this.state.tabValue === 'sms' && hasAccess && <TabContainer>
           <SMS openNotification={this.openNotification} />

@@ -172,10 +172,11 @@ class ComposeEditor extends React.Component {
       data: {subject: subject, emailtext: emailBody, memberids, groupids, specials: _specials}
     })
     .then(function(response, body) {
-      this.reset();
+      response.data.success && this.reset();
       this.setState({
-        snackMessage: 'Successfulluy sent.',
-        openSuccess: true
+        snackMessage: response.data.success ? 'Successfully sent.' : 'Message was not sent!',
+        openSuccess: response.data.success,
+        openError: !response.data.success
       });
     }.bind(this));
   }
@@ -186,8 +187,8 @@ class ComposeEditor extends React.Component {
     .then(json => {
       console.log('json', json);
       this.setState({
-        churchname: json.settings.churchname,
-        emailfooter: json.settings.emailfooter,
+        churchname: json.settings.churchname || Utils.DEFAULT_NAME,
+        emailfooter: json.settings.emailfooter || Utils.DEFAULT_FOOTER,
         logo: json.settings.logo
       })
     })
