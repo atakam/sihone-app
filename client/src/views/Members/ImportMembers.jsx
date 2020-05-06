@@ -141,8 +141,8 @@ class CreateMember extends React.Component {
                 this.props.hasOwnProperty('memberId') ? (
                   null
                 ) : (
-                  <CardHeader color="info">
-                    <h4>Import members from spreadsheet</h4>
+                  <CardHeader color={'warning'}>
+                    {this.props.tabs}
                   </CardHeader>
                 )
               }

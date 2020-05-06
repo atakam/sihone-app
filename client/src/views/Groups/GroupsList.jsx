@@ -6,6 +6,7 @@ import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 
@@ -54,9 +55,11 @@ class GroupsList extends React.Component {
   render() {
     return (
       <GridContainer>
-        Count: {this.state.groups.length}
         <GridItem xs={12} sm={12} md={12}>
           <Card>
+            <CardHeader color={'info'}>
+              {this.props.tabs}
+            </CardHeader>
             <CardBody>
               <CustomInput
                 labelText={'Search groups name or type'}

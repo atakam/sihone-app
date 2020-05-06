@@ -98,9 +98,7 @@
 }
 
 /** TOOLBAR **/
-.toolbar {
-   background: linear-gradient(60deg, #00cec3, #01ddd2) !important;
-}
+
 .toolbar .toolbar-icons {
   position: absolute;
   right: 0;
@@ -304,4 +302,13 @@ table{
 }
 .ct-grid {
   stroke: rgba(255, 255, 255, 0.6);
+}
+
+.menu-tabs span {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.menu-tabs button {
+  opacity: 1;
 }

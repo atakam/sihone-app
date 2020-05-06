@@ -641,8 +641,8 @@ class CreateMember extends React.Component {
                 this.props.hasOwnProperty('memberId') ? (
                   null
                 ) : (
-                  <CardHeader color="info">
-                    <h4>New Member Creation</h4>
+                  <CardHeader color={'warning'}>
+                    {this.props.tabs}
                   </CardHeader>
                 )
               }

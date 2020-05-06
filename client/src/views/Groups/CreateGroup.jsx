@@ -339,8 +339,8 @@ class CreateGroup extends React.Component {
                 this.props.hasOwnProperty('groupId') ? (
                   null
                 ) : (
-                  <CardHeader color="info">
-                    <h4>Fill in the form below to create a Group</h4>
+                  <CardHeader color={'info'}>
+                    {this.props.tabs}
                   </CardHeader>
                 )
               }
