@@ -88,8 +88,9 @@ class SMS extends React.Component {
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
-              <CardHeader color="info">
-                <p>SMS Service is provided by Nexmo. <a href='https://www.nexmo.com/' rel="noopener noreferrer" target="_blank">Create an account</a> to obtain the credentials for this page.</p>
+              <CardHeader color="primary">
+                {this.props.tabs}
+                <p>SMS Service is provided by Vonage. <a href='https://www.vonage.com/' rel="noopener noreferrer" target="_blank" className="nexmo">Create an account</a> to obtain the credentials for this page.</p>
               </CardHeader>
               <CardBody>
                 <GridContainer>

@@ -142,7 +142,8 @@ class Identity extends React.Component {
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
-              <CardHeader color="info">
+              <CardHeader color="primary">
+                {this.props.tabs}
                 <p>Some of this information would be visible to members.</p>
               </CardHeader>
               <CardBody>
