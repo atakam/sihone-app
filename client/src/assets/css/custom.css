@@ -297,3 +297,11 @@ table{
 .MuiTabs-flexContainer-203 {
   flex-wrap: wrap;
 }
+
+.ct-label {
+  color: rgba(255, 255, 255, 1);
+  font-weight: 400;
+}
+.ct-grid {
+  stroke: rgba(255, 255, 255, 0.6);
+}
