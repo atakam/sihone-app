@@ -243,8 +243,8 @@ class CreateEnvelope extends React.Component {
               this.props.hasOwnProperty('envelopeId') ? (
                 null
               ) : (
-                <CardHeader color={'info'}>
-                  <h5>Fill in the form below to create an Envelope</h5>
+                <CardHeader color={'success'}>
+                  {this.props.tabs}
                 </CardHeader>
               )
             }

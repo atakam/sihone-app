@@ -181,8 +181,8 @@ class CreateAccount extends React.Component {
               this.props.hasOwnProperty('accountId') ? (
                 null
               ) : (
-                <CardHeader color={'info'}>
-                  <h5>Fill in the form below to create an Account</h5>
+                <CardHeader color={'danger'}>
+                  {this.props.tabs}
                 </CardHeader>
               )
             }
@@ -221,7 +221,11 @@ class CreateAccount extends React.Component {
                   <TransactionsList accountId={this.props.accountId} setTransactionNumber={this.setTransactionNumber} />
                 ) : null
           }
-          <EnvelopeList accountId={this.props.accountId} />
+          {
+                this.props.hasOwnProperty('accountId') ? (
+                  <EnvelopeList accountId={this.props.accountId} />
+                ) : null
+          }
         </GridItem>
       </GridContainer>
     )

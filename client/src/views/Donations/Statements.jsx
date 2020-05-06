@@ -376,8 +376,8 @@ class Statements extends React.Component {
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
-            <CardHeader color={'info'} className="card-header">
-              <h4>Statement Generator</h4>
+            <CardHeader color={'success'}>
+              {this.props.tabs}
             </CardHeader>
             <CardBody className="statement-body">
               <GridContainer>
