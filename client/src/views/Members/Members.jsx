@@ -120,12 +120,12 @@ class Members extends React.Component {
   render () {
     return (
       <div>
-        {this.state.tabValue === 'members' && <MembersList active tabs={this.getTabs()}/>}
-        {this.state.tabValue === 'nonmembers' && <MembersList active={false} tabs={this.getTabs()}/>}
-        {this.state.tabValue === 'families' && <FamilyList tabs={this.getTabs()}/>}
-        {this.state.tabValue === 'children' && <MembersList isChildren tabs={this.getTabs()}/>}
-        {this.state.tabValue === 'create' && <CreateMember onSave={(e) => {this.handleTabChange(e, 'members')}} tabs={this.getTabs()}/>}
-        {this.state.tabValue === 'import' && <ImportMembers onSave={(e) => {this.handleTabChange(e, 'members')}} tabs={this.getTabs()}/>}
+        {this.state.tabValue === 'members' && <MembersList active tabs={this.getTabs()} refreshNumbers={this.fetchNumbers} />}
+        {this.state.tabValue === 'nonmembers' && <MembersList active={false} tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
+        {this.state.tabValue === 'families' && <FamilyList tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
+        {this.state.tabValue === 'children' && <MembersList isChildren tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
+        {this.state.tabValue === 'create' && <CreateMember onSave={(e) => {this.handleTabChange(e, 'members')}} tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
+        {this.state.tabValue === 'import' && <ImportMembers onSave={(e) => {this.handleTabChange(e, 'members')}} tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
       </div>
     );
   }

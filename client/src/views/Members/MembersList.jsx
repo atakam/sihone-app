@@ -45,7 +45,8 @@ class MembersList extends React.Component {
       console.log('json', json);
       this.setState({
         members: json.members
-      })
+      });
+      this.props.refreshNumbers && this.props.refreshNumbers();
     })
     .catch(error => console.log('error', error));
   }

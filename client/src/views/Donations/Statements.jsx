@@ -511,6 +511,7 @@ class Statements extends React.Component {
                     className="statement-data" fullWidth
                     isStatement
                     donations={this.state.donations}
+                    refreshCallback={this.fetchQuickDonations}
                   />
                 </GridItem>
               </GridContainer>

@@ -198,7 +198,7 @@ function sendSms(phone, smstext, res) {
         });
 
         const from = 'JadeSoft';
-        const to = smsnumber;
+        const to = phoneNumber;
         const text = smstext;
 
         nexmo.message.sendSms(from, to, text, (err, responseData) => {

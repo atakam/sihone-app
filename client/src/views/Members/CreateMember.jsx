@@ -291,6 +291,7 @@ class CreateMember extends React.Component {
         this.reset();
       }
     }.bind(this));
+    this.props.refreshNumbers && this.props.refreshNumbers();
   }
 
   reset = () => {
@@ -367,11 +368,12 @@ class CreateMember extends React.Component {
       data: group
     })
     .then(function(response, body) {
+      const openError = response.status !== 200 || response.data.error;
       this.setState({
-        notificationDeleteErrorOpen: response.statusCode !== 200,
+        notificationDeleteErrorOpen: openError,
         deleteAction: false
       });
-      this.props.onClose && this.props.onClose();
+      !openError && this.props.onClose && this.props.onClose();
     }.bind(this));
   }
 

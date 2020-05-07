@@ -40,7 +40,8 @@ class FamilyList extends React.Component {
       console.log('json', json);
       this.setState({
         families: json.families
-      })
+      });
+      this.props.refreshNumbers && this.props.refreshNumbers();
     })
     .catch(error => console.log('error', error));
   }

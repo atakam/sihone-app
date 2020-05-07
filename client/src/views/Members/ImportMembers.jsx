@@ -70,6 +70,7 @@ class CreateMember extends React.Component {
       }
       
     }.bind(this));
+    this.props.refreshNumbers && this.props.refreshNumbers();
   }
 
   closeNotification = () => {
