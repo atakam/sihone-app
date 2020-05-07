@@ -10,7 +10,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import Checkbox from '@material-ui/core/Checkbox';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
@@ -18,6 +17,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import CloseIcon from '@material-ui/icons/Close';
 import Button from "components/CustomButtons/Button.jsx";
+import Checkbox from "components/CustomInput/CustomCheckbox.jsx";
 
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 import ToolBar from "components/ToolBar/ToolBar.jsx";

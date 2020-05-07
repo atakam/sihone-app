@@ -3,8 +3,8 @@ import React from "react";
 import axios from "axios";
 // @material-ui/core components
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 // core components
+import Checkbox from "components/CustomInput/CustomCheckbox.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";

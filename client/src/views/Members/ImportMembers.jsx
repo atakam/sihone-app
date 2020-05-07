@@ -4,8 +4,8 @@ import axios from "axios";
 import CsvParse from '@vtex/react-csv-parse';
 // @material-ui/core components
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 // core components
+import Checkbox from "components/CustomInput/CustomCheckbox.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import Button from "components/CustomButtons/Button.jsx";

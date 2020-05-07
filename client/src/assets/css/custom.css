@@ -317,3 +317,12 @@ a.nexmo {
   color: #ffffff;
   text-decoration: underline;
 }
+
+label[data-shrink="true"] {
+  font-weight: 500;
+  color: #464646 !important;
+}
+
+.mui-checked  svg{
+  color: #464646;;
+}
