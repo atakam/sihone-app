@@ -12,8 +12,6 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
-import {convertCurrency} from 'currencies-exchange-rates';
-
 import './Settings.css';
 
 class SMS extends React.Component {
@@ -35,10 +33,6 @@ class SMS extends React.Component {
     this.fetchSettings();
   }
 
-  convertToCurrency = (value, currencyFrom, currencyTo) => {
-    return convertCurrency(currencyFrom, currencyTo, value);
-  }
-
   fetchBalance = () => {
     fetch('/settings/smsBalance')
     .then(response => response.json())
@@ -46,19 +40,20 @@ class SMS extends React.Component {
       console.log('json', json);
       const result = json.result;
       let value = result && JSON.parse(json.result).value;
-      
-      const currency = this.state.currency;
-      if (currency !== 'EUR') {
-        convertCurrency('EUR', currency, value).then((newValue) => {
-          console.log(newValue);
-          value = Math.round((value + Number.EPSILON) * 100) / 100;
-          newValue = Math.round((newValue + Number.EPSILON) * 100) / 100;
-          value = value + ' EUR (' + newValue + ' ' + currency + ')';
-          this.setState({
-            smsbalance: value
-          });
+      const conversion = "EUR_" + this.state.currency;
+
+      fetch("https://free.currconv.com/api/v7/convert?q="+conversion+"&compact=y&apiKey=13fb70c013d9fedb9103")
+      .then(response => response.json())
+      .then((json) => {
+        const rate = json[conversion].val;
+        let newValue = value * rate;
+        value = Math.round((value + Number.EPSILON) * 100) / 100;
+        newValue = Math.round((newValue + Number.EPSILON) * 100) / 100;
+        value = value + ' EUR (' + newValue + ' ' + this.state.currency + ')';
+        this.setState({
+          smsbalance: value
         });
-      }
+      })
     });
   }
 
