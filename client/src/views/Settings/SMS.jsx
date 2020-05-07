@@ -12,6 +12,8 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
+import {convertCurrency} from 'currencies-exchange-rates';
+
 import './Settings.css';
 
 class SMS extends React.Component {
@@ -33,6 +35,33 @@ class SMS extends React.Component {
     this.fetchSettings();
   }
 
+  convertToCurrency = (value, currencyFrom, currencyTo) => {
+    return convertCurrency(currencyFrom, currencyTo, value);
+  }
+
+  fetchBalance = () => {
+    fetch('/settings/smsBalance')
+    .then(response => response.json())
+    .then(json => {
+      console.log('json', json);
+      const result = json.result;
+      let value = result && JSON.parse(json.result).value;
+      
+      const currency = this.state.currency;
+      if (currency !== 'EUR') {
+        convertCurrency('EUR', currency, value).then((newValue) => {
+          console.log(newValue);
+          value = Math.round((value + Number.EPSILON) * 100) / 100;
+          newValue = Math.round((newValue + Number.EPSILON) * 100) / 100;
+          value = value + ' EUR (' + newValue + ' ' + currency + ')';
+          this.setState({
+            smsbalance: value
+          });
+        });
+      }
+    });
+  }
+
   fetchSettings = () => {
     fetch('/settings/findAll')
     .then(response => response.json())
@@ -42,8 +71,8 @@ class SMS extends React.Component {
         smsapikey: json.settings.smsapikey,
         smsapisecret: json.settings.smsapisecret,
         smsnumber: json.settings.smsnumber,
-        smsbalance: json.settings.smsbalance
-      });
+        currency: json.settings.currency
+      }, this.fetchBalance());
     })
     .catch(error => console.log('error', error));
   }
