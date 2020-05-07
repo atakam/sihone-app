@@ -104,7 +104,7 @@ class SmsView extends React.Component {
           })
           .then(function(response, body) {
               if (response.status === 200) {
-                  const json = JSON.parse(response.data.result);
+                  const json = response.data.result;
                 if (json.messages[0].status === '0') {
                     this.setBalance(json.messages[0]['remaining-balance']);
                     this.reset();

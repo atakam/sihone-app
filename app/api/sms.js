@@ -190,24 +190,32 @@ function sendSms(phone, smstext, res) {
             smsnumber
         });
 
-        var options = {
-            method: 'POST',
-            url: 'https://rest.nexmo.com/sms/json',
-            headers: 
-            { 
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            form: {api_key: smsapikey, api_secret: smsapisecret, from: smsnumber, to: phoneNumber, text: smstext}
-        };
-      
-        request(options, function (error, response, body) {
-            if (error) throw new Error(error);
-            console.log(body);
+        const Nexmo = require('nexmo');
+
+        const nexmo = new Nexmo({
+            apiKey: smsapikey,
+            apiSecret: smsapisecret
+        });
+
+        const from = 'JadeSoft';
+        const to = smsnumber;
+        const text = smstext;
+
+        nexmo.message.sendSms(from, to, text, (err, responseData) => {
+            if (err) {
+                console.log(err);
+            } else {
+                if(responseData.messages[0]['status'] === "0") {
+                    console.log("Message sent successfully.");
+                } else {
+                    console.log(`Message failed with error: ${responseData.messages[0]['error-text']}`);
+                }
+            }
             res.json({
                 message: 'successfully added sms',
-                result: body
+                result: responseData
             });
-        }.bind(this));
+        })
 
         // axios({
         //     method: 'post',
