@@ -157,8 +157,7 @@ class Identity extends React.Component {
       province,
       postalcode,
       country,
-      website,
-      welcome
+      website
     } = this.state
 
     return (

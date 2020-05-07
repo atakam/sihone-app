@@ -41,9 +41,6 @@
 .form-checkbox {
   margin-top: 36px;
 }
-.form-checkbox span{
-  color: #AAAAAA !important;
-}
 .form-subtitle {
   margin-bottom: 0px;
   border-bottom: 1px solid #eee;
@@ -190,6 +187,13 @@ dd {
   padding: 8px;
 }
 
+.mailbox .content {
+  width: unset !important;
+}
+.emaillist {
+  height: 500px;
+}
+
 .text-messages {
   min-height: 200px;
   max-height: 400px;
@@ -213,8 +217,16 @@ dd {
   top: 0;
 }
 
-.outbox {
-  float: right;
+.email-row {
+  display: flex;
+}
+
+.mailboxes {
+  display: flex;
+  flex-direction: column;
+  padding-top: 40px;
+  width: 20%;
+  padding-right: 20px;
 }
 
 .float-right {
@@ -325,4 +337,13 @@ label[data-shrink="true"] {
 
 .mui-checked  svg{
   color: #464646;;
+}
+
+.form-checkbox span {
+  color: #464646;
+  font-weight: 500;
+}
+
+#editor-container {
+  height: 200px;
 }
