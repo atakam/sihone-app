@@ -11,6 +11,9 @@
     "configure": "./bin/configure_db.sh",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
+  "engines": {
+    "node": "10.x"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
