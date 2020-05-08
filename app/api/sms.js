@@ -197,11 +197,11 @@ function sendSms(phone, smstext, res) {
             apiSecret: smsapisecret
         });
 
-        const from = 'JadeSoft';
-        const to = phoneNumber;
-        const text = smstext;
+        console.log('from:', smsnumber);
+        console.log('to:', phoneNumber);
+        console.log('text:', smstext);
 
-        nexmo.message.sendSms(from, to, text, (err, responseData) => {
+        nexmo.message.sendSms(smsnumber, phoneNumber, smstext, (err, responseData) => {
             if (err) {
                 console.log(err);
             } else {
