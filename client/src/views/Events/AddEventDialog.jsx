@@ -88,6 +88,7 @@ export default class AddEventDialog extends React.Component {
       data: event
     })
     .then(function(response) {
+      this.props.refresh && this.props.refresh();
       this.handleClose(true);
     }.bind(this));
   }

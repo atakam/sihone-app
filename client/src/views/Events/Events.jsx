@@ -38,8 +38,16 @@ class Events extends React.Component {
 
   }
 
-  handleClickOpenAddEvent = () => {
-    this.setState({ openAddEvent: true });
+  handleClickOpenAddEvent = (event) => {
+    let start = event.start.getFullYear() + '-' + (event.start.getMonth() < 10 ? '0' + (1 + event.start.getMonth()) : (1 + event.start.getMonth())) + '-' + (event.start.getDate() < 10 ? '0' + event.start.getDate() : event.start.getDate()) + "T" + event.start.toTimeString();
+    start = start.split(":")[0] + ":" + start.split(":")[1];
+    let end = event.end.getFullYear() + '-' + (event.end.getMonth() < 10 ? '0' + (1 + event.end.getMonth()) : (1 + event.end.getMonth())) + '-' + (event.end.getDate() < 10 ? '0' + event.end.getDate() : event.end.getDate()) + "T" + event.end.toTimeString();
+    end = end.split(":")[0] + ":" + end.split(":")[1];
+    this.setState({
+      openAddEvent: true,
+      startValue: start,
+      endValue: end
+    });
   };
 
   handleCloseAddEvent = () => {
@@ -68,16 +76,20 @@ class Events extends React.Component {
 
   fetchEvents = () => {
     Utils.fetchEvents(fetch).then((events) => {
-      events['allDay?'] = events.allDay ? true : false; 
+      events['allDay?'] = events.allDay ? true : false;
       this.setState({events});
     });
   }
 
   handleClickEditFullScreen = (event) => {
+    let start = event.start.getFullYear() + '-' + (event.start.getMonth() < 10 ? '0' + (1 + event.start.getMonth()) : (1 + event.start.getMonth())) + '-' + (event.start.getDate() < 10 ? '0' + event.start.getDate() : event.start.getDate()) + "T" + event.start.toTimeString();
+    start = start.split(":")[0] + ":" + start.split(":")[1];
+    let end = event.end.getFullYear() + '-' + (event.end.getMonth() < 10 ? '0' + (1 + event.end.getMonth()) : (1 + event.end.getMonth())) + '-' + (event.end.getDate() < 10 ? '0' + event.end.getDate() : event.end.getDate()) + "T" + event.end.toTimeString();
+    end = end.split(":")[0] + ":" + end.split(":")[1];
     this.setState({
       eventValue: event.title,
-      startValue: event.start,
-      endValue: event.end || event.start,
+      startValue: start,
+      endValue: end || start,
       eventId: event.id,
       location: event.location,
       repeat: event.repeat,
@@ -101,6 +113,11 @@ class Events extends React.Component {
     const hasAccess = (this.props.account.role === 'administrator' || 
       this.props.account.role === 'assistant' ||
       this.props.account.role === 'accountant');
+    const events = this.state.events.map((ev) => {
+      ev.start = new Date(ev.start);
+      ev.end = new Date(ev.end);
+      return ev;
+    });
     return (
       <div>
         <Card>
@@ -111,10 +128,11 @@ class Events extends React.Component {
           <Calendar
             selectable
             localizer={localizer}
-            events={this.state.events}
+            events={events}
             startAccessor="start"
             endAccessor="end"
             style={{ height: 500 }}
+            defaultView={Views.WEEK}
             onSelectEvent={event => this.handleClickEditFullScreen(event)}
             onSelectSlot={this.handleClickOpenAddEvent}
           />
@@ -127,6 +145,7 @@ class Events extends React.Component {
           start={this.state.startValue}
           end={this.state.endValue}
           openFullScreen={this.handleClickOpenAddEventFullScrenn}
+          refresh={this.fetchEvents}
         />
         <AddEventFullScreenDialog
           open={this.state.openAddEventFullScreen}
@@ -140,6 +159,7 @@ class Events extends React.Component {
           repeat={this.state.repeat}
           guests={this.state.guests}
           groups={this.state.groups}
+          refresh={this.fetchEvents}
         />
       </div>
     );

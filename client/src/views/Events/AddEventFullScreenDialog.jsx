@@ -118,6 +118,7 @@ class AddEventFullScreenDialog extends React.Component {
       guests: [],
       groups: []
     });
+    this.props.refresh && this.props.refresh();
     this.props.onClose && this.props.onClose(shouldRefresh);
   }
 

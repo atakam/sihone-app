@@ -202,7 +202,7 @@ class Dashboard extends React.Component {
             <GridItem xs={12} sm={12} md={6}>
               <Card>
                 <CardHeader color={'danger'}>
-                  <h4 className={classes.cardTitleWhite}>Calendar <a href='/events' style={{color: '#fff'}}>(View Events Page)</a></h4>
+                  <h4 className={classes.cardTitleWhite}>Upcoming Events <a href='/events' style={{color: '#fff'}}>(View Events Page)</a></h4>
                 </CardHeader>
                 <CardBody style={{height: '225px'}}>
                   <Calendar
@@ -210,6 +210,8 @@ class Dashboard extends React.Component {
                     events={this.state.events || []}
                     startAccessor="start"
                     endAccessor="end"
+                    defaultView={Views.AGENDA}
+                    className={'dashboard-events'}
                   />
                 </CardBody>
               </Card>

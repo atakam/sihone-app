@@ -347,3 +347,7 @@ label[data-shrink="true"] {
 #editor-container {
   height: 200px;
 }
+
+.dashboard-events .rbc-btn-group {
+  display: none;
+}
