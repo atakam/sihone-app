@@ -6,8 +6,8 @@ import axios from "axios";
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 // core components
+import Checkbox from "components/CustomInput/CustomCheckbox.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
@@ -291,6 +291,7 @@ class CreateMember extends React.Component {
         this.reset();
       }
     }.bind(this));
+    this.props.refreshNumbers && this.props.refreshNumbers();
   }
 
   reset = () => {
@@ -367,11 +368,12 @@ class CreateMember extends React.Component {
       data: group
     })
     .then(function(response, body) {
+      const openError = response.status !== 200 || response.data.error;
       this.setState({
-        notificationDeleteErrorOpen: response.statusCode !== 200,
+        notificationDeleteErrorOpen: openError,
         deleteAction: false
       });
-      this.props.onClose && this.props.onClose();
+      !openError && this.props.onClose && this.props.onClose();
     }.bind(this));
   }
 
@@ -641,8 +643,8 @@ class CreateMember extends React.Component {
                 this.props.hasOwnProperty('memberId') ? (
                   null
                 ) : (
-                  <CardHeader color="info">
-                    <h4>New Member Creation</h4>
+                  <CardHeader color={'warning'}>
+                    {this.props.tabs}
                   </CardHeader>
                 )
               }

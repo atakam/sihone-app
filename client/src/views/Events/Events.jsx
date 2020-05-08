@@ -6,15 +6,18 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
-import $ from 'jquery';
-import 'fullcalendar';
-import 'fullcalendar/dist/fullcalendar.css';
-import './Events.css';
-import AddCalendarDialog from './AddCalendarDialog'
 import AddEventDialog from './AddEventDialog'
 import AddEventFullScreenDialog from './AddEventFullScreenDialog'
 
-// import ApiCalendar from 'react-google-calendar-api';
+import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
+import CardBody from "components/Card/CardBody.jsx";
+
+import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
+import moment from 'moment';
+import "react-big-calendar/lib/css/react-big-calendar.css";
+
+import Utils from "../utils/Utils";
 
 class Events extends React.Component {
   constructor(props) {
@@ -27,54 +30,30 @@ class Events extends React.Component {
       startValue: null,
       endValue: null,
 
-      sign: null,
-
       events: [],
 
       allDay: false,
       eventId: null
     };
 
-    // ApiCalendar.onLoad(() => {
-    //     ApiCalendar.listenSign(this.signUpdate);
-    // });
   }
 
-  signUpdate = (sign) => {
+  handleClickOpenAddEvent = (event) => {
+    let start = Utils.getDateString(event.start, true);
+    start = start.split(":")[0] + ":" + start.split(":")[1];
+    let end = Utils.getDateString(event.end, true);
+    end = end.split(":")[0] + ":" + end.split(":")[1];
     this.setState({
-      sign
-    })
-  }
-
-  handleClickOpenAddCalendar = () => {
-    this.setState({ openAddCalendar: true });
+      openAddEvent: true,
+      startValue: start,
+      endValue: end
+    });
   };
 
-  handleCloseAddCalendar = () => {
-    this.setState({ openAddCalendar: false });
-  };
-
-  handleClickOpenAddEvent = () => {
-    this.setState({ openAddEvent: true });
-  };
-
-  handleCloseAddEvent = (shouldRefresh) => {
+  handleCloseAddEvent = () => {
     this.setState({
       openAddEvent: false
     });
-    shouldRefresh && this.reset();
-  };
-
-  reset = () => {
-    this.setState({
-      openAddEvent: false,
-      eventValue: '',
-      startValue: '',
-      endValue: '',
-      allDay: false,
-      eventId: null
-    });
-    this.fetchEvents(true);
   };
 
   handleClickOpenAddEventFullScrenn = (event) => {
@@ -86,111 +65,31 @@ class Events extends React.Component {
     });
   };
 
-  handleCloseAddEventEventFullScreen = (shouldRefresh) => {
+  handleCloseAddEventEventFullScreen = () => {
     this.setState({ openAddEventFullScreen: false });
     this.fetchEvents();
-    shouldRefresh && this.reset();
   };
 
-  fetchEvents = (shouldRefresh) => {
-    fetch('/event/findAll')
-    .then(response => response.json())
-    .then(json => {
-      //console.log('json', json);
-      let eventids = [];
-      let skippedids = [];
-      let events = json.events.map((event, index) => {
-        if (!eventids.includes(event.eventid)) {
-          var d = new Date('2019-02-08T07:30:00');
-          var n = d.getDay() -1;
-          eventids.push(event.eventid);
-          return {
-            title: event.description,
-            start: event.startdate,
-            end: event.enddate,
-            allDay: event.allday,
-            id: event.eventid,
-            location: event.location,
-            repeat: event.repeat,
-            daysOfWeek: event.repeat === 'daily' ? [0,1,2,3,4,5,6] : (event.repeat === 'weekly' ? [n] : null),
-            startRecur: event.startdate,
-            guests: event.memberid ? [{
-              id: event.memberid,
-              value: event.memberid,
-              label: event.firstname + ' ' + event.lastname
-            }] : [],
-            groups: event.groupid ? [{
-              id: event.groupid,
-              value: event.groupid,
-              label: event.groupname
-            }] : []
-          }
-        } 
-        else {
-          skippedids.push(index);
-        }
-        return null;
-      });
-      events = events.filter(function (el) {
-        return el != null;
-      });
-      
-      events = events.map((event) => {
-        skippedids.map((id, index) => {
-          if (event.id === json.events[id].eventid) {
-            const _e = json.events[id];
-            _e.memberid && !this.propInArray(event.guests, _e.memberid) && event.guests.push({
-              id: _e.memberid,
-              value: _e.memberid,
-              label: _e.firstname + ' ' + _e.lastname
-            });
-            _e.groupid && !this.propInArray(event.groups, _e.groupid) && event.groups.push({
-              id: _e.groupid,
-              value: _e.groupid,
-              label: _e.groupname
-            });
-            skippedids.splice(index, 1);
-          }
-          return null;
-        })
-        return event;
-      })
-
-      events = events.filter(function (el) {
-        return el != null;
-      });
-
-      this.setState({
-        events
-      }, this.initCalendar);
-
-      console.log(events);
-
-      shouldRefresh && window.location.reload();
-    })
-    .catch(error => console.log('error', error));
-  }
-
-  propInArray=(arr, prop)=> {
-    let found = false;
-    for(let i = 0; i < arr.length; i++) {
-        if (arr[i].value === prop) {
-            found = true;
-            break;
-        }
-    }
-    return found;
-  }
-
   componentDidMount () {
-    this.fetchEvents(false);
+    this.fetchEvents();
+  }
+
+  fetchEvents = () => {
+    Utils.fetchEvents(fetch).then((events) => {
+      events['allDay?'] = events.allDay ? true : false;
+      this.setState({events});
+    });
   }
 
   handleClickEditFullScreen = (event) => {
+    let start = Utils.getDateString(event.start, true);
+    start = start.split(":")[0] + ":" + start.split(":")[1];
+    let end = Utils.getDateString(event.end, true);
+    end = end.split(":")[0] + ":" + end.split(":")[1];
     this.setState({
       eventValue: event.title,
-      startValue: event.start.format(),
-      endValue: event.end ? event.end.format() : event.start.format(),
+      startValue: start,
+      endValue: end || start,
       eventId: event.id,
       location: event.location,
       repeat: event.repeat,
@@ -201,29 +100,6 @@ class Events extends React.Component {
     })
   }
 
-  initCalendar = () => {
-    let that = this;
-    const hasAccess = (this.props.account.role === 'administrator' || 
-      this.props.account.role === 'assistant' ||
-      this.props.account.role === 'accountant');
-    $('#agenda').fullCalendar({
-      defaultView: 'agendaWeek',
-      selectable: true,
-      selectHelper: true,
-      select: hasAccess ? function(startDate, endDate) {
-        that.initStartEndTime(startDate, endDate);
-        that.handleClickOpenAddEvent();
-      } : () => {},
-      dayClick: function() {},
-      events: that.state.events,
-      eventColor: '#00bbb2',
-      eventClick: that.handleClickEditFullScreen
-    });
-    $('#calendar').fullCalendar({
-      height: 350
-    });
-  }
-
   initStartEndTime = (startDate, endDate) => {
     this.setState({
       startValue: startDate.format(),
@@ -232,25 +108,44 @@ class Events extends React.Component {
   }
 
   render() {
+    const {classes} = this.props;
+    const localizer = momentLocalizer(moment);
+    const hasAccess = (this.props.account.role === 'administrator' || 
+      this.props.account.role === 'assistant' ||
+      this.props.account.role === 'accountant');
+    const events = this.state.events.map((ev) => {
+      ev.start = new Date(ev.start);
+      ev.end = new Date(ev.end);
+      return ev;
+    });
     return (
-      <div id='events'>
-        <div id='right-sidebar' className='left'>
-          <div id='calendar'></div>
-          <div className='clear'/>
-          
-        </div>
-        <div id='main-view' className='right'>
-          <div id='agenda'></div>
-        </div>
-        <div className='clear'/>
-
-        <AddCalendarDialog open={this.state.openAddCalendar} onClose={this.handleCloseAddCalendar}/>
+      <div>
+        <Card>
+          <CardHeader color={'danger'}>
+            <h4 className={classes.cardTitleWhite}>Calendar <a href='/events' style={{color: '#fff'}}>(View Events)</a></h4>
+          </CardHeader>
+          <CardBody style={{height: '600px'}}>
+          <Calendar
+            selectable={hasAccess}
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: 500 }}
+            defaultView={Views.WEEK}
+            onSelectEvent={event => this.handleClickEditFullScreen(event)}
+            onSelectSlot={this.handleClickOpenAddEvent}
+          />
+          </CardBody>
+        </Card>
+        
         <AddEventDialog
           open={this.state.openAddEvent}
           onClose={this.handleCloseAddEvent}
           start={this.state.startValue}
           end={this.state.endValue}
           openFullScreen={this.handleClickOpenAddEventFullScrenn}
+          refresh={this.fetchEvents}
         />
         <AddEventFullScreenDialog
           open={this.state.openAddEventFullScreen}
@@ -264,6 +159,7 @@ class Events extends React.Component {
           repeat={this.state.repeat}
           guests={this.state.guests}
           groups={this.state.groups}
+          refresh={this.fetchEvents}
         />
       </div>
     );

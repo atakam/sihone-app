@@ -5,6 +5,7 @@ import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 
@@ -81,6 +82,14 @@ class EnvelopeList extends React.Component {
         }
         <GridItem xs={12} sm={12} md={12}>
           <Card>
+            {
+                !this.props.hasOwnProperty('accountId') &&
+                (
+                <CardHeader color={'success'}>
+                  {this.props.tabs}
+                </CardHeader>
+                )
+            }
             <CardBody>
               {
                 !this.props.hasOwnProperty('accountId') ?

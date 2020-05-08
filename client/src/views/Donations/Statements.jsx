@@ -48,6 +48,7 @@ class Statements extends React.Component {
   handleMemberChange = name => value => {
     this.setState({
       [name]: value,
+      memberId: value.id
     });
   };
 
@@ -376,8 +377,8 @@ class Statements extends React.Component {
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
-            <CardHeader color={'info'} className="card-header">
-              <h4>Statement Generator</h4>
+            <CardHeader color={'success'}>
+              {this.props.tabs}
             </CardHeader>
             <CardBody className="statement-body">
               <GridContainer>
@@ -511,6 +512,7 @@ class Statements extends React.Component {
                     className="statement-data" fullWidth
                     isStatement
                     donations={this.state.donations}
+                    refreshCallback={this.fetchQuickDonations}
                   />
                 </GridItem>
               </GridContainer>

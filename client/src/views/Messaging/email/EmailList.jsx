@@ -25,6 +25,7 @@ class EmailList extends React.Component {
                 }
                 onRowClick={this.props.onSelectEmail}
                 rowActions={this.props.actions}
+                classes={{tableResponsive: 'emaillist'}}
             />
         </GridItem>
     );

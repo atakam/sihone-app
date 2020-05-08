@@ -66,7 +66,8 @@ class EmailTable {
         LEFT JOIN memberemail ON emails.id = memberemail.emailid
         LEFT JOIN members ON memberemail.memberid = members.id
         LEFT JOIN groupemail ON emails.id = groupemail.emailid
-        LEFT JOIN groups ON groupemail.groupid = groups.id`,
+        LEFT JOIN groups ON groupemail.groupid = groups.id
+        ORDER BY emaildate DESC`,
         (error, response) => {
           if (error) return reject(error);
 

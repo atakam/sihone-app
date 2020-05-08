@@ -308,7 +308,7 @@ function sendEmail(to, subject, body) {
                     console.log(error);
 
                 }
-                console.log('Message sent: %s', info.messageId);
+                console.log('Message sent: %s', info);
                 console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
             });
         });

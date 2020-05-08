@@ -9,7 +9,7 @@ class ToolBar extends React.Component {
   render() {
     return (
       <AppBar position="static">
-        <Toolbar className="toolbar">
+        <Toolbar>
           <Typography variant="title" color="inherit">
             {this.props.title}
           </Typography>

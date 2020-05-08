@@ -5,6 +5,7 @@ import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 
@@ -39,7 +40,8 @@ class FamilyList extends React.Component {
       console.log('json', json);
       this.setState({
         families: json.families
-      })
+      });
+      this.props.refreshNumbers && this.props.refreshNumbers();
     })
     .catch(error => console.log('error', error));
   }
@@ -74,9 +76,11 @@ class FamilyList extends React.Component {
 
     return (
       <GridContainer>
-        Count: {families.length}
         <GridItem xs={12} sm={12} md={12}>
           <Card>
+            <CardHeader color={'warning'}>
+              {this.props.tabs}
+            </CardHeader>
             <CardBody>
               <CustomInput
                 labelText={'Search family name or address'}

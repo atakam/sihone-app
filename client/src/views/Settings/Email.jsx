@@ -155,7 +155,8 @@ class Email extends React.Component {
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
-              <CardHeader color="info">
+              <CardHeader color="primary">
+                {this.props.tabs}
                 <p>Email setup must be done before the system can send any email.</p>
                 <p><i>Will use JadeSoft default settings if a field is left empty.</i></p>
               </CardHeader>

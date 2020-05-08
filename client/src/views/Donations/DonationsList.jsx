@@ -26,7 +26,7 @@ class DonationsList extends React.Component {
 
       member: '',
       paytype: '',
-      paydate: Utils.getTodaysDateString(),
+      paydate: Utils.getDateString(new Date(), false),
       checknumber: '',
       fundValues: [],
       donationid: '',
@@ -253,7 +253,7 @@ class DonationsList extends React.Component {
     this.setState({
       member: '',
       paytype: '',
-      paydate: Utils.getTodaysDateString(),
+      paydate: this.props.envelopeDate || Utils.getDateString(new Date(), false),
       checknumber: '',
       fundValues: [],
       donationid: '',
@@ -312,7 +312,7 @@ class DonationsList extends React.Component {
       data: donation
     })
     .then(function(response, body) {
-      this.fetchDonations();
+      this.props.envelopeId && this.fetchDonations();
       refresh && this.newDonation();
       this.setState({showForm: false});
     }.bind(this));
@@ -340,7 +340,8 @@ class DonationsList extends React.Component {
     .then(function(response, body) {
       this.closeDelete();
       this.newDonation();
-      this.fetchDonations();
+      this.props.envelopeId && this.fetchDonations();
+      this.props.refreshCallback && this.props.refreshCallback();
     }.bind(this));
   }
 
@@ -503,11 +504,13 @@ class DonationsList extends React.Component {
 
 DonationsList.propTypes = {
   envelopeId: PropTypes.number,
+  envelopeDate: PropTypes.string,
   fullWidth: PropTypes.bool,
   memberId: PropTypes.number,
   donations: PropTypes.array,
   isStatement: PropTypes.bool,
-  isPrintable: PropTypes.bool
+  isPrintable: PropTypes.bool,
+  refreshCallback: PropTypes.func
 };
 
 export default connect(
