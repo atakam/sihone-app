@@ -4,6 +4,10 @@ const MemberTable = require('../domain/member/table');
 const Family = require('../domain/family');
 const FamilyTable = require('../domain/family/table');
 const SettingsTable = require('../domain/settings/table');
+const DonationTable = require('../domain/donation/table');
+const MemberSmsTable = require('../domain/membersms/table');
+const MemberEmailTable = require('../domain/memberemail/table');
+const MemberEventTable = require('../domain/memberevent/table');
 const { setSession, authenticatedMember } = require('./helper');
 
 const { hash } = require('../domain/member/helper');
@@ -279,7 +283,7 @@ router.post('/import', (req, res, next) => {
 
     if (enforcefamily) {
         families.map((family, i) => {
-            families.map((family2, j) => {
+            return families.map((family2, j) => {
                 if (i < j && family.streetaddress === family2.streetaddress
                     && family.city === family2.city
                     && family.province === family2.province
@@ -325,20 +329,38 @@ router.post('/import', (req, res, next) => {
         )
     })
     .then(() => res.json({ message: 'successfully updated member' }))
-    .catch(error => res.json({ error: true, message: 'Error occured during import' }));
+    .catch(error => res.json({ error: true, message: 'Error occured during import', details: error }));
 });
 
 router.post('/delete', (req, res, next) => {
     const { 
         memberid
-     } = req.body;
+    } = req.body;
 
-    MemberTable.deleteGroupsByMember({ memberid })
-    .then(() => {
-        return MemberTable.deleteMember({ memberid });
+    DonationTable.getDonationsByQuickFilter({ memberid })
+    .then((donations) => {
+        if (donations.length === 0) {
+            MemberTable.deleteGroupsByMember({ memberid })
+            .then(() => {
+                return MemberSmsTable.deleteMemberSmsByMemberId({ memberid })
+            })
+            .then(() => {
+                return MemberEmailTable.deleteMemberEmailByMemberId({ memberid })
+            })
+            .then(() => {
+                return MemberEventTable.deleteMemberEventByMemberId({ memberid })
+            })
+            .then(() => {
+                return MemberTable.deleteMember({ memberid });
+            })
+            .then(() => res.json({ message: 'successfully deleted member' }))
+            .catch(error => res.json({ error: true, message: error}));
+        }
+        else {
+            res.json({ error: true, message: 'Please delete all donations related to this member first' })
+        }
     })
-    .then(() => res.json({ message: 'successfully deleted member' }))
-    .catch(error => next(error));
+    .catch(error => res.json({ error: true, message: error}));
 });
 
 router.get('/find/:id', (req, res, next) => {

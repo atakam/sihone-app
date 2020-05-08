@@ -6,13 +6,14 @@ import axios from "axios";
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
+import Checkbox from "components/CustomInput/CustomCheckbox.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 import Snackbar from "components/Snackbar/Snackbar.jsx";
@@ -481,6 +482,9 @@ class MemberReport extends React.Component {
           />
           <GridItem xs={12} sm={12} md={12}>
             <Card>
+              <CardHeader color={'success'} className="card-header">
+                {this.props.tabs}
+              </CardHeader>
               <CardBody>
                 <GridContainer>
                 <GridItem xs={12} sm={12} md={12}>

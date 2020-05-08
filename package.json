@@ -11,6 +11,9 @@
     "configure": "./bin/configure_db.sh",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
+  "engines": {
+    "node": "10.x"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -25,6 +28,7 @@
     "crypto-js": "^3.1.9-1",
     "express": "^4.16.3",
     "mv": "^2.1.1",
+    "nexmo": "^2.6.0",
     "nodemailer": "^4.6.8",
     "path": "^0.12.7",
     "pg": "^7.4.3",

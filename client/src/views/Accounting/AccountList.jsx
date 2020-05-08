@@ -4,6 +4,7 @@ import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 
@@ -52,6 +53,9 @@ class AccountList extends React.Component {
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
+            <CardHeader color={'danger'}>
+              {this.props.tabs}
+            </CardHeader>
             <CardBody>
               <CustomInput
                 labelText="Search accounts by name, category, fund or balance"

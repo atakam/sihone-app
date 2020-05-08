@@ -1,8 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import TabContainer from 'components/TabContainer/TabContainer.jsx';
-
 import Identity from './Identity.jsx';
 import Email from './Email.jsx';
 import SMS from './SMS.jsx';
@@ -73,6 +71,66 @@ class Settings extends React.Component {
     });
   }
 
+  getTabs = (hasAccess) => {
+    return (
+      <Tabs
+        className='menu-tabs'
+        value={this.state.tabValue}
+        onChange={this.handleTabChange}
+        scrollable
+        scrollButtons="on"
+        indicatorColor="primary"
+      >
+        {
+          hasAccess && (
+            <Tab
+              value='identity'
+              disableRipple
+              label="IDENTITY"
+              icon={<Home />}
+            />
+          )
+        }
+        {
+          hasAccess && (
+            <Tab
+              value='email'
+              disableRipple
+              label="EMAIL SETUP"
+              icon={<Mail />}
+            />
+          )
+        }
+        {
+          hasAccess && (
+            <Tab
+              value='sms'
+              disableRipple
+              label="SMS SETUP"
+              icon={<Message />}
+            />
+          )
+        }
+        <Tab
+          value='membership'
+          disableRipple
+          label="membership / Group"
+          icon={<Person />}
+        />
+        {
+          hasAccess && (
+            <Tab
+              value='finance'
+              disableRipple
+              label="Donations / Accounting"
+              icon={<AttachMoney />}
+            />
+          )
+        }
+      </Tabs>
+    );
+  }
+
   render () {
     const {
       notificationOpen,
@@ -104,76 +162,11 @@ class Settings extends React.Component {
           open={warningOpen}
           closeNotification={this.closeNotification}
         />
-        <Tabs
-          className='tabs'
-          value={this.state.tabValue}
-          onChange={this.handleTabChange}
-          scrollable
-          scrollButtons="on"
-          indicatorColor="primary"
-        >
-          {
-            hasAccess && (
-              <Tab
-                value='identity'
-                disableRipple
-                label="IDENTITY"
-                icon={<Home />}
-              />
-            )
-          }
-          {
-            hasAccess && (
-              <Tab
-                value='email'
-                disableRipple
-                label="EMAIL SETUP"
-                icon={<Mail />}
-              />
-            )
-          }
-          {
-            hasAccess && (
-              <Tab
-                value='sms'
-                disableRipple
-                label="SMS SETUP"
-                icon={<Message />}
-              />
-            )
-          }
-          <Tab
-            value='membership'
-            disableRipple
-            label="membership / Group"
-            icon={<Person />}
-          />
-          {
-            hasAccess && (
-              <Tab
-                value='finance'
-                disableRipple
-                label="Donations / Accounting"
-                icon={<AttachMoney />}
-              />
-            )
-          }
-        </Tabs>
-        {this.state.tabValue === 'identity' && hasAccess && <TabContainer>
-          <Identity openNotification={this.openNotification} />
-        </TabContainer>}
-        {this.state.tabValue === 'email' && hasAccess && <TabContainer>
-          <Email openNotification={this.openNotification} openWarning={this.openWarning} />
-        </TabContainer>}
-        {this.state.tabValue === 'sms' && hasAccess && <TabContainer>
-          <SMS openNotification={this.openNotification} />
-        </TabContainer>}
-        {this.state.tabValue === 'membership' && <TabContainer>
-          <Membership openNotification={this.openNotification} />
-        </TabContainer>}
-        {this.state.tabValue === 'finance' && hasAccess && <TabContainer>
-          <Finance openNotification={this.openNotification} />
-        </TabContainer>}
+        {this.state.tabValue === 'identity' && hasAccess && <Identity openNotification={this.openNotification} tabs={this.getTabs(hasAccess)} />}
+        {this.state.tabValue === 'email' && hasAccess && <Email openNotification={this.openNotification} openWarning={this.openWarning} tabs={this.getTabs(hasAccess)} />}
+        {this.state.tabValue === 'sms' && hasAccess && <SMS openNotification={this.openNotification} tabs={this.getTabs(hasAccess)} />}
+        {this.state.tabValue === 'membership' && <Membership openNotification={this.openNotification} tabs={this.getTabs(hasAccess)} />}
+        {this.state.tabValue === 'finance' && hasAccess && <Finance openNotification={this.openNotification} tabs={this.getTabs(hasAccess)} />}
       </div>
     );
   }

@@ -33,6 +33,30 @@ class SMS extends React.Component {
     this.fetchSettings();
   }
 
+  fetchBalance = () => {
+    fetch('/settings/smsBalance')
+    .then(response => response.json())
+    .then(json => {
+      console.log('json', json);
+      const result = json.result;
+      let value = result && JSON.parse(json.result).value;
+      const conversion = "EUR_" + this.state.currency;
+
+      fetch("https://free.currconv.com/api/v7/convert?q="+conversion+"&compact=y&apiKey=13fb70c013d9fedb9103")
+      .then(response => response.json())
+      .then((json) => {
+        const rate = json[conversion].val;
+        let newValue = value * rate;
+        value = Math.round((value + Number.EPSILON) * 100) / 100;
+        newValue = Math.round((newValue + Number.EPSILON) * 100) / 100;
+        value = value + ' EUR (' + newValue + ' ' + this.state.currency + ')';
+        this.setState({
+          smsbalance: value
+        });
+      })
+    });
+  }
+
   fetchSettings = () => {
     fetch('/settings/findAll')
     .then(response => response.json())
@@ -42,8 +66,8 @@ class SMS extends React.Component {
         smsapikey: json.settings.smsapikey,
         smsapisecret: json.settings.smsapisecret,
         smsnumber: json.settings.smsnumber,
-        smsbalance: json.settings.smsbalance
-      });
+        currency: json.settings.currency
+      }, this.fetchBalance());
     })
     .catch(error => console.log('error', error));
   }
@@ -88,8 +112,9 @@ class SMS extends React.Component {
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
-              <CardHeader color="info">
-                <p>SMS Service is provided by Nexmo. <a href='https://www.nexmo.com/' rel="noopener noreferrer" target="_blank">Create an account</a> to obtain the credentials for this page.</p>
+              <CardHeader color="primary">
+                {this.props.tabs}
+                <p>SMS Service is provided by Vonage. <a href='https://www.vonage.com/' rel="noopener noreferrer" target="_blank" className="nexmo">Create an account</a> to obtain the credentials for this page.</p>
               </CardHeader>
               <CardBody>
                 <GridContainer>

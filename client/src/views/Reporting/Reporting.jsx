@@ -24,40 +24,39 @@ class Reporting extends React.Component {
     this.setState({ tabValue: value });
   };
 
+  getTabs = () => {
+    return (
+      <Tabs
+        className='menu-tabs'
+        value={this.state.tabValue}
+        onChange={this.handleTabChange}
+        indicatorColor="primary"
+      >
+        <Tab
+          value='members'
+          disableRipple
+          label="MEMBERS, FAMILIES & GROUPS"
+        />
+        <Tab
+          value='donations'
+          disableRipple
+          label="DONATIONS"
+        />
+        <Tab
+          value='accounting'
+          disableRipple
+          label="ACCOUNTING"
+        />
+      </Tabs>
+    );
+  }
+
   render () {
     return (
       <div>
-        <Tabs
-          className='tabs'
-          value={this.state.tabValue}
-          onChange={this.handleTabChange}
-          indicatorColor="primary"
-        >
-          <Tab
-            value='members'
-            disableRipple
-            label="MEMBERS, FAMILIES & GROUPS"
-          />
-          <Tab
-            value='donations'
-            disableRipple
-            label="DONATIONS"
-          />
-          <Tab
-            value='accounting'
-            disableRipple
-            label="ACCOUNTING"
-          />
-        </Tabs>
-        {this.state.tabValue === 'members' && <TabContainer>
-          <MemberReport />
-        </TabContainer>}
-        {this.state.tabValue === 'donations' && <TabContainer>
-          <DonationReport />
-        </TabContainer>}
-        {this.state.tabValue === 'accounting' && <TabContainer>
-          <AccountReport />
-        </TabContainer>}
+        {this.state.tabValue === 'members' && <MemberReport tabs={this.getTabs()} />}
+        {this.state.tabValue === 'donations' && <DonationReport tabs={this.getTabs()} />}
+        {this.state.tabValue === 'accounting' && <AccountReport tabs={this.getTabs()} />}
       </div>
     );
   }

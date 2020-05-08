@@ -41,9 +41,6 @@
 .form-checkbox {
   margin-top: 36px;
 }
-.form-checkbox span{
-  color: #AAAAAA !important;
-}
 .form-subtitle {
   margin-bottom: 0px;
   border-bottom: 1px solid #eee;
@@ -98,10 +95,8 @@
 }
 
 /** TOOLBAR **/
-.toolbar {
-   background: linear-gradient(60deg, #00cec3, #01ddd2) !important;
-}
-.toolbar .toolbar-icons {
+
+.toolbar-icons {
   position: absolute;
   right: 0;
 }
@@ -192,6 +187,13 @@ dd {
   padding: 8px;
 }
 
+.mailbox .content {
+  width: unset !important;
+}
+.emaillist {
+  height: 500px;
+}
+
 .text-messages {
   min-height: 200px;
   max-height: 400px;
@@ -215,8 +217,16 @@ dd {
   top: 0;
 }
 
-.outbox {
-  float: right;
+.email-row {
+  display: flex;
+}
+
+.mailboxes {
+  display: flex;
+  flex-direction: column;
+  padding-top: 40px;
+  width: 20%;
+  padding-right: 20px;
 }
 
 .float-right {
@@ -296,4 +306,48 @@ table{
 
 .MuiTabs-flexContainer-203 {
   flex-wrap: wrap;
+}
+
+.ct-label {
+  color: rgba(255, 255, 255, 1);
+  font-weight: 400;
+}
+.ct-grid {
+  stroke: rgba(255, 255, 255, 0.6);
+}
+
+.menu-tabs span {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.menu-tabs button {
+  opacity: 1;
+}
+
+a.nexmo {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+label[data-shrink="true"] {
+  font-weight: 500;
+  color: #464646 !important;
+}
+
+.mui-checked  svg{
+  color: #464646;;
+}
+
+.form-checkbox span {
+  color: #464646;
+  font-weight: 500;
+}
+
+#editor-container {
+  height: 200px;
+}
+
+.dashboard-events .rbc-btn-group {
+  display: none;
 }

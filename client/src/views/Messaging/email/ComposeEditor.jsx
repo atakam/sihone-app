@@ -16,7 +16,7 @@ import Cancel from "@material-ui/icons/Cancel";
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 
-import ReactQuill from 'react-quill';
+import Quill from "quill";
 
 class ComposeEditor extends React.Component {
   constructor(props){
@@ -41,6 +41,24 @@ class ComposeEditor extends React.Component {
 
   componentDidMount() {
     this.fetchSettings();
+
+    this.quill = new Quill('#editor-container', {
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, false] }],
+          ['bold', 'italic', 'underline'],
+          ['image', 'code-block']
+        ]
+      },
+      placeholder: '',
+      theme: 'snow'  // or 'bubble'
+    });
+
+    this.quill.on('text-change', function(delta) {
+      this.setState({
+        emailContent: this.quill.container.firstChild.innerHTML
+      });
+    }.bind(this));
   }
 
   handleInputChange = (event, state) => {
@@ -103,31 +121,8 @@ class ComposeEditor extends React.Component {
   }
 
   getRichTextEditor = () => {
-
-    const modules = {
-      toolbar: [
-        [{ 'header': [1, 2, false] }],
-        ['bold', 'italic', 'underline','strike', 'blockquote'],
-        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-        ['link', 'image', 'video'],
-        ['clean']
-      ],
-    };
-
-    const formats = [
-      'header',
-      'bold', 'italic', 'underline', 'strike', 'blockquote',
-      'list', 'bullet', 'indent',
-      'link', 'image', 'video'
-    ];
     return (
-      <ReactQuill
-              id="emailContent"
-              onChange={value => this.handleEmailContentChange(value)}
-              value={this.state.emailContent}
-              modules={modules}
-              formats={formats}
-            />
+      <div id="editor-container"/>
     );
   }
 
@@ -139,6 +134,7 @@ class ComposeEditor extends React.Component {
       subject: '',
       emailContent: ''
     });
+    this.quill.root.innerHTML = '';
   }
 
   closeNotification = () => {
