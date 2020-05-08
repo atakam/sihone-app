@@ -79,7 +79,9 @@ class Settings extends React.Component {
         onChange={this.handleTabChange}
         scrollable
         scrollButtons="on"
-        indicatorColor="primary"
+        classes={
+          {indicator: 'tabs-indicator'}
+        }
       >
         {
           hasAccess && (

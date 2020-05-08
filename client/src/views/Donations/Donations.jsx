@@ -43,7 +43,9 @@ class Donations extends React.Component {
         className='menu-tabs'
         value={this.state.tabValue}
         onChange={this.handleTabChange}
-        indicatorColor="primary"
+        classes={
+          {indicator: 'tabs-indicator'}
+        }
       >
       {
         Utils.isMoneyHandler(this.props.account.role) && 

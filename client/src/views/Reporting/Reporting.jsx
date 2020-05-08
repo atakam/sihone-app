@@ -30,7 +30,9 @@ class Reporting extends React.Component {
         className='menu-tabs'
         value={this.state.tabValue}
         onChange={this.handleTabChange}
-        indicatorColor="primary"
+        classes={
+          {indicator: 'tabs-indicator'}
+        }
       >
         <Tab
           value='members'

@@ -321,6 +321,10 @@ table{
   font-size: 14px;
 }
 
+.menu-tabs span.tabs-indicator {
+  background-color: #ffffff;
+}
+
 .menu-tabs button {
   opacity: 1;
 }

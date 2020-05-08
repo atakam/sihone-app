@@ -40,6 +40,9 @@ class SMS extends React.Component {
       console.log('json', json);
       const result = json.result;
       let value = result && JSON.parse(json.result).value;
+      this.setState({
+        origbalance: value
+      });
       const conversion = "EUR_" + this.state.currency;
 
       fetch("https://free.currconv.com/api/v7/convert?q="+conversion+"&compact=y&apiKey=13fb70c013d9fedb9103")
@@ -78,14 +81,14 @@ class SMS extends React.Component {
       smsapikey,
       smsapisecret,
       smsnumber,
-      smsbalance
+      origbalance
     } = this.state
 
     const settings = {
       smsapikey,
       smsapisecret,
       smsnumber,
-      smsbalance
+      smsbalance: origbalance
     }
     
     axios({
