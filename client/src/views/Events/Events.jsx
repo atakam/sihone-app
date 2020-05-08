@@ -39,9 +39,9 @@ class Events extends React.Component {
   }
 
   handleClickOpenAddEvent = (event) => {
-    let start = event.start.getFullYear() + '-' + (event.start.getMonth() < 10 ? '0' + (1 + event.start.getMonth()) : (1 + event.start.getMonth())) + '-' + (event.start.getDate() < 10 ? '0' + event.start.getDate() : event.start.getDate()) + "T" + event.start.toTimeString();
+    let start = Utils.getDateString(event.start, true);
     start = start.split(":")[0] + ":" + start.split(":")[1];
-    let end = event.end.getFullYear() + '-' + (event.end.getMonth() < 10 ? '0' + (1 + event.end.getMonth()) : (1 + event.end.getMonth())) + '-' + (event.end.getDate() < 10 ? '0' + event.end.getDate() : event.end.getDate()) + "T" + event.end.toTimeString();
+    let end = Utils.getDateString(event.end, true);
     end = end.split(":")[0] + ":" + end.split(":")[1];
     this.setState({
       openAddEvent: true,
@@ -82,9 +82,9 @@ class Events extends React.Component {
   }
 
   handleClickEditFullScreen = (event) => {
-    let start = event.start.getFullYear() + '-' + (event.start.getMonth() < 10 ? '0' + (1 + event.start.getMonth()) : (1 + event.start.getMonth())) + '-' + (event.start.getDate() < 10 ? '0' + event.start.getDate() : event.start.getDate()) + "T" + event.start.toTimeString();
+    let start = Utils.getDateString(event.start, true);
     start = start.split(":")[0] + ":" + start.split(":")[1];
-    let end = event.end.getFullYear() + '-' + (event.end.getMonth() < 10 ? '0' + (1 + event.end.getMonth()) : (1 + event.end.getMonth())) + '-' + (event.end.getDate() < 10 ? '0' + event.end.getDate() : event.end.getDate()) + "T" + event.end.toTimeString();
+    let end = Utils.getDateString(event.end, true);
     end = end.split(":")[0] + ":" + end.split(":")[1];
     this.setState({
       eventValue: event.title,
@@ -126,7 +126,7 @@ class Events extends React.Component {
           </CardHeader>
           <CardBody style={{height: '600px'}}>
           <Calendar
-            selectable
+            selectable={hasAccess}
             localizer={localizer}
             events={events}
             startAccessor="start"

@@ -48,6 +48,7 @@ class Statements extends React.Component {
   handleMemberChange = name => value => {
     this.setState({
       [name]: value,
+      memberId: value.id
     });
   };
 

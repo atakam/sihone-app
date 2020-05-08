@@ -18,13 +18,15 @@ import TextField from '@material-ui/core/TextField';
 
 import DonationsList from './DonationsList.jsx'
 
+import Utils from "../utils/Utils";
+
 class CreateEnvelope extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       descriptiontext: '',
-      envelopedate: '',
+      envelopedate: Utils.getDateString(new Date(), false),
       isopen: 'open',
       notificationOpen: false,
 
@@ -335,6 +337,7 @@ class CreateEnvelope extends React.Component {
                 this.props.hasOwnProperty('envelopeId') ? (
                   <DonationsList
                     envelopeId={this.props.envelopeId}
+                    envelopeDate={this.state.envelopedate}
                     setDonationNumber={this.setDonationNumber}
                   />
                 ) : null

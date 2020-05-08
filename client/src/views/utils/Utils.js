@@ -217,6 +217,14 @@ class Utils {
         }
     }
 
+    static getDateString = (date, withTime) => {
+      let str =  date.getFullYear() + '-' + (date.getMonth() < 10 ? '0' + (1 + date.getMonth()) : (1 + date.getMonth())) + '-' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
+      if (withTime) {
+        str = str + "T" + date.toTimeString();
+      }
+      return str;
+    }
+
     static fetchEvents = (fetch) => {
         let events = [];
         return fetch('/event/findAll')
