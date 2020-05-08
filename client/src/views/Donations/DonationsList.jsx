@@ -423,7 +423,7 @@ class DonationsList extends React.Component {
               donations.push(
                 [
                   donation.id,
-                  donation.firstname + ' ' + donation.lastname ,
+                  <span className={donation.active ? '' : 'inactive'}>{donation.firstname + " " + donation.lastname}</span>,
                   donation.paydate ? donation.paydate.split('T')[0] : '',
                   donation.amount
                 ]

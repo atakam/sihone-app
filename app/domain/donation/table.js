@@ -71,6 +71,7 @@ class DonationTable {
           checknumber,
           firstname,
           lastname,
+          active,
           funds.id AS fundid,
           fundname,
           amount

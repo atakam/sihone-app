@@ -257,6 +257,9 @@ class App extends React.Component {
             open={this.state.mobileOpen}
             color="blue"
             role={this.props.account.role}
+            classes={
+              {itemLink: 'menu-item'}
+            }
             {...rest}
           />
           <div className={classes.mainPanel} ref="mainPanel">

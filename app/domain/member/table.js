@@ -268,13 +268,15 @@ class MemberTable {
     return new Promise((resolve, reject) => {
       pool.query(
         `SELECT
-          phone
+          phone,
+          active,
+          subscribtion
         FROM members
         WHERE id = $1`,
         [memberid],
         (error, response) => {
           if (error) return reject(error);
-          resolve(response.rows[0] ? response.rows[0].phone : null);
+          resolve(response.rows[0] ? response.rows[0] : null);
         }
       )
     });
@@ -285,14 +287,16 @@ class MemberTable {
       if (special === 'staff') {
         pool.query(
           `SELECT
-            phone
+            phone,
+            active,
+            subscribtion
           FROM members
           WHERE memberrole = $1 OR memberrole = $2 OR memberrole = $3 OR memberrole = $4`,
           ['administrator', 'assistant', 'accountant', 'group'],
           (error, response) => {
             if (error) return reject(error);
             response.rows.length === 0 && resolve('')
-            response.rows.length > 0 && resolve(response.rows.map((row) => row.phone));
+            response.rows.length > 0 && resolve(response.rows);
           }
         )
       } else if (special === 'members' || special === 'visitors') {

@@ -125,7 +125,7 @@ class Members extends React.Component {
         {this.state.tabValue === 'members' && <MembersList active tabs={this.getTabs()} refreshNumbers={this.fetchNumbers} />}
         {this.state.tabValue === 'nonmembers' && <MembersList active={false} tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
         {this.state.tabValue === 'families' && <FamilyList tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
-        {this.state.tabValue === 'children' && <MembersList isChildren tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
+        {this.state.tabValue === 'children' && <MembersList active isChildren tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
         {this.state.tabValue === 'create' && <CreateMember onSave={(e) => {this.handleTabChange(e, 'members')}} tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
         {this.state.tabValue === 'import' && <ImportMembers onSave={(e) => {this.handleTabChange(e, 'members')}} tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
       </div>

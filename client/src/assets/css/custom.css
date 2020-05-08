@@ -75,6 +75,10 @@
   margin-top: 30px !important;
 }
 
+.inactive {
+  color: #f44336;
+}
+
 .react-calendar__tile--now {
   border: 1px solid !important;
 }
@@ -323,6 +327,11 @@ table{
 
 .menu-tabs span.tabs-indicator {
   background-color: #ffffff;
+}
+
+.menu-item div {
+  font-size: 16px;
+  font-weight: 400;
 }
 
 .menu-tabs button {

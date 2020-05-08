@@ -427,7 +427,7 @@ class CreateGroup extends React.Component {
                                 return (
                                   [
                                     member.id,
-                                    member.firstname + " " + member.lastname,
+                                    <span className={member.active ? '' : 'inactive'}>{member.firstname + " " + member.lastname}</span>,
                                     member.email,
                                     member.phone
                                   ]

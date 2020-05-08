@@ -28,7 +28,7 @@ class CreateMember extends React.Component {
     this.state = {
       gender: '',
       marital: '',
-      role: '',
+      role: 'member',
       firstname: '',
       lastname: '',
       birthdate: '',
@@ -298,7 +298,7 @@ class CreateMember extends React.Component {
     !this.props.memberId && this.setState({
       gender: '',
       marital: '',
-      role: '',
+      role: 'member',
       subscribtion: false,
       firstname: '',
       lastname: '',
@@ -735,6 +735,19 @@ class CreateMember extends React.Component {
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
                     <CustomInput
+                      labelText="Mobile Number"
+                      id="mobile"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        value: phone,
+                        onChange: (e) => this.handleInputChange(e, 'phone')
+                      }}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={4}>
+                    <CustomInput
                       labelText="Email"
                       id="email"
                       formControlProps={{
@@ -745,19 +758,6 @@ class CreateMember extends React.Component {
                         value: email,
                         autoComplete: 'new-password',
                         onChange: (e) => this.handleInputChange(e, 'email')
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
-                      labelText="Mobile Number"
-                      id="mobile"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        value: phone,
-                        onChange: (e) => this.handleInputChange(e, 'phone')
                       }}
                     />
                   </GridItem>
