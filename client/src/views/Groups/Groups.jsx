@@ -72,8 +72,8 @@ class Groups extends React.Component {
     return (
       <div>
         
-        {this.state.tabValue === 'group' && <GroupsList tabs={this.getTabs()} />}
-        {this.state.tabValue === 'create' && <CreateGroup tabs={this.getTabs()} />}
+        {this.state.tabValue === 'group' && <GroupsList tabs={this.getTabs()} refreshNumbers={this.fetchNumbers} />}
+        {this.state.tabValue === 'create' && <CreateGroup tabs={this.getTabs()} refreshNumbers={this.fetchNumbers} />}
       </div>
     );
   }

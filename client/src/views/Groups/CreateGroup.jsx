@@ -149,6 +149,7 @@ class CreateGroup extends React.Component {
       grouptypeid: '',
       groupname: ''
     });
+    this.props.refreshNumbers && this.props.refreshNumbers();
   }
 
   closeNotification = () => {
