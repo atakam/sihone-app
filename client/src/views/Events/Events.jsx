@@ -77,8 +77,54 @@ class Events extends React.Component {
   fetchEvents = () => {
     Utils.fetchEvents(fetch).then((events) => {
       events['allDay?'] = events.allDay ? true : false;
+
+      events = events.concat(this.generateReccuring(events));
       this.setState({events});
     });
+  }
+
+  generateReccuring = (events) => {
+    
+    const gevents = [];
+    events.map((event) => {
+      if (event.repeat === "daily" ||
+      event.repeat === "weekly" ||
+      event.repeat === "biweekly" ||
+      event.repeat === "monthly" ||
+      event.repeat === "yearly") {
+        for (let i=0; i<1000; i++){
+          const newEvent = JSON.parse(JSON.stringify(event));
+          let start = new Date(newEvent.start);
+          let end = new Date(newEvent.end);
+          if (event.repeat === "daily") {
+            start.setDate(start.getDate() + (i+1));
+            end.setDate(end.getDate() + (i+1));
+          }
+          else if (event.repeat === "weekly") {
+            start.setDate(start.getDate() + 7*(i+1));
+            end.setDate(end.getDate() + 7*(i+1));
+          }
+          else if (event.repeat === "biweekly") {
+            start.setDate(start.getDate() + 14*(i+1));
+            end.setDate(end.getDate() + 14*(i+1));
+          }
+          else if (event.repeat === "monthly") {
+            start.setMonth(start.getMonth() + (i+1));
+            end.setMonth(end.getMonth() + (i+1));
+          }
+          else if (event.repeat === "yearly") {
+            start.setFullYear(start.getFullYear() + (i+1));
+            end.setFullYear(end.getFullYear() + (i+1));
+          }
+          
+          newEvent.start = Utils.getDateString(start, true).split(":00 GMT")[0];
+          newEvent.end = Utils.getDateString(end, true).split(":00 GMT")[0];
+          gevents.push(newEvent);
+        }
+      }
+      
+    });
+    return gevents;
   }
 
   handleClickEditFullScreen = (event) => {

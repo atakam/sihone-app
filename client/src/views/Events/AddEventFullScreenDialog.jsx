@@ -347,9 +347,9 @@ class AddEventFullScreenDialog extends React.Component {
             <MenuItem value={'none'}>Does Not repeat</MenuItem>
             <MenuItem value={'daily'}>Daily</MenuItem>
             <MenuItem value={'weekly'}>Weekly</MenuItem>
-            {/* <MenuItem value={'biweekly'}>Bi Weekly</MenuItem>
+            <MenuItem value={'biweekly'}>Bi Weekly</MenuItem>
             <MenuItem value={'monthly'}>Monthly</MenuItem>
-            <MenuItem value={'yearly'}>Yearly</MenuItem> */}
+            <MenuItem value={'yearly'}>Yearly</MenuItem>
           </Select>
           <div className="clear" />
           <Tabs
