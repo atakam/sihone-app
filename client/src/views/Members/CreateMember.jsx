@@ -72,6 +72,8 @@ class CreateMember extends React.Component {
 
   componentDidMount () {
     this.fetchFamilies();
+    this.fetchLastId();
+    this.fetchSettings();
     this.props.memberId && this.fetchMember();
     this.props.memberId && this.fetchGroupsByMember();
     this.props.memberId && this.fetchGroups();
@@ -89,6 +91,24 @@ class CreateMember extends React.Component {
     .catch(error => console.log('error', error));
   }
 
+  fetchSettings = () => {
+    fetch('/settings/findAll')
+    .then(response => response.json())
+    .then(json => {
+      console.log('json', json);
+      this.setState({
+        memberdefaultpassword: json.settings.memberdefaultpassword,
+        memberidautomate: json.settings.memberidautomate
+      });
+      if (json.settings.memberidautomate) {
+        this.setState({
+          uid: json.settings.memberidprefix + this.generateId()
+        });
+      }
+    })
+    .catch(error => console.log('error', error));
+  }
+
   fetchGroups = () => {
     setTimeout(() => {
       fetch('/group/findAll')
@@ -101,6 +121,18 @@ class CreateMember extends React.Component {
       })
       .catch(error => console.log('error', error));
     }, 2000);
+  }
+
+  fetchLastId = () => {
+    fetch('/member/findLast',)
+    .then(response => response.json())
+    .then(json => {
+      console.log('member', json.member);
+      this.setState({
+        lastid: json.member.id
+      })
+    })
+    .catch(error => console.log('error', error));
   }
 
   fetchMember = () => {
@@ -126,6 +158,12 @@ class CreateMember extends React.Component {
       })
     })
     .catch(error => console.log('error', error));
+  }
+
+  generateId = () => {
+    let d = new Date();
+    d = '1' + d.toJSON().replace(/-/g, '').replace(/:/g, '').split('T')[0].slice(4) + 'J';
+    return d + (this.state.lastid+1);
   }
 
   handleInputChange = (event, state) => {
@@ -244,7 +282,8 @@ class CreateMember extends React.Component {
       postalcode,
       country,
       homephone,
-      active
+      active,
+      memberdefaultpassword
     } = this.state
 
     const member = {
@@ -257,7 +296,7 @@ class CreateMember extends React.Component {
       birthdate,
       email,
       phone,
-      password: password === '' ? 'abc123' : password,
+      password: password === '' ? memberdefaultpassword : password,
       memberuid: uid,
       membershipdate,
       familyid,
@@ -548,7 +587,9 @@ class CreateMember extends React.Component {
       allGroups,
       group,
 
-      active
+      active,
+
+      memberidautomate
     } = this.state
 
     const excludes = groups.map((group) => group.id);
@@ -973,7 +1014,7 @@ class CreateMember extends React.Component {
                       }}
                       inputProps={{
                         value: uid,
-                        disabled: !hasSecureAccess,
+                        disabled: !hasSecureAccess || memberidautomate,
                         onChange: (e) => this.handleInputChange(e, 'uid')
                       }}
                     />

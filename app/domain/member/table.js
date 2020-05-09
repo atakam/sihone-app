@@ -78,6 +78,24 @@ class MemberTable {
     });
   }
 
+  static getLastMember() {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `SELECT
+          id
+        FROM members
+        ORDER BY ID DESC LIMIT 1`,
+        (error, response) => {
+          if (error) return reject(error);
+
+          if (response.rows.length === 0) return reject(new Error('no member'));
+
+          resolve(response.rows[0]);
+        }
+      )
+    });
+  }
+
   static getMember({ id }) {
     return new Promise((resolve, reject) => {
       pool.query(

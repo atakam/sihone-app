@@ -378,6 +378,15 @@ router.get('/find/:id', (req, res, next) => {
     .catch(error => next(error));
 });
 
+router.get('/findLast', (req, res, next) => {
+    MemberTable.getLastMember()
+    .then((member) => res.json({
+        message: 'successfully found member',
+        member
+    }))
+    .catch(error => next(error));
+});
+
 router.get('/findAll', (req, res, next) => {
     MemberTable.getMembers(true)
         .then((members) => res.json({
