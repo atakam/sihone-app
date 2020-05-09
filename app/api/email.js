@@ -94,6 +94,23 @@ router.post('/new', (req, res, next) => {
     .catch(error => next(error));
 });
 
+router.post('/welcome', (req, res, next) => {
+    const { 
+        email,
+        subject,
+        message
+    } = req.body;
+
+    sendEmail(email, subject, message).then((response) => {
+        console.log('WELCOME EMAIL RESPONSE', response);
+        if (response.status) {
+            res.json({
+                message: 'Successfully sent welcome email'
+            });
+        }
+    });
+});
+
 router.post('/delete', (req, res, next) => {
     const { 
         emailid

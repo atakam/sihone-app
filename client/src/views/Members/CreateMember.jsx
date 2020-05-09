@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import axios from "axios";
 // @material-ui/core components
+import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -19,6 +20,7 @@ import CardFooter from "components/Card/CardFooter.jsx";
 import Snackbar from "components/Snackbar/Snackbar.jsx";
 import AlertDialog from "components/Dialog/AlertDialog";
 import Table from "components/Table/Table.jsx";
+import Utils from "../utils/Utils";
 
 import FamilyView from './FamilyView'
 
@@ -72,11 +74,15 @@ class CreateMember extends React.Component {
 
   componentDidMount () {
     this.fetchFamilies();
-    this.fetchLastId();
-    this.fetchSettings();
-    this.props.memberId && this.fetchMember();
-    this.props.memberId && this.fetchGroupsByMember();
-    this.props.memberId && this.fetchGroups();
+    this.fetchLastId()
+    .then(() => {
+      return this.fetchSettings();
+    })
+    .then(() => {
+      this.props.memberId && this.fetchMember();
+      this.props.memberId && this.fetchGroupsByMember();
+      this.props.memberId && this.fetchGroups();
+    });
   }
 
   fetchFamilies = () => {
@@ -92,15 +98,19 @@ class CreateMember extends React.Component {
   }
 
   fetchSettings = () => {
-    fetch('/settings/findAll')
+    return fetch('/settings/findAll')
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
       this.setState({
         memberdefaultpassword: json.settings.memberdefaultpassword,
-        memberidautomate: json.settings.memberidautomate
+        memberidautomate: json.settings.memberidautomate,
+        memberidprefix: json.settings.memberidprefix,
+        churchname: json.settings.churchname,
+        website: json.settings.website,
+        emailfooter: json.settings.emailfooter
       });
-      if (json.settings.memberidautomate) {
+      if (json.settings.memberidautomate && this.state.uid === '') {
         this.setState({
           uid: json.settings.memberidprefix + this.generateId()
         });
@@ -124,7 +134,7 @@ class CreateMember extends React.Component {
   }
 
   fetchLastId = () => {
-    fetch('/member/findLast',)
+    return fetch('/member/findLast',)
     .then(response => response.json())
     .then(json => {
       console.log('member', json.member);
@@ -151,7 +161,7 @@ class CreateMember extends React.Component {
         birthdate: json.member.birthdate ? json.member.birthdate.split('T')[0] : '',
         email: json.member.email,
         phone: json.member.phone,
-        uid: json.member.memberuid,
+        uid: json.member.memberuid === '' && this.state.memberidautomate ? this.state.memberidprefix + this.generateId(json.member.id) : json.member.memberuid,
         membershipdate: json.member.membershipdate ? json.member.membershipdate.split('T')[0] : '',
         familyid: json.member.familyid,
         active: json.member.active
@@ -160,10 +170,12 @@ class CreateMember extends React.Component {
     .catch(error => console.log('error', error));
   }
 
-  generateId = () => {
+  generateId = (actualId) => {
+    let id = actualId ? actualId : this.state.lastid+1;
+    id = (id > 10 && id < 100 ? '0' : (id < 10 ? '00' : '')) + id;
     let d = new Date();
     d = '1' + d.toJSON().replace(/-/g, '').replace(/:/g, '').split('T')[0].slice(4) + 'J';
-    return d + (this.state.lastid+1);
+    return d + id;
   }
 
   handleInputChange = (event, state) => {
@@ -187,6 +199,7 @@ class CreateMember extends React.Component {
 
   handleSave = (event) => {
     event.preventDefault();
+    this.handleActionsClose();
     const {
       gender,
       marital,
@@ -260,6 +273,7 @@ class CreateMember extends React.Component {
 
   handleSaveNew = (event) => {
     event.preventDefault();
+    this.handleActionsClose();
     const {
       gender,
       marital,
@@ -327,6 +341,7 @@ class CreateMember extends React.Component {
         this.setState({
           notificationNewOpen: true
         });
+        this.sendWelcomeEmail();
         this.reset();
       }
     }.bind(this));
@@ -370,6 +385,7 @@ class CreateMember extends React.Component {
       notificationRemoveOpen: false,
       notificationDeleteErrorOpen: false,
       notificationError: false,
+      notificationEmailOpen: false,
       notificationErrorMessage: ''
     });
   }
@@ -466,6 +482,57 @@ class CreateMember extends React.Component {
         member: ''
       });
       this.fetchGroupsByMember();
+    }.bind(this));
+  }
+
+  handleActions = (event) => {
+    this.setState({
+      otherActionEl: event.currentTarget
+    });
+  }
+
+  handleActionsClose = () => {
+    this.setState({
+      otherActionEl: null
+    });
+  };
+
+  sendWelcomeEmail = () => {
+    this.handleActionsClose();
+    const {
+      churchname,
+      emailfooter,
+      website,
+      firstname,
+      lastname,
+      email,
+      uid
+    } = this.state;
+    const subject = 'Welcome to ' + churchname;
+    let welcome = "Hi " + firstname + " " + lastname + ",";
+    welcome += "<br/>Member Id: " + uid;
+    welcome += "<br/><br/>Welcome to the web portal of " + churchname + ".";
+    welcome += "<br/><br/>You may access your profile from by going to the <a href='"+window.location.hostname+"'>web portal</a> with the following credentials.";
+    welcome += "<br/>Email: " + email;
+    welcome += "<br/>Password: <i>(If you do not know your password, click on <strong>Forgot Password</strong> on the web portal login page)</i>";
+    welcome += "<br/><br/>Thanks,";
+    welcome += "<br/>" + churchname;
+    const template = Utils.getEmailTemplates(churchname, subject, emailfooter, website, `${website}/settings/logo`)[0];
+    const message = template.before + welcome + template.after;
+    const member = {
+      email,
+      subject,
+      message
+    }
+    axios({
+      method: 'post',
+      url: '/email/welcome',
+      data: member
+    })
+    .then(function(response, body) {
+      this.setState({
+        notificationEmailOpen: true
+      });
     }.bind(this));
   }
 
@@ -582,6 +649,7 @@ class CreateMember extends React.Component {
       notificationDeleteErrorOpen,
       notificationError,
       notificationErrorMessage,
+      notificationEmailOpen,
 
       groups,
       allGroups,
@@ -589,7 +657,9 @@ class CreateMember extends React.Component {
 
       active,
 
-      memberidautomate
+      memberidautomate,
+
+      otherActionEl
     } = this.state
 
     const excludes = groups.map((group) => group.id);
@@ -636,6 +706,16 @@ class CreateMember extends React.Component {
             place="tc"
             color="success"
             open={notificationOpen}
+            closeNotification={this.closeNotification}
+          />
+          <Snackbar
+            message={
+              'SUCCESS - Welcome email sent!'
+            }
+            close
+            place="tc"
+            color="success"
+            open={notificationEmailOpen}
             closeNotification={this.closeNotification}
           />
           <Snackbar
@@ -1083,6 +1163,26 @@ class CreateMember extends React.Component {
                     <Button color="danger" className='add-button create' onClick={this.handleDelete}>
                       Delete
                     </Button>
+                  ) : (
+                    <span />
+                  )
+                }
+                {
+                  this.props.hasOwnProperty('memberId') && this.props.memberId !== this.props.account.memberid ? (
+                    <span>
+                      <Button className='add-button create' aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleActions}>
+                        Actions
+                      </Button>
+                      <Menu
+                        id="simple-menu"
+                        anchorEl={otherActionEl}
+                        keepMounted
+                        open={Boolean(otherActionEl)}
+                        onClose={this.handleActionsClose}
+                      >
+                        <MenuItem onClick={this.sendWelcomeEmail}>Send Welcome Email</MenuItem>
+                      </Menu>
+                    </span>
                   ) : (
                     <span />
                   )

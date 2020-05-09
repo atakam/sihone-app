@@ -174,16 +174,17 @@ class MemberSelect extends React.Component {
   }
 
   render() {
-    const { classes, theme, onChange, value, excludeMembers } = this.props;
+    const { classes, theme, onChange, value, excludeMembers, showId } = this.props;
 
     const excludes = excludeMembers.map((member) => member.id);
 
     let suggestions = this.state.members.map(member => {
+      const idLabel = showId ? " (" + member.memberuid + ")" : '';
       if (excludes.indexOf(member.id) < 0) {
         return {
           id: member.id,
           value: member.id,
-          label: member.firstname + ' ' + member.lastname,
+          label: member.firstname + ' ' + member.lastname + idLabel,
           firstname: member.firstname,
           lastname: member.lastname,
           email: member.email,
@@ -202,12 +203,13 @@ class MemberSelect extends React.Component {
 
     if (this.props.emailOnly) {
       suggestions = suggestions.map(member => {
+        const idLabel = showId ? " (" + member.memberuid + ")" : '';
         //console.log("MEMBER", member);
         if (member.email && member.subscribtion) {
           return {
             id: member.id,
             value: member.value,
-            label: member.firstname + ' ' + member.lastname,
+            label: member.firstname + ' ' + member.lastname + idLabel,
             firstname: member.firstname,
             lastname: member.lastname,
             email: member.email,
@@ -226,11 +228,12 @@ class MemberSelect extends React.Component {
 
     if (this.props.phoneOnly) {
       suggestions = suggestions.map(member => {
+        const idLabel = showId ? " (" + member.memberuid + ")" : '';
         if (member.phone) {
           return {
             id: member.id,
             value: member.value,
-            label: member.firstname + ' ' + member.lastname,
+            label: member.firstname + ' ' + member.lastname + idLabel,
             firstname: member.firstname,
             lastname: member.lastname,
             email: member.email,
@@ -280,7 +283,8 @@ MemberSelect.propTypes = {
   onChange: PropTypes.func,
   excludeMembers: PropTypes.arrayOf(PropTypes.object),
   emailOnly: PropTypes.bool,
-  phoneOnly: PropTypes.bool
+  phoneOnly: PropTypes.bool,
+  showId: PropTypes.bool
 };
 
 export default withStyles(styles, { withTheme: true })(MemberSelect);

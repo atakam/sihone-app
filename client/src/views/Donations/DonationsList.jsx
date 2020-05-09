@@ -143,6 +143,7 @@ class DonationsList extends React.Component {
               value={member}
               onChange={this.handleMemberChange('member')}
               required
+              showId
             />
           </GridItem>
           <GridItem xs={12} sm={6} md={6}>

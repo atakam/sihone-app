@@ -83,7 +83,7 @@ class MembersList extends React.Component {
               <Table
                 id='members-table'
                 tableHeaderColor="primary"
-                tableHead={["Name", "Roles", "Email", "Phone", "Family", this.props.isChildren ? "Age" : "Date Joined"]}
+                tableHead={["Name", "Roles", "Email", "Phone", "Family", this.props.isChildren ? "Age" : "Date Joined", "Member Id"]}
                 tableData={
                   members.map(
                     (member, index) => {
@@ -95,7 +95,8 @@ class MembersList extends React.Component {
                           member.email,
                           member.phone,
                           member.familyname,
-                          this.props.isChildren ? member.age : member.membershipdate ? member.membershipdate.split('T')[0] : member.membershipdate
+                          this.props.isChildren ? member.age : member.membershipdate ? member.membershipdate.split('T')[0] : member.membershipdate,
+                          member.memberuid
                         ]
                       )
                     }
