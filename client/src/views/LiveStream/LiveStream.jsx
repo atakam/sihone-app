@@ -20,8 +20,8 @@ class LiveStream extends React.Component {
     super(props);
     this.state = {
       tabValue: 'youtube',
-      youtube: 'https://youtu.be/tXxTiaKh_20',
-      facebook: 'Facebook live'
+      youtube: '',
+      facebook: ''
     };
   }
 
@@ -66,9 +66,10 @@ class LiveStream extends React.Component {
     .then(response => response.json())
     .then(json => {
       console.log('json', json);
-      // this.setState({
-      //   youtube: json.settings.youtube
-      // })
+      this.setState({
+        youtube: json.settings.youtube && json.settings.youtube !== '' ? json.settings.youtube : 'https://www.youtube.com/embed/Snr_eId97YM',
+        facebook: json.settings.facebook && json.settings.facebook !== '' ? json.settings.facebook : 'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2FSihoneDesign%2Fposts%2F1009169426167415'
+      })
     })
     .catch(error => console.log('error', error));
   }

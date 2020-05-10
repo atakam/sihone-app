@@ -3,20 +3,20 @@ import { connect } from "react-redux";
 
 import Identity from './Identity.jsx';
 import Email from './Email.jsx';
-import SMS from './SMS.jsx';
+import Stream from './Stream.jsx';
 import Membership from './Membership.jsx';
 import Finance from './Finance.jsx';
 
 import Home from "@material-ui/icons/Home";
 import Person from "@material-ui/icons/Person";
 import Mail from "@material-ui/icons/Mail";
-import Message from "@material-ui/icons/Message";
 import AttachMoney from "@material-ui/icons/AttachMoney";
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 import Snackbar from "components/Snackbar/Snackbar.jsx";
+import LiveTvIcon from '@material-ui/icons/LiveTv';
 
 class Settings extends React.Component {
   constructor(props) {
@@ -98,18 +98,8 @@ class Settings extends React.Component {
             <Tab
               value='email'
               disableRipple
-              label="EMAIL SETUP"
+              label="EMAIL / SMS SETUP"
               icon={<Mail />}
-            />
-          )
-        }
-        {
-          hasAccess && (
-            <Tab
-              value='sms'
-              disableRipple
-              label="SMS SETUP"
-              icon={<Message />}
             />
           )
         }
@@ -126,6 +116,16 @@ class Settings extends React.Component {
               disableRipple
               label="Donations / Accounting"
               icon={<AttachMoney />}
+            />
+          )
+        }
+        {
+          hasAccess && (
+            <Tab
+              value='stream'
+              disableRipple
+              label="LIVE STREAM"
+              icon={<LiveTvIcon />}
             />
           )
         }
@@ -166,9 +166,9 @@ class Settings extends React.Component {
         />
         {this.state.tabValue === 'identity' && hasAccess && <Identity openNotification={this.openNotification} tabs={this.getTabs(hasAccess)} />}
         {this.state.tabValue === 'email' && hasAccess && <Email openNotification={this.openNotification} openWarning={this.openWarning} tabs={this.getTabs(hasAccess)} />}
-        {this.state.tabValue === 'sms' && hasAccess && <SMS openNotification={this.openNotification} tabs={this.getTabs(hasAccess)} />}
         {this.state.tabValue === 'membership' && <Membership openNotification={this.openNotification} tabs={this.getTabs(hasAccess)} />}
         {this.state.tabValue === 'finance' && hasAccess && <Finance openNotification={this.openNotification} tabs={this.getTabs(hasAccess)} />}
+        {this.state.tabValue === 'stream' && hasAccess && <Stream openNotification={this.openNotification} tabs={this.getTabs(hasAccess)} />}
       </div>
     );
   }

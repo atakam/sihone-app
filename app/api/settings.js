@@ -122,6 +122,14 @@ router.post('/sms/update', (req, res, next) => {
         .catch(error => next(error));
 });
 
+router.post('/stream/update', (req, res, next) => {
+    console.log('settings', req.body);
+
+    SettingsTable.updateStreamSettings(req.body)
+        .then(() => res.json({ message: 'successfully updated settings' }))
+        .catch(error => next(error));
+});
+
 router.post('/sms/balance', (req, res, next) => {
     console.log('sms balance', req.body);
 
