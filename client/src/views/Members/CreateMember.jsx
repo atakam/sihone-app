@@ -22,7 +22,12 @@ import AlertDialog from "components/Dialog/AlertDialog";
 import Table from "components/Table/Table.jsx";
 import Utils from "../utils/Utils";
 
-import FamilyView from './FamilyView'
+import FamilyView from './FamilyView';
+
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 class CreateMember extends React.Component {
   constructor(props) {
@@ -68,7 +73,9 @@ class CreateMember extends React.Component {
       notificationDeleteErrorOpen: false,
 
       notificationError: false,
-      notificationErrorMessage: ''
+      notificationErrorMessage: '',
+
+      showPassword: false
     };
   }
 
@@ -536,6 +543,16 @@ class CreateMember extends React.Component {
     }.bind(this));
   }
 
+  handleClickShowPassword = (value) => {
+    this.setState({
+      showPassword: !this.state.showPassword
+    });
+  };
+
+  handleMouseDownPassword = event => {
+    event.preventDefault();
+  };
+
   render () {
     const genderlist = [
       {
@@ -659,7 +676,9 @@ class CreateMember extends React.Component {
 
       memberidautomate,
 
-      otherActionEl
+      otherActionEl,
+
+      showPassword
     } = this.state
 
     const excludes = groups.map((group) => group.id);
@@ -890,10 +909,21 @@ class CreateMember extends React.Component {
                         fullWidth: true
                       }}
                       inputProps={{
-                        type: 'password',
+                        type: showPassword ? 'text' : 'password',
                         value: password,
                         autoComplete: 'new-password',
-                        onChange: (e) => this.handleInputChange(e, 'password')
+                        onChange: (e) => this.handleInputChange(e, 'password'),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={this.handleClickShowPassword.bind(this)}
+                              onMouseDown={this.handleMouseDownPassword.bind(this)}
+                            >
+                              {showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                          </InputAdornment>
+                        )
                       }}
                     />
                   </GridItem>
