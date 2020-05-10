@@ -3,6 +3,7 @@ import React from "react";
 // @material-ui/icons
 import Home from "@material-ui/icons/Home";
 import DateRange from "@material-ui/icons/DateRange";
+import LiveTvIcon from '@material-ui/icons/LiveTv';
 import Person from "@material-ui/icons/Person";
 import Group from "@material-ui/icons/Group";
 import AttachMoney from "@material-ui/icons/AttachMoney";
@@ -20,6 +21,7 @@ import GroupsPage from "views/Groups/Groups.jsx";
 import DonationsPage from "views/Donations/Donations.jsx";
 import AccountingPage from "views/Accounting/Accounting.jsx";
 import MessagingPage from "views/Messaging/Messaging.jsx";
+import LiveStreamPage from "views/LiveStream/LiveStream.jsx";
 // import ActivityPage from "views/Activity/Activity.jsx";
 import ReportingPage from "views/Reporting/Reporting.jsx";
 import SettingsPage from "views/Settings/Settings.jsx";
@@ -76,6 +78,13 @@ const dashboardRoutes = [
     navbarName: "Messaging",
     icon: Mail,
     component: MessagingPage
+  },
+  {
+    path: "/stream",
+    sidebarName: "Live Stream",
+    navbarName: "Live Stream",
+    icon: LiveTvIcon,
+    component: LiveStreamPage
   },
   {
     path: "/reporting",

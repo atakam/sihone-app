@@ -70,8 +70,8 @@ const Sidebar = ({ ...props }) => {
     <List className={classes.list}>
       {routes.map((prop, key) => {
 
-        // ADMINISTRATOR
-        if (Utils.isAdministrator(role)) {
+        // ADMINISTRATOR // ADMINISTRATIVE ASSISTANT // ACCOUNTANT
+        if (Utils.isAdministrator(role) || Utils.isAdminAssistant(role) || Utils.isAccountant(role)) {
           switch(prop.navbarName) {
             case 'Home':
             case 'Events':
@@ -80,6 +80,7 @@ const Sidebar = ({ ...props }) => {
             case 'Donations':
             case 'Accounting':
             case 'Messaging':
+            case 'Live Stream':
             case 'Reporting':
             case 'Activity':
             case 'Settings':
@@ -89,48 +90,8 @@ const Sidebar = ({ ...props }) => {
               return null;
           }
         } 
-        
-        // ADMINISTRATIVE ASSISTANT
-        else if (Utils.isAdminAssistant(role)) {
-          switch(prop.navbarName) {
-            case 'Home':
-            case 'Events':
-            case 'Members':
-            case 'Groups':
-            case 'Donations':
-            case 'Accounting':
-            case 'Messaging':
-            case 'Reporting':
-            case 'Activity':
-            case 'Settings':
-            case 'Logout':
-              return renderNavigation(key, prop);
-            default:
-              return null;
-          }
-        }
 
-        // ACCOUNTANT
-        else if (Utils.isAccountant(role)) {
-          switch(prop.navbarName) {
-            case 'Home':
-            case 'Events':
-            case 'Members':
-            case 'Groups':
-            case 'Donations':
-            case 'Accounting':
-            case 'Messaging':
-            case 'Reporting':
-            case 'Activity':
-            case 'Settings':
-            case 'Logout':
-              return renderNavigation(key, prop);
-            default:
-              return null;
-          }
-        }
-
-        // ACCOUNTANT
+        // GROUP ADMIN
         else if (Utils.isGroupAdministrator(role)) {
           switch(prop.navbarName) {
             case 'Home':
@@ -138,6 +99,7 @@ const Sidebar = ({ ...props }) => {
             case 'Members':
             case 'Donations':
             case 'Messaging':
+            case 'Live Stream':
             case 'Settings':
             case 'Logout':
               return renderNavigation(key, prop);
@@ -151,6 +113,7 @@ const Sidebar = ({ ...props }) => {
           switch(prop.navbarName) {
             case 'Home':
             case 'Events':
+            case 'Live Stream':
             case 'Donations':
             case 'Logout':
               return renderNavigation(key, prop);
