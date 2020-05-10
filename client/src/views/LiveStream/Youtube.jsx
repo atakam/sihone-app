@@ -9,7 +9,7 @@ import CardBody from "components/Card/CardBody.jsx";
 
 class Youtube extends React.Component {
   render () {
-    const iframe = '<iframe src="'+this.props.url+'" width="540" height="450"></iframe>'; 
+    const iframe = '<iframe width="560" height="315" src="'+this.props.url+'" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
     return (
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
