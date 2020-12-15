@@ -231,9 +231,9 @@ CREATE TABLE IF NOT EXISTS settings (
   facebook VARCHAR(255) NOT NULL
 );
 INSERT INTO settings (
-  churchname, charitynumber, streetaddress, city, province, postalcode, country, currency, phone, email, website, logo, welcome, smtphost, smtpport, smtpuser, smtppass, smtpemail, smtpname, smtpsecure, emailfooter, smsapikey, smsapisecret, smsnumber, smsbalance, memberidprefix, memberidlength, memberidautomate, memberdefaultpassword
+  churchname, charitynumber, streetaddress, city, province, postalcode, country, currency, phone, email, website, logo, welcome, smtphost, smtpport, smtpuser, smtppass, smtpemail, smtpname, smtpsecure, emailfooter, smsapikey, smsapisecret, smsnumber, smsbalance, memberidprefix, memberidlength, memberidautomate, memberdefaultpassword, youtube, facebook
   ) VALUES
-('JadeSoft', '1111', '', '', '', '', '', '', '', '', '', '', '<p>We have dedicated time and resources to produce the ultimate software to help manage your organization.</p>\r\n\r\n<p>JadeSoft Software is built with simplicity to help facilitate management and leadership within any nonprofit institutions accepting donations, with an easy to use and intuitive interface. All features have been handcrafted to suit most day to day activities, with test cases carried on active running institutions.</p>\r\n\r\n<p>Our team work hard everyday to make sure any new needs are promptly met.</p>\r\n', '', '', '', '', '', '', '', '', '', '', '', '0', 'JS', 7, 1, 'abc123');
+('JadeSoft', '1111', '', '', '', '', '', '', '', '', '', '', '<p>We have dedicated time and resources to produce the ultimate software to help manage your organization.</p>\r\n\r\n<p>JadeSoft Software is built with simplicity to help facilitate management and leadership within any nonprofit institutions accepting donations, with an easy to use and intuitive interface. All features have been handcrafted to suit most day to day activities, with test cases carried on active running institutions.</p>\r\n\r\n<p>Our team work hard everyday to make sure any new needs are promptly met.</p>\r\n', '', '', '', '', '', '', '', '', '', '', '', '0', 'JS', 7, 1, 'abc123', '', '');
 
 INSERT INTO members (
   firstname, lastname, gender, marital, email, memberrole, access, subscribtion, active, password

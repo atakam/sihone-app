@@ -1,9 +1,9 @@
 const { Pool } = require('pg');
 const databaseConfiguration = {
-    user: 'sctbckje',
-    host: 'baasu.db.elephantsql.com', //'churchbraindb.c6nccd29fuwa.us-east-2.rds.amazonaws.com',
-    database: 'sctbckje',
-    password: 'N6gW0bjDrYfn-i_Un1w6HY8mhvv_u84j',
+    user: 'clgmhytu',
+    host: 'rajje.db.elephantsql.com', //'churchbraindb.c6nccd29fuwa.us-east-2.rds.amazonaws.com',
+    database: 'clgmhytu',
+    password: 'm1sGvfb4sQrgS_5sj1R6064apdyIIplu',
     port: 5432
 };
 
