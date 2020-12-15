@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
-import CsvParse from '@vtex/react-csv-parse';
+// import CsvParse from '@vtex/react-csv-parse';
 // @material-ui/core components
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 // core components
@@ -180,7 +180,7 @@ class CreateMember extends React.Component {
                     </ul>
                   </GridItem>
                   
-                  <GridItem xs={12} sm={12} md={6}>
+                  {/* <GridItem xs={12} sm={12} md={6}>
                     <h6 className="form-subtitle">Import</h6>
                     <CsvParse
                       keys={keys}
@@ -202,7 +202,7 @@ class CreateMember extends React.Component {
                     <Button color="info" className='add-button create'  type='submit' disabled={this.state.data === null}>
                       Import
                     </Button>
-                  </GridItem>
+                  </GridItem> */}
                 </GridContainer>
               </CardBody>
               <CardFooter>
