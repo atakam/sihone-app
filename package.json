@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "server": "nodemon server.js",
+    "start": "node ./server",
+    "server": "nodemon ./server",
+    "test": "npm -v",
     "client": "cd client && npm install && npm start",
     "configure-dev": "npm run configure && npm run dev",
     "configure": "./bin/configure_db.sh",
