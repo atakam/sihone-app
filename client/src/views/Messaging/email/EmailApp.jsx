@@ -104,7 +104,7 @@ class Email extends React.Component {
         }
     
         return (
-          <div className="app row">
+          <div className="app row email-row">
             <MailboxList mailboxes={mailboxes}
                          onSelectMailbox={this.handleSelectMailbox}
                          onSelectCompose={this.handleSelectCompose} />

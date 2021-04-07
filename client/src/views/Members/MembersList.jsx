@@ -6,6 +6,7 @@ import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import Table from "components/Table/Table.jsx";
 import Card from "components/Card/Card.jsx";
+import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
 
@@ -44,7 +45,8 @@ class MembersList extends React.Component {
       console.log('json', json);
       this.setState({
         members: json.members
-      })
+      });
+      this.props.refreshNumbers && this.props.refreshNumbers();
     })
     .catch(error => console.log('error', error));
   }
@@ -58,12 +60,14 @@ class MembersList extends React.Component {
           return Math.ceil((new Date() - new Date(Number(bdate[0]), Number(bdate[1])-1, Number(bdate[2]))) / (1000 * 3600 * 24)) / 365 < 18;
         } else return false;
       })
-    )
+    );
     return (
       <GridContainer>
-        Count: {members.length}
         <GridItem xs={12} sm={12} md={12}>
           <Card>
+            <CardHeader color={'warning'}>
+              {this.props.tabs}
+            </CardHeader>
             <CardBody>
               <CustomInput
                 labelText={'Search'}
@@ -79,7 +83,7 @@ class MembersList extends React.Component {
               <Table
                 id='members-table'
                 tableHeaderColor="primary"
-                tableHead={["Name", "Roles", "Email", "Phone", "Family", this.props.isChildren ? "Age" : "Date Joined"]}
+                tableHead={["Name", "Roles", "Email", "Phone", "Family", this.props.isChildren ? "Age" : "Date Joined", "Member Id"]}
                 tableData={
                   members.map(
                     (member, index) => {
@@ -91,7 +95,8 @@ class MembersList extends React.Component {
                           member.email,
                           member.phone,
                           member.familyname,
-                          this.props.isChildren ? member.age : member.membershipdate ? member.membershipdate.split('T')[0] : member.membershipdate
+                          this.props.isChildren ? member.age : member.membershipdate ? member.membershipdate.split('T')[0] : member.membershipdate,
+                          member.memberuid
                         ]
                       )
                     }
@@ -114,7 +119,8 @@ class MembersList extends React.Component {
 
 MembersList.propTypes = {
   isChildren: PropTypes.bool,
-  active: PropTypes.bool
+  active: PropTypes.bool,
+  tabs: PropTypes.object
 };
 
 export default MembersList;

@@ -191,7 +191,7 @@ class Utils {
         // Convert Object to JSON
         var jsonObject = JSON.stringify(items);
     
-        var csv = this.convertToCSV(jsonObject);
+        var csv = Utils.convertToCSV(jsonObject);
 
         var timestamp = (new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate())
             + (new Date().getMonth() < 10 ? '0' + new Date().getMonth() : new Date().getMonth())
@@ -215,6 +215,100 @@ class Utils {
                 document.body.removeChild(link);
             }
         }
+    }
+
+    static getDateString = (date, withTime) => {
+      let str =  date.getFullYear() + '-' + (date.getMonth() < 10 ? '0' + (1 + date.getMonth()) : (1 + date.getMonth())) + '-' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
+      if (withTime) {
+        str = str + "T" + date.toTimeString();
+      }
+      return str;
+    }
+
+    static fetchEvents = (fetch) => {
+        let events = [];
+        return fetch('/event/findAll')
+        .then(response => response.json())
+        .then(json => {
+          //console.log('json', json);
+          let eventids = [];
+          let skippedids = [];
+          events = json.events.map((event, index) => {
+            if (!eventids.includes(event.eventid)) {
+              var d = new Date('2019-02-08T07:30:00');
+              var n = d.getDay() -1;
+              eventids.push(event.eventid);
+              return {
+                title: event.description,
+                start: event.startdate,
+                end: event.enddate,
+                allDay: event.allday,
+                id: event.eventid,
+                location: event.location,
+                repeat: event.repeat,
+                daysOfWeek: event.repeat === 'daily' ? [0,1,2,3,4,5,6] : (event.repeat === 'weekly' ? [n] : null),
+                startRecur: event.startdate,
+                guests: event.memberid ? [{
+                  id: event.memberid,
+                  value: event.memberid,
+                  label: event.firstname + ' ' + event.lastname
+                }] : [],
+                groups: event.groupid ? [{
+                  id: event.groupid,
+                  value: event.groupid,
+                  label: event.groupname
+                }] : []
+              }
+            } 
+            else {
+              skippedids.push(index);
+            }
+            return null;
+          });
+          events = events.filter(function (el) {
+            return el != null;
+          });
+
+          const propInArray = (arr, prop)=> {
+            let found = false;
+            for(let i = 0; i < arr.length; i++) {
+                if (arr[i].value === prop) {
+                    found = true;
+                    break;
+                }
+            }
+            return found;
+          };
+          
+          events = events.map((event) => {
+            skippedids.map((id, index) => {
+              if (event.id === json.events[id].eventid) {
+                const _e = json.events[id];
+                _e.memberid && !propInArray(event.guests, _e.memberid) && event.guests.push({
+                  id: _e.memberid,
+                  value: _e.memberid,
+                  label: _e.firstname + ' ' + _e.lastname
+                });
+                _e.groupid && !propInArray(event.groups, _e.groupid) && event.groups.push({
+                  id: _e.groupid,
+                  value: _e.groupid,
+                  label: _e.groupname
+                });
+                skippedids.splice(index, 1);
+              }
+              return null;
+            })
+            return event;
+          })
+    
+          events = events.filter(function (el) {
+            return el != null;
+          });
+    
+          console.log(events);
+          return events;
+        })
+        .catch(error => console.log('error', error));
     }
 }
 export default Utils;

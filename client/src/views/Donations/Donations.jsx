@@ -6,7 +6,6 @@ import './Donations.css'
 import EnvelopeList from './EnvelopeList.jsx'
 import Statements from './Statements.jsx'
 import CreateEnvelope from './CreateEnvelope.jsx'
-import TabContainer from 'components/TabContainer/TabContainer.jsx'
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -38,49 +37,51 @@ class Donations extends React.Component {
 
   }
 
+  getTabs = () => {
+    return (
+      <Tabs
+        className='menu-tabs'
+        value={this.state.tabValue}
+        onChange={this.handleTabChange}
+        classes={
+          {indicator: 'tabs-indicator'}
+        }
+      >
+      {
+        Utils.isMoneyHandler(this.props.account.role) && 
+        <Tab
+          value='envelopes'
+          disableRipple
+          label="ENVELOPES"
+        />
+      }
+        
+        <Tab
+          value='statements'
+          disableRipple
+          label="STATEMENTS"
+        />
+
+      {
+        Utils.isMoneyHandler(this.props.account.role) && 
+        <Tab
+          value='create-envelope'
+          disableRipple
+          label="CREATE ENVELOPE"
+        />
+      }
+        
+      </Tabs>
+    );
+  }
+
   render () {
     return (
       <div>
-        <Tabs
-          className='donations-tabs'
-          value={this.state.tabValue}
-          onChange={this.handleTabChange}
-          indicatorColor="primary"
-        >
-        {
-          Utils.isMoneyHandler(this.props.account.role) && 
-          <Tab
-            value='envelopes'
-            disableRipple
-            label="ENVELOPES"
-          />
-        }
-          
-          <Tab
-            value='statements'
-            disableRipple
-            label="STATEMENTS"
-          />
-
-        {
-          Utils.isMoneyHandler(this.props.account.role) && 
-          <Tab
-            value='create-envelope'
-            disableRipple
-            label="CREATE ENVELOPE"
-          />
-        }
-          
-        </Tabs>
-        {this.state.tabValue === 'envelopes' && Utils.isMoneyHandler(this.props.account.role) && <TabContainer>
-          <EnvelopeList />
-        </TabContainer>}
-        {this.state.tabValue === 'statements' && <TabContainer>
-          <Statements memberRole={this.props.account.role} memberId={this.props.account.memberid}/>
-        </TabContainer>}
-        {this.state.tabValue === 'create-envelope' && Utils.isMoneyHandler(this.props.account.role) && <TabContainer>
-          <CreateEnvelope />
-        </TabContainer>}
+        
+        {this.state.tabValue === 'envelopes' && Utils.isMoneyHandler(this.props.account.role) && <EnvelopeList tabs={this.getTabs()} />}
+        {this.state.tabValue === 'statements' && <Statements memberRole={this.props.account.role} memberId={this.props.account.memberid} tabs={this.getTabs()} />}
+        {this.state.tabValue === 'create-envelope' && Utils.isMoneyHandler(this.props.account.role) && <CreateEnvelope tabs={this.getTabs()} />}
       </div>
     );
   }

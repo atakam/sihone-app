@@ -269,8 +269,7 @@ class SettingsTable {
     const {
       smsapikey,
       smsapisecret,
-      smsnumber,
-      smsbalance
+      smsnumber
     } = settings
 
     return new Promise((resolve, reject) => {
@@ -278,12 +277,31 @@ class SettingsTable {
         `UPDATE settings SET
           smsapikey = $1,
           smsapisecret = $2,
-          smsnumber = $3,
-          smsbalance = $4`,
+          smsnumber = $3`,
         [ smsapikey,
           smsapisecret,
-          smsnumber,
-          smsbalance],
+          smsnumber],
+        (error, response) => {
+          if (error) return reject(error);
+          resolve(true);
+        }
+      )
+    });
+  }
+
+  static updateStreamSettings(settings) { 
+    const {
+      youtube,
+      facebook
+    } = settings;
+
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE settings SET
+          youtube = $1,
+          facebook = $2`,
+        [ youtube,
+          facebook ],
         (error, response) => {
           if (error) return reject(error);
           resolve(true);

@@ -139,6 +139,11 @@ class EditFamily extends React.Component {
       homephone,
       notificationOpen
     } = this.state
+
+    let memberlist = this.state.members.filter(function (el) {
+      return !!el.active;
+    });
+
     return (
       <form onSubmit={this.handleSave}>
         <GridContainer>
@@ -282,7 +287,7 @@ class EditFamily extends React.Component {
                     tableHeaderColor="primary"
                     tableHead={["Name", "Family Roles", "Email", "Phone"]}
                     tableData={
-                      this.state.members.map(
+                      memberlist.map(
                         (member, index) => {
                           return (
                             [

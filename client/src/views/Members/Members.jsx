@@ -5,7 +5,6 @@ import MembersList from './MembersList.jsx'
 import FamilyList from './FamilyList.jsx'
 import CreateMember from './CreateMember.jsx'
 import ImportMembers from './ImportMembers.jsx'
-import TabContainer from 'components/TabContainer/TabContainer.jsx'
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -14,7 +13,11 @@ class Members extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabValue: props.tabValue || 'members'
+      tabValue: props.tabValue || 'members',
+      membersCount: '',
+      nonmembersCount: '',
+      familiesCount: '',
+      childrenCount: ''
     };
   }
 
@@ -29,34 +32,78 @@ class Members extends React.Component {
     });
   }
 
-  render () {
+  componentDidMount () {
+    this.fetchNumbers();
+  }
+
+  fetchNumbers = () => {
+    fetch('/member/findAll')
+    .then(response => response.json())
+    .then(json => {
+      console.log('json', json);
+      const children = json.members.filter((member) => {
+        if (member.birthdate) {
+          const bdate = member.birthdate.split('T')[0].split('-');
+          return Math.ceil((new Date() - new Date(Number(bdate[0]), Number(bdate[1])-1, Number(bdate[2]))) / (1000 * 3600 * 24)) / 365 < 18;
+        } else return false;
+      })
+      this.setState({
+        membersCount: json.members.length,
+        childrenCount: children.length
+      })
+    })
+    .catch(error => console.log('error', error));
+
+    fetch('/member/findInactive')
+    .then(response => response.json())
+    .then(json => {
+      console.log('json', json);
+      this.setState({
+        nonmembersCount: json.members.length
+      })
+    })
+    .catch(error => console.log('error', error));
+
+    fetch('/family/findAll')
+    .then(response => response.json())
+    .then(json => {
+      console.log('json', json);
+      this.setState({
+        familiesCount: json.families.length
+      })
+    })
+    .catch(error => console.log('error', error));
+  }
+
+  getTabs = () => {
     return (
-      <div>
-        <Tabs
-          className='members-tabs'
+      <Tabs
+          className='menu-tabs'
           value={this.state.tabValue}
           onChange={this.handleTabChange}
-          indicatorColor="primary"
+          classes={
+            {indicator: 'tabs-indicator'}
+          }
         >
           <Tab
             value='members'
             disableRipple
-            label={"ACTIVE MEMBERS"}
+            label={"ACTIVE MEMBERS (" + this.state.membersCount + ")"}
           />
           <Tab
             value='nonmembers'
             disableRipple
-            label={"INACTIVE MEMBERS"}
+            label={"INACTIVE MEMBERS (" + this.state.nonmembersCount + ")"}
           />
           <Tab
             value='families'
             disableRipple
-            label={"FAMILIES"}
+            label={"FAMILIES (" + this.state.familiesCount + ")"}
           />
           <Tab
             value='children'
             disableRipple
-            label={"CHILDREN < 18"}
+            label={"CHILDREN < 18 (" + this.state.childrenCount + ")"}
           />
           <Tab
             value='create'
@@ -69,24 +116,18 @@ class Members extends React.Component {
             label="Import Members"
           />
         </Tabs>
-        {this.state.tabValue === 'members' && <TabContainer>
-          <MembersList active/>
-        </TabContainer>}
-        {this.state.tabValue === 'nonmembers' && <TabContainer>
-          <MembersList active={false} />
-        </TabContainer>}
-        {this.state.tabValue === 'families' && <TabContainer>
-          <FamilyList />
-        </TabContainer>}
-        {this.state.tabValue === 'children' && <TabContainer>
-          <MembersList isChildren />
-        </TabContainer>}
-        {this.state.tabValue === 'create' && <TabContainer>
-          <CreateMember onSave={(e) => {this.handleTabChange(e, 'members')}} />
-        </TabContainer>}
-        {this.state.tabValue === 'import' && <TabContainer>
-          <ImportMembers onSave={(e) => {this.handleTabChange(e, 'members')}} />
-        </TabContainer>}
+    );
+  }
+
+  render () {
+    return (
+      <div>
+        {this.state.tabValue === 'members' && <MembersList active tabs={this.getTabs()} refreshNumbers={this.fetchNumbers} />}
+        {this.state.tabValue === 'nonmembers' && <MembersList active={false} tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
+        {this.state.tabValue === 'families' && <FamilyList tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
+        {this.state.tabValue === 'children' && <MembersList active isChildren tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
+        {this.state.tabValue === 'create' && <CreateMember onSave={(e) => {this.handleTabChange(e, 'members')}} tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
+        {this.state.tabValue === 'import' && <ImportMembers onSave={(e) => {this.handleTabChange(e, 'members')}} tabs={this.getTabs()} refreshNumbers={this.fetchNumbers}/>}
       </div>
     );
   }

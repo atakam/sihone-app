@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import ChartistGraph from "react-chartist";
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
-import Calendar from 'react-calendar'
 
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
@@ -18,6 +17,8 @@ import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
 import Utils from "../utils/Utils";
+import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
+import moment from 'moment';
 
 import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
@@ -55,6 +56,9 @@ class Dashboard extends React.Component {
       this.fetchCounts();
     }
     this.fetchSettings();
+    Utils.fetchEvents(fetch).then((events) => {
+      this.setState({events});
+    });
   }
 
   fetchCounts = () => {
@@ -146,7 +150,7 @@ class Dashboard extends React.Component {
                       <CardIcon color={data.colorValue}>
                         {data.icon}
                       </CardIcon>
-                      <p className={classes.cardCategory}>{data.title}</p>
+                      <p className={classes.cardCategory} style={{color:'#1d1d1d'}}>{data.title}</p>
                       <h3 className={classes.cardTitle}>
                         {this.state.dataCount[data.key]}
                       </h3>
@@ -154,7 +158,7 @@ class Dashboard extends React.Component {
                     <CardFooter stats>
                       <div className={classes.stats}>
                         {data.captionIcon}
-                        <a href={data.captionLink}>
+                        <a href={data.captionLink} style={{fontSize:'14px'}}>
                           {data.caption}
                         </a>
                       </div>
@@ -198,12 +202,16 @@ class Dashboard extends React.Component {
             <GridItem xs={12} sm={12} md={6}>
               <Card>
                 <CardHeader color={'danger'}>
-                  <h4 className={classes.cardTitleWhite}>Calendar</h4>
+                  <h4 className={classes.cardTitleWhite}>Upcoming Events <a href='/events' style={{color: '#fff'}}>(View Events Page)</a></h4>
                 </CardHeader>
-                <CardBody>
+                <CardBody style={{height: '225px'}}>
                   <Calendar
-                    onChange={this.onChange}
-                    value={this.state.date}
+                    localizer={momentLocalizer(moment)}
+                    events={this.state.events || []}
+                    startAccessor="start"
+                    endAccessor="end"
+                    defaultView={Views.AGENDA}
+                    className={'dashboard-events'}
                   />
                 </CardBody>
               </Card>

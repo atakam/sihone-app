@@ -3,8 +3,16 @@ import React from "react";
 class NoneSelected extends React.Component {
   render(){
     return (
-      <div className="none-selected alert alert-warning" role="alert">
-        <span>No {this.props.text} selected.</span>
+      <div>
+        <dl className="meta dl-horizontal">
+          <dt>Do {this.props.text} selected.</dt>
+          <dd></dd>
+          <br />
+          <dt></dt>
+          <dd></dd>
+          <br />
+        </dl>
+        <div className="email-body"></div>
       </div>
     );
   }

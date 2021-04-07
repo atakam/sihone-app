@@ -226,7 +226,9 @@ CREATE TABLE IF NOT EXISTS settings (
   memberidprefix VARCHAR(10) NOT NULL,
   memberidlength INTEGER NOT NULL,
   memberidautomate INTEGER NOT NULL,
-  memberdefaultpassword VARCHAR(50) NOT NULL
+  memberdefaultpassword VARCHAR(50) NOT NULL,
+  youtube VARCHAR(255) NOT NULL,
+  facebook VARCHAR(255) NOT NULL
 );
 INSERT INTO settings (
   churchname, charitynumber, streetaddress, city, province, postalcode, country, currency, phone, email, website, logo, welcome, smtphost, smtpport, smtpuser, smtppass, smtpemail, smtpname, smtpsecure, emailfooter, smsapikey, smsapisecret, smsnumber, smsbalance, memberidprefix, memberidlength, memberidautomate, memberdefaultpassword

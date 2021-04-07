@@ -48,9 +48,10 @@ class CustomTabs extends React.Component {
             onChange={this.handleChange}
             classes={{
               root: classes.tabsRoot,
-              indicator: classes.displayNone,
+              indicator: 'tabs-indicator',
               scrollButtons: classes.displayNone
             }}
+            indicatorColor={'secondary'}
             scrollable
             scrollButtons="auto"
           >

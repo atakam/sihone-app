@@ -14,14 +14,12 @@ import CardFooter from "components/Card/CardFooter.jsx";
 
 import './Settings.css';
 
-class SMS extends React.Component {
+class LiveStream extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      smsapikey: '',
-      smsapisecret: '',
-      smsnumber: '',
-      smsbalance: ''
+      youtube: '',
+      facebook: ''
     };
   }
 
@@ -39,10 +37,8 @@ class SMS extends React.Component {
     .then(json => {
       console.log('json', json);
       this.setState({
-        smsapikey: json.settings.smsapikey,
-        smsapisecret: json.settings.smsapisecret,
-        smsnumber: json.settings.smsnumber,
-        smsbalance: json.settings.smsbalance
+        youtube: json.settings.youtube,
+        facebook: json.settings.facebook
       });
     })
     .catch(error => console.log('error', error));
@@ -51,22 +47,18 @@ class SMS extends React.Component {
   save = (event) => {
     event.preventDefault();
     const {
-      smsapikey,
-      smsapisecret,
-      smsnumber,
-      smsbalance
+      youtube,
+      facebook
     } = this.state
 
     const settings = {
-      smsapikey,
-      smsapisecret,
-      smsnumber,
-      smsbalance
+      youtube,
+      facebook
     }
     
     axios({
       method: 'post',
-      url: '/settings/sms/update',
+      url: '/settings/stream/update',
       data: settings
     })
     .then(function(response, body) {
@@ -77,10 +69,8 @@ class SMS extends React.Component {
 
   render () {
     const {
-      smsapikey,
-      smsapisecret,
-      smsnumber,
-      smsbalance
+      youtube,
+      facebook
     } = this.state
 
     return (
@@ -88,66 +78,38 @@ class SMS extends React.Component {
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
-              <CardHeader color="info">
-                <p>SMS Service is provided by Nexmo. <a href='https://www.nexmo.com/' rel="noopener noreferrer" target="_blank">Create an account</a> to obtain the credentials for this page.</p>
+              <CardHeader color="primary">
+                {this.props.tabs}
+                <p>SMS Service is provided by Vonage. <a href='https://www.vonage.com/' rel="noopener noreferrer" target="_blank" className="nexmo">Create an account</a> to obtain the credentials for this page.</p>
               </CardHeader>
               <CardBody>
                 <GridContainer>
-                  <GridItem xs={12} sm={12} md={3}>
+                  <GridItem xs={12} sm={12} md={6}>
                     <CustomInput
-                      labelText="API Key"
-                      id="sms-key"
+                      labelText="Youtube URL"
+                      id="youtube"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
-                        value: smsapikey,
-                        onChange: (e) => this.handleInputChange(e, 'smsapikey')
+                        value: youtube,
+                        onChange: (e) => this.handleInputChange(e, 'youtube')
                       }}
                     />
                   </GridItem>
-                  <GridItem xs={12} sm={12} md={3}>
+                  <GridItem xs={12} sm={12} md={6}>
                     <CustomInput
-                      labelText="API Secret"
-                      id="sms-secret"
+                      labelText="Facebook URL"
+                      id="facebook"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
-                        value: smsapisecret,
-                        onChange: (e) => this.handleInputChange(e, 'smsapisecret')
+                        value: facebook,
+                        onChange: (e) => this.handleInputChange(e, 'facebook')
                       }}
                     />
                   </GridItem>
-                  <GridItem xs={12} sm={12} md={3}>
-                    <CustomInput
-                      labelText="Phone Number"
-                      id="sms-number"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        value: smsnumber,
-                        onChange: (e) => this.handleInputChange(e, 'smsnumber')
-                      }}
-                    />
-                  </GridItem>
-                  
-                  {
-                    <GridItem xs={12} sm={12} md={3}>
-                      <CustomInput
-                        labelText="Balance"
-                        id="sms-balance"
-                        formControlProps={{
-                          fullWidth: true
-                        }}
-                        inputProps={{
-                          value: smsbalance,
-                          disabled: true
-                        }}
-                      />
-                    </GridItem>
-                  }
                 </GridContainer>
               </CardBody>
               <CardFooter>
@@ -162,8 +124,8 @@ class SMS extends React.Component {
   }
 }
 
-SMS.propTypes = {
+LiveStream.propTypes = {
   openNotification: PropTypes.func
 };
 
-export default SMS;
+export default LiveStream;

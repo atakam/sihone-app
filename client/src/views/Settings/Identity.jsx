@@ -14,11 +14,14 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
+import Quill from "quill";
+
 import './Settings.css';
 
 class Identity extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       churchname : '',
       charitynumber : '',
@@ -44,6 +47,27 @@ class Identity extends React.Component {
     this.fetchSettings();
   }
 
+  initializeWelcome = (welcome) => {
+    const quill = new Quill('#editor-container', {
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, false] }],
+          ['bold', 'italic', 'underline'],
+          ['image', 'code-block']
+        ]
+      },
+      placeholder: 'Write your custom message here...',
+      theme: 'snow'  // or 'bubble'
+    });
+    quill.root.innerHTML = welcome;
+
+    quill.on('text-change', function(delta) {
+      this.setState({
+        welcome: quill.container.firstChild.innerHTML
+      });
+    }.bind(this));
+  }
+
   fetchSettings = () => {
     fetch('/settings/findAll')
     .then(response => response.json())
@@ -62,7 +86,7 @@ class Identity extends React.Component {
         country : json.settings.country,
         website : json.settings.website,
         welcome : json.settings.welcome
-      })
+      }, this.initializeWelcome(json.settings.welcome));
     })
     .catch(error => console.log('error', error));
   }
@@ -133,8 +157,7 @@ class Identity extends React.Component {
       province,
       postalcode,
       country,
-      website,
-      welcome
+      website
     } = this.state
 
     return (
@@ -142,7 +165,8 @@ class Identity extends React.Component {
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
-              <CardHeader color="info">
+              <CardHeader color="primary">
+                {this.props.tabs}
                 <p>Some of this information would be visible to members.</p>
               </CardHeader>
               <CardBody>
@@ -298,20 +322,8 @@ class Identity extends React.Component {
                 </GridContainer>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
-                  
-                    <CustomInput
-                      labelText="Welcome message"
-                      id="welcome"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        multiline: true,
-                        rows: 5,
-                        value: welcome,
-                        onChange: (e) => this.handleInputChange(e, 'welcome')
-                      }}
-                    />
+                    <strong>Welcome Message</strong>
+                    <div id="editor-container" />
                   </GridItem>
                 </GridContainer>
               </CardBody>

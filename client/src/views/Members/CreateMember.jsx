@@ -3,11 +3,12 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import axios from "axios";
 // @material-ui/core components
+import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 // core components
+import Checkbox from "components/CustomInput/CustomCheckbox.jsx";
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
@@ -19,8 +20,14 @@ import CardFooter from "components/Card/CardFooter.jsx";
 import Snackbar from "components/Snackbar/Snackbar.jsx";
 import AlertDialog from "components/Dialog/AlertDialog";
 import Table from "components/Table/Table.jsx";
+import Utils from "../utils/Utils";
 
-import FamilyView from './FamilyView'
+import FamilyView from './FamilyView';
+
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 class CreateMember extends React.Component {
   constructor(props) {
@@ -28,7 +35,7 @@ class CreateMember extends React.Component {
     this.state = {
       gender: '',
       marital: '',
-      role: '',
+      role: 'member',
       firstname: '',
       lastname: '',
       birthdate: '',
@@ -66,15 +73,23 @@ class CreateMember extends React.Component {
       notificationDeleteErrorOpen: false,
 
       notificationError: false,
-      notificationErrorMessage: ''
+      notificationErrorMessage: '',
+
+      showPassword: false
     };
   }
 
   componentDidMount () {
     this.fetchFamilies();
-    this.props.memberId && this.fetchMember();
-    this.props.memberId && this.fetchGroupsByMember();
-    this.props.memberId && this.fetchGroups();
+    this.fetchLastId()
+    .then(() => {
+      return this.fetchSettings();
+    })
+    .then(() => {
+      this.props.memberId && this.fetchMember();
+      this.props.memberId && this.fetchGroupsByMember();
+      this.props.memberId && this.fetchGroups();
+    });
   }
 
   fetchFamilies = () => {
@@ -85,6 +100,28 @@ class CreateMember extends React.Component {
       this.setState({
         families: json.families
       })
+    })
+    .catch(error => console.log('error', error));
+  }
+
+  fetchSettings = () => {
+    return fetch('/settings/findAll')
+    .then(response => response.json())
+    .then(json => {
+      console.log('json', json);
+      this.setState({
+        memberdefaultpassword: json.settings.memberdefaultpassword,
+        memberidautomate: json.settings.memberidautomate,
+        memberidprefix: json.settings.memberidprefix,
+        churchname: json.settings.churchname,
+        website: json.settings.website,
+        emailfooter: json.settings.emailfooter
+      });
+      if (json.settings.memberidautomate && this.state.uid === '') {
+        this.setState({
+          uid: json.settings.memberidprefix + this.generateId()
+        });
+      }
     })
     .catch(error => console.log('error', error));
   }
@@ -103,6 +140,18 @@ class CreateMember extends React.Component {
     }, 2000);
   }
 
+  fetchLastId = () => {
+    return fetch('/member/findLast',)
+    .then(response => response.json())
+    .then(json => {
+      console.log('member', json.member);
+      this.setState({
+        lastid: json.member.id
+      })
+    })
+    .catch(error => console.log('error', error));
+  }
+
   fetchMember = () => {
     fetch('/member/find/' + this.props.memberId,)
     .then(response => response.json())
@@ -119,13 +168,21 @@ class CreateMember extends React.Component {
         birthdate: json.member.birthdate ? json.member.birthdate.split('T')[0] : '',
         email: json.member.email,
         phone: json.member.phone,
-        uid: json.member.memberuid,
+        uid: json.member.memberuid === '' && this.state.memberidautomate ? this.state.memberidprefix + this.generateId(json.member.id) : json.member.memberuid,
         membershipdate: json.member.membershipdate ? json.member.membershipdate.split('T')[0] : '',
         familyid: json.member.familyid,
         active: json.member.active
       })
     })
     .catch(error => console.log('error', error));
+  }
+
+  generateId = (actualId) => {
+    let id = actualId ? actualId : this.state.lastid+1;
+    id = (id > 10 && id < 100 ? '0' : (id < 10 ? '00' : '')) + id;
+    let d = new Date();
+    d = '1' + d.toJSON().replace(/-/g, '').replace(/:/g, '').split('T')[0].slice(4) + 'J';
+    return d + id;
   }
 
   handleInputChange = (event, state) => {
@@ -149,6 +206,7 @@ class CreateMember extends React.Component {
 
   handleSave = (event) => {
     event.preventDefault();
+    this.handleActionsClose();
     const {
       gender,
       marital,
@@ -222,6 +280,7 @@ class CreateMember extends React.Component {
 
   handleSaveNew = (event) => {
     event.preventDefault();
+    this.handleActionsClose();
     const {
       gender,
       marital,
@@ -244,7 +303,8 @@ class CreateMember extends React.Component {
       postalcode,
       country,
       homephone,
-      active
+      active,
+      memberdefaultpassword
     } = this.state
 
     const member = {
@@ -257,7 +317,7 @@ class CreateMember extends React.Component {
       birthdate,
       email,
       phone,
-      password: password === '' ? 'abc123' : password,
+      password: password === '' ? memberdefaultpassword : password,
       memberuid: uid,
       membershipdate,
       familyid,
@@ -288,16 +348,18 @@ class CreateMember extends React.Component {
         this.setState({
           notificationNewOpen: true
         });
+        this.sendWelcomeEmail();
         this.reset();
       }
     }.bind(this));
+    this.props.refreshNumbers && this.props.refreshNumbers();
   }
 
   reset = () => {
     !this.props.memberId && this.setState({
       gender: '',
       marital: '',
-      role: '',
+      role: 'member',
       subscribtion: false,
       firstname: '',
       lastname: '',
@@ -330,6 +392,7 @@ class CreateMember extends React.Component {
       notificationRemoveOpen: false,
       notificationDeleteErrorOpen: false,
       notificationError: false,
+      notificationEmailOpen: false,
       notificationErrorMessage: ''
     });
   }
@@ -367,11 +430,12 @@ class CreateMember extends React.Component {
       data: group
     })
     .then(function(response, body) {
+      const openError = response.status !== 200 || response.data.error;
       this.setState({
-        notificationDeleteErrorOpen: response.statusCode !== 200,
+        notificationDeleteErrorOpen: openError,
         deleteAction: false
       });
-      this.props.onClose && this.props.onClose();
+      !openError && this.props.onClose && this.props.onClose();
     }.bind(this));
   }
 
@@ -427,6 +491,67 @@ class CreateMember extends React.Component {
       this.fetchGroupsByMember();
     }.bind(this));
   }
+
+  handleActions = (event) => {
+    this.setState({
+      otherActionEl: event.currentTarget
+    });
+  }
+
+  handleActionsClose = () => {
+    this.setState({
+      otherActionEl: null
+    });
+  };
+
+  sendWelcomeEmail = () => {
+    this.handleActionsClose();
+    const {
+      churchname,
+      emailfooter,
+      website,
+      firstname,
+      lastname,
+      email,
+      uid
+    } = this.state;
+    const subject = 'Welcome to ' + churchname;
+    let welcome = "Hi " + firstname + " " + lastname + ",";
+    welcome += "<br/>Member Id: " + uid;
+    welcome += "<br/><br/>Welcome to the web portal of " + churchname + ".";
+    welcome += "<br/><br/>You may access your profile from by going to the <a href='"+window.location.hostname+"'>web portal</a> with the following credentials.";
+    welcome += "<br/>Email: " + email;
+    welcome += "<br/>Password: <i>(If you do not know your password, click on <strong>Forgot Password</strong> on the web portal login page)</i>";
+    welcome += "<br/><br/>Thanks,";
+    welcome += "<br/>" + churchname;
+    const template = Utils.getEmailTemplates(churchname, subject, emailfooter, website, `${website}/settings/logo`)[0];
+    const message = template.before + welcome + template.after;
+    const member = {
+      email,
+      subject,
+      message
+    }
+    axios({
+      method: 'post',
+      url: '/email/welcome',
+      data: member
+    })
+    .then(function(response, body) {
+      this.setState({
+        notificationEmailOpen: true
+      });
+    }.bind(this));
+  }
+
+  handleClickShowPassword = (value) => {
+    this.setState({
+      showPassword: !this.state.showPassword
+    });
+  };
+
+  handleMouseDownPassword = event => {
+    event.preventDefault();
+  };
 
   render () {
     const genderlist = [
@@ -541,12 +666,19 @@ class CreateMember extends React.Component {
       notificationDeleteErrorOpen,
       notificationError,
       notificationErrorMessage,
+      notificationEmailOpen,
 
       groups,
       allGroups,
       group,
 
-      active
+      active,
+
+      memberidautomate,
+
+      otherActionEl,
+
+      showPassword
     } = this.state
 
     const excludes = groups.map((group) => group.id);
@@ -597,6 +729,16 @@ class CreateMember extends React.Component {
           />
           <Snackbar
             message={
+              'SUCCESS - Welcome email sent!'
+            }
+            close
+            place="tc"
+            color="success"
+            open={notificationEmailOpen}
+            closeNotification={this.closeNotification}
+          />
+          <Snackbar
+            message={
               notificationErrorMessage
             }
             close
@@ -641,8 +783,8 @@ class CreateMember extends React.Component {
                 this.props.hasOwnProperty('memberId') ? (
                   null
                 ) : (
-                  <CardHeader color="info">
-                    <h4>New Member Creation</h4>
+                  <CardHeader color={'warning'}>
+                    {this.props.tabs}
                   </CardHeader>
                 )
               }
@@ -733,6 +875,19 @@ class CreateMember extends React.Component {
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
                     <CustomInput
+                      labelText="Mobile Number"
+                      id="mobile"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        value: phone,
+                        onChange: (e) => this.handleInputChange(e, 'phone')
+                      }}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={4}>
+                    <CustomInput
                       labelText="Email"
                       id="email"
                       formControlProps={{
@@ -748,29 +903,27 @@ class CreateMember extends React.Component {
                   </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
                     <CustomInput
-                      labelText="Mobile Number"
-                      id="mobile"
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        value: phone,
-                        onChange: (e) => this.handleInputChange(e, 'phone')
-                      }}
-                    />
-                  </GridItem>
-                  <GridItem xs={12} sm={12} md={4}>
-                    <CustomInput
                       labelText="Password"
                       id="password"
                       formControlProps={{
                         fullWidth: true
                       }}
                       inputProps={{
-                        type: 'password',
+                        type: showPassword ? 'text' : 'password',
                         value: password,
                         autoComplete: 'new-password',
-                        onChange: (e) => this.handleInputChange(e, 'password')
+                        onChange: (e) => this.handleInputChange(e, 'password'),
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={this.handleClickShowPassword.bind(this)}
+                              onMouseDown={this.handleMouseDownPassword.bind(this)}
+                            >
+                              {showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                          </InputAdornment>
+                        )
                       }}
                     />
                   </GridItem>
@@ -971,7 +1124,7 @@ class CreateMember extends React.Component {
                       }}
                       inputProps={{
                         value: uid,
-                        disabled: !hasSecureAccess,
+                        disabled: !hasSecureAccess || memberidautomate,
                         onChange: (e) => this.handleInputChange(e, 'uid')
                       }}
                     />
@@ -1040,6 +1193,26 @@ class CreateMember extends React.Component {
                     <Button color="danger" className='add-button create' onClick={this.handleDelete}>
                       Delete
                     </Button>
+                  ) : (
+                    <span />
+                  )
+                }
+                {
+                  this.props.hasOwnProperty('memberId') && this.props.memberId !== this.props.account.memberid ? (
+                    <span>
+                      <Button className='add-button create' aria-controls="simple-menu" aria-haspopup="true" onClick={this.handleActions}>
+                        Actions
+                      </Button>
+                      <Menu
+                        id="simple-menu"
+                        anchorEl={otherActionEl}
+                        keepMounted
+                        open={Boolean(otherActionEl)}
+                        onClose={this.handleActionsClose}
+                      >
+                        <MenuItem onClick={this.sendWelcomeEmail}>Send Welcome Email</MenuItem>
+                      </Menu>
+                    </span>
                   ) : (
                     <span />
                   )

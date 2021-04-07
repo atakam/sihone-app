@@ -12,8 +12,6 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 
-import TabContainer from 'components/TabContainer/TabContainer.jsx'
-
 class Messaging extends React.Component {
   constructor(props) {
     super(props);
@@ -33,54 +31,59 @@ class Messaging extends React.Component {
     });
   }
 
+  getTabs = () => {
+    return (
+      <Tabs
+        className='menu-tabs'
+        value={this.state.tabValue}
+        onChange={this.handleTabChange}
+        classes={
+          {indicator: 'tabs-indicator'}
+        }
+      >
+        <Tab
+          value='email'
+          disableRipple
+          label="EMAIL"
+        />
+        <Tab
+          value='sms'
+          disableRipple
+          label="SMS"
+        />
+      </Tabs>
+    );
+  }
+
   render () {
     return (
       <div>
-        <Tabs
-          className='messaging-tabs'
-          value={this.state.tabValue}
-          onChange={this.handleTabChange}
-          indicatorColor="primary"
-        >
-          <Tab
-            value='email'
-            disableRipple
-            label="EMAIL"
-          />
-          <Tab
-            value='sms'
-            disableRipple
-            label="SMS"
-          />
-        </Tabs>
-        {this.state.tabValue === 'email' && <TabContainer>
+        {this.state.tabValue === 'email' &&
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
               <Card>
-                <CardHeader color={'info'} className="card-header">
-                  <p>You can email groups and members</p>
+                <CardHeader color={'warning'} className="card-header">
+                  {this.getTabs()}
                 </CardHeader>
                 <CardBody>
                   <EmailApp />
                 </CardBody>
               </Card>
             </GridItem>
-          </GridContainer>
-        </TabContainer>}
-        {this.state.tabValue === 'sms' && <TabContainer>
+          </GridContainer>}
+        {this.state.tabValue === 'sms' &&
           <GridContainer>
             <GridItem xs={12} sm={12} md={12}>
               <Card>
-                <CardHeader color={'info'} className="card-header">
-                  <p>You can message members with phone numbers</p>
+                <CardHeader color={'warning'} className="card-header">
+                  {this.getTabs()}
                 </CardHeader>
                 <CardBody>
                   <SmsApp />
                 </CardBody>
               </Card>
             </GridItem>
-          </GridContainer>
-        </TabContainer>}
+          </GridContainer>}
       </div>
     );
   }

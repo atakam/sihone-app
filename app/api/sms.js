@@ -27,31 +27,35 @@ router.post('/new', (req, res, next) => {
 
     SmsTable.addSms(sms)
     .then(({ smsid }) => {
-        MemberSmsTable.addMemberSms({memberid, smsid})
-        .then(() => {
-            return GroupSmsTable.addGroupSms({groupid, smsid})
-        })
-        .then(() => {
-            if (memberid && memberid !== '0') {
-                MemberTable.getPhone(memberid)
-                .then((phone) => {
-                    sendSms(phone, smstext, res);
-                })
-            }
-            else if (groupid && groupid !== '0') {
-                GroupTable.getPhones(groupid)
-                .then((phones) => {
-                    sendManySms(phones, smstext, res);
-                })
-            }
-            else if (special && special !== '') {
-                MemberTable.getPhonesFromSpecial(special)
-                .then((phones) => {
-                    console.log(phones);
-                    sendManySms(phones, smstext, res);
-                })
-            }
-        })
+        if (memberid && memberid !== '0') {
+            MemberTable.getPhone(memberid)
+            .then((member) => {
+                console.log(member);
+                if (member.active && (member.subscribtion || member.subscription)) {
+                    console.log('Should Send', member.phone);
+                    sendSms(member.phone, smstext, res, ()=> {GroupSmsTable.addGroupSms({groupid, smsid})}, ()=>{MemberSmsTable.addMemberSms({memberid, smsid})});
+                }
+                else {
+                    res.json({
+                        message: 'Could not send to this user',
+                        result: false
+                    });
+                }
+            })
+        }
+        else if (groupid && groupid !== '0') {
+            GroupTable.getPhones(groupid)
+            .then((members) => {
+                sendManySms(members, smstext, res);
+            })
+        }
+        else if (special && special !== '') {
+            MemberTable.getPhonesFromSpecial(special)
+            .then((members) => {
+                console.log(members);
+                sendManySms(members, smstext, res);
+            })
+        }
     })
     .catch(error => next(error));
 });
@@ -165,13 +169,15 @@ router.get('/status', (req, res, next) => {
     .catch(error => next(error));
 });
 
-function sendManySms(phoneArray, smstext, res) {
-    phoneArray.filter(Boolean).map((phone) => {
-        sendSms(phone, smstext, res);
+function sendManySms(members, smstext, res) {
+    members.map((member) => {
+        if (member.active && member.subscription) {
+            sendSms(member.phone, smstext, res);
+        }
     });
 }
 
-function sendSms(phone, smstext, res) {
+function sendSms(phone, smstext, res, callback1, callback2) {
     let phoneNumber = phone;
     if (!phone.startsWith("1")) {
         phoneNumber = '1' + phone;
@@ -190,24 +196,34 @@ function sendSms(phone, smstext, res) {
             smsnumber
         });
 
-        var options = {
-            method: 'POST',
-            url: 'https://rest.nexmo.com/sms/json',
-            headers: 
-            { 
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            form: {api_key: smsapikey, api_secret: smsapisecret, from: smsnumber, to: phoneNumber, text: smstext}
-        };
-      
-        request(options, function (error, response, body) {
-            if (error) throw new Error(error);
-            console.log(body);
+        const Nexmo = require('nexmo');
+
+        const nexmo = new Nexmo({
+            apiKey: smsapikey,
+            apiSecret: smsapisecret
+        });
+
+        console.log('from:', smsnumber);
+        console.log('to:', phoneNumber);
+        console.log('text:', smstext);
+
+        nexmo.message.sendSms(smsnumber, phoneNumber, smstext, (err, responseData) => {
+            if (err) {
+                console.log(err);
+            } else {
+                if(responseData.messages[0]['status'] === "0") {
+                    console.log("Message sent successfully.");
+                } else {
+                    console.log(`Message failed with error: ${responseData.messages[0]['error-text']}`);
+                }
+            }
+            callback1 && callback1();
+            callback2 && callback2();
             res.json({
                 message: 'successfully added sms',
-                result: body
+                result: responseData
             });
-        }.bind(this));
+        })
 
         // axios({
         //     method: 'post',

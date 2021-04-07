@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
 // // @material-ui/core components
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 // core components
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
@@ -160,10 +160,10 @@ class Membership extends React.Component {
       notificationGroupTypeError,
       notificationMessage,
 
-      // memberidautomate,
-      // memberidprefix,
+      memberidautomate,
+      memberidprefix,
       // memberidlength,
-      // memberdefaultpassword
+      memberdefaultpassword
     } = this.state;
     return (
       <div>
@@ -180,11 +180,12 @@ class Membership extends React.Component {
           />
           <GridItem xs={12} sm={12} md={12}>
             <Card>
-              <CardHeader color="info">
+              <CardHeader color="primary">
+                {this.props.tabs}
                 <p>Configure member id, predefined member options, family roles and group types.</p>
               </CardHeader>
               <CardBody>
-                {/* <GridContainer>
+                <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     <h6 className="form-subtitle">Membership Settings</h6>
                   </GridItem>
@@ -209,11 +210,12 @@ class Membership extends React.Component {
                       }}
                       inputProps={{
                         value: memberidprefix,
+                        disabled: !memberidautomate,
                         onChange: (e) => this.handleInputChange(e, 'memberidprefix')
                       }}
                     />
                   </GridItem>
-                  <GridItem xs={12} sm={12} md={3}>
+                  {/* <GridItem xs={12} sm={12} md={3}>
                     <CustomInput
                       labelText="Member Id Length"
                       id="id-length"
@@ -225,10 +227,10 @@ class Membership extends React.Component {
                         onChange: (e) => this.handleInputChange(e, 'memberidlength')
                       }}
                     />
-                  </GridItem>
+                  </GridItem> */}
                   <GridItem xs={12} sm={12} md={3}>
                     <CustomInput
-                      labelText="Default Passsword"
+                      labelText="Default Member Passsword"
                       id="default-password"
                       formControlProps={{
                         fullWidth: true
@@ -242,7 +244,7 @@ class Membership extends React.Component {
                   <GridItem xs={12} sm={12} md={3}>
                     <Button className="form-button" color="info" size="sm" onClick={this.saveMemberSettings}>Save</Button>
                   </GridItem>
-                </GridContainer> */}
+                </GridContainer>
                 <GridContainer>
                   <GridItem xs={12} sm={12} md={12}>
                     <h6 className="form-subtitle">Group Settings</h6>

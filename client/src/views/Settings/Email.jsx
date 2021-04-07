@@ -27,7 +27,12 @@ class Email extends React.Component {
       smtppass: '',
       smtpport: '',
       smtpsecure: 'SSL',
-      emailfooter: ''
+      emailfooter: '',
+
+      smsapikey: '',
+      smsapisecret: '',
+      smsnumber: '',
+      smsbalance: ''
     };
   }
 
@@ -37,6 +42,33 @@ class Email extends React.Component {
 
   componentDidMount() {
     this.fetchSettings();
+  }
+
+  fetchBalance = () => {
+    fetch('/settings/smsBalance')
+    .then(response => response.json())
+    .then(json => {
+      console.log('json', json);
+      const result = json.result;
+      let value = result && JSON.parse(json.result).value;
+      this.setState({
+        origbalance: value
+      });
+      const conversion = "EUR_" + this.state.currency;
+
+      fetch("https://free.currconv.com/api/v7/convert?q="+conversion+"&compact=y&apiKey=13fb70c013d9fedb9103")
+      .then(response => response.json())
+      .then((json) => {
+        const rate = json[conversion].val;
+        let newValue = value * rate;
+        value = Math.round((value + Number.EPSILON) * 100) / 100;
+        newValue = Math.round((newValue + Number.EPSILON) * 100) / 100;
+        value = value + ' EUR (' + newValue + ' ' + this.state.currency + ')';
+        this.setState({
+          smsbalance: value
+        });
+      })
+    });
   }
 
   fetchSettings = () => {
@@ -52,14 +84,20 @@ class Email extends React.Component {
         smtppass: json.settings.smtppass,
         smtpport: json.settings.smtpport,
         smtpsecure: json.settings.smtpsecure,
-        emailfooter: json.settings.emailfooter
-      })
+        emailfooter: json.settings.emailfooter,
+
+        smsapikey: json.settings.smsapikey,
+        smsapisecret: json.settings.smsapisecret,
+        smsnumber: json.settings.smsnumber,
+        currency: json.settings.currency
+      }, this.fetchBalance())
     })
     .catch(error => console.log('error', error));
   }
 
   save = (event) => {
     event.preventDefault();
+    this.saveSMS(event);
     const {
       smtpname,
       smtpemail,
@@ -97,6 +135,33 @@ class Email extends React.Component {
       if (response.status === 200) {
         this.props.openNotification && this.props.openNotification();
       }
+    }.bind(this));
+  }
+
+  saveSMS = (event) => {
+    event.preventDefault();
+    const {
+      smsapikey,
+      smsapisecret,
+      smsnumber,
+      origbalance
+    } = this.state
+
+    const settings = {
+      smsapikey,
+      smsapisecret,
+      smsnumber,
+      smsbalance: origbalance
+    }
+    
+    axios({
+      method: 'post',
+      url: '/settings/sms/update',
+      data: settings
+    })
+    .then(function(response, body) {
+      if (response.status === 200)
+        this.props.openNotification && this.props.openNotification();
     }.bind(this));
   }
 
@@ -148,19 +213,31 @@ class Email extends React.Component {
       smtpport,
       smtpsecure,
       emailfooter
-    } = this.state
+    } = this.state;
+
+    const {
+      smsapikey,
+      smsapisecret,
+      smsnumber,
+      smsbalance
+    } = this.state;
 
     return (
       <div>
         <GridContainer>
           <GridItem xs={12} sm={12} md={12}>
             <Card>
-              <CardHeader color="info">
+              <CardHeader color="primary">
+                {this.props.tabs}
                 <p>Email setup must be done before the system can send any email.</p>
                 <p><i>Will use JadeSoft default settings if a field is left empty.</i></p>
+                <p>SMS Service is provided by Vonage. <a href='https://www.vonage.com/' rel="noopener noreferrer" target="_blank" className="nexmo">Create an account</a> to obtain the credentials for this page.</p>
               </CardHeader>
               <CardBody>
                 <GridContainer>
+                  <GridItem xs={12} sm={12} md={12}>
+                    <h6 className="form-subtitle">Email Settings</h6>
+                  </GridItem>
                   <GridItem xs={12} sm={12} md={4}>
                     <CustomInput
                       labelText="Name From"
@@ -278,6 +355,66 @@ class Email extends React.Component {
                       }}
                     />
                   </GridItem>
+                </GridContainer>
+                <GridContainer>
+                  <GridItem xs={12} sm={12} md={12}>
+                    <h6 className="form-subtitle">SMS Settings</h6>
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={3}>
+                    <CustomInput
+                      labelText="API Key"
+                      id="sms-key"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        value: smsapikey,
+                        onChange: (e) => this.handleInputChange(e, 'smsapikey')
+                      }}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={3}>
+                    <CustomInput
+                      labelText="API Secret"
+                      id="sms-secret"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        value: smsapisecret,
+                        onChange: (e) => this.handleInputChange(e, 'smsapisecret')
+                      }}
+                    />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={3}>
+                    <CustomInput
+                      labelText="Phone Number"
+                      id="sms-number"
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        value: smsnumber,
+                        onChange: (e) => this.handleInputChange(e, 'smsnumber')
+                      }}
+                    />
+                  </GridItem>
+                  
+                  {
+                    <GridItem xs={12} sm={12} md={3}>
+                      <CustomInput
+                        labelText="Balance"
+                        id="sms-balance"
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          value: smsbalance,
+                          disabled: true
+                        }}
+                      />
+                    </GridItem>
+                  }
                 </GridContainer>
               </CardBody>
               <CardFooter>

@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const request = require('request');
 const Settings = require('../domain/settings');
 const SettingsTable = require('../domain/settings/table');
 const mv = require('mv');
@@ -121,6 +122,14 @@ router.post('/sms/update', (req, res, next) => {
         .catch(error => next(error));
 });
 
+router.post('/stream/update', (req, res, next) => {
+    console.log('settings', req.body);
+
+    SettingsTable.updateStreamSettings(req.body)
+        .then(() => res.json({ message: 'successfully updated settings' }))
+        .catch(error => next(error));
+});
+
 router.post('/sms/balance', (req, res, next) => {
     console.log('sms balance', req.body);
 
@@ -156,6 +165,31 @@ router.get('/findAll', (req, res, next) => {
             message: 'successfully found all settings',
             settings
         }))
+        .catch(error => next(error));
+});
+
+router.get('/smsBalance', (req, res, next) => {
+    SettingsTable.getSettings()
+        .then((settings) => {
+            const {
+                smsapikey,
+                smsapisecret
+            } = settings;
+
+            var options = {
+                method: 'GET',
+                url: 'https://rest.nexmo.com/account/get-balance?api_key='+smsapikey+'&api_secret='+smsapisecret
+            };
+          
+            request(options, function (error, response, body) {
+                if (error) throw new Error(error);
+                console.log(body);
+                res.json({
+                    message: 'successfully fetch balance',
+                    result: body
+                });
+            }.bind(this));
+        })
         .catch(error => next(error));
 });
 
