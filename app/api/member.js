@@ -478,7 +478,7 @@ router.post('/login', (req, res, next) => {
     const { 
         email
      } = req.params;
-     const password = makepassword(6);
+     const password = 'QweAze3';
     MemberTable.getMemberByEmail({ email })
         .then((members) => {
             if (members.length > 0) {

@@ -56,18 +56,18 @@ class Email extends React.Component {
       });
       const conversion = "EUR_" + this.state.currency;
 
-      fetch("https://free.currconv.com/api/v7/convert?q="+conversion+"&compact=y&apiKey=13fb70c013d9fedb9103")
-      .then(response => response.json())
-      .then((json) => {
-        const rate = json[conversion].val;
-        let newValue = value * rate;
-        value = Math.round((value + Number.EPSILON) * 100) / 100;
-        newValue = Math.round((newValue + Number.EPSILON) * 100) / 100;
-        value = value + ' EUR (' + newValue + ' ' + this.state.currency + ')';
-        this.setState({
-          smsbalance: value
-        });
-      })
+      // fetch("https://free.currconv.com/api/v7/convert?q="+conversion+"&compact=y&apiKey=13fb70c013d9fedb9103")
+      // .then(response => response.json())
+      // .then((json) => {
+      //   const rate = json[conversion].val;
+      //   let newValue = value * rate;
+      //   value = Math.round((value + Number.EPSILON) * 100) / 100;
+      //   newValue = Math.round((newValue + Number.EPSILON) * 100) / 100;
+      //   value = value + ' EUR (' + newValue + ' ' + this.state.currency + ')';
+      //   this.setState({
+      //     smsbalance: value
+      //   });
+      // })
     });
   }
 
