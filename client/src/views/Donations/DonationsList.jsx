@@ -24,7 +24,7 @@ class DonationsList extends React.Component {
     this.state = {
       donations: [],
 
-      member: '',
+      member: props.memberId,
       paytype: '',
       paydate: Utils.getDateString(new Date(), false),
       checknumber: '',
@@ -138,13 +138,15 @@ class DonationsList extends React.Component {
         </h6>
         <GridContainer>
           <GridItem xs={12} sm={6} md={12}>
-            <MemberSelect
-              placeholder="Member Search"
-              value={member}
-              onChange={this.handleMemberChange('member')}
-              required
-              showId
-            />
+            {!this.props.memberId && (
+              <MemberSelect
+                placeholder="Member Search"
+                value={member}
+                onChange={this.handleMemberChange('member')}
+                required
+                showId
+              />
+            )}
           </GridItem>
           <GridItem xs={12} sm={6} md={6}>
             <TextField
@@ -237,7 +239,7 @@ class DonationsList extends React.Component {
           receipt: donation.receipt ? donation.receipt : '',
           donationid: donation.id ? donation.id : '',
 
-          member: { value: donation.memberid, label: donation.firstname + ' ' + donation.lastname },
+          member: donation.memberid,
           paytype: donation.paytype ? Number(donation.paytype) : '',
           paydate: donation.paydate ? donation.paydate.split('T')[0] : '',
           checknumber: donation.checknumber ? donation.checknumber : '',
@@ -252,7 +254,7 @@ class DonationsList extends React.Component {
 
   newDonation = () => {
     this.setState({
-      member: '',
+      member: this.props.memberId,
       paytype: '',
       paydate: this.props.envelopeDate || Utils.getDateString(new Date(), false),
       checknumber: '',
@@ -282,7 +284,7 @@ class DonationsList extends React.Component {
     });
 
     let donation = {
-      memberid: member.value,
+      memberid: this.props.memberId || member.value,
       paytype,
       paydate: paydate.split('T')[0],
       checknumber,
@@ -294,7 +296,7 @@ class DonationsList extends React.Component {
     if (donationid === '') {
       donation = {
         envelopeid: this.props.envelopeId,
-        memberid: member.value,
+        memberid:  this.props.memberId || member.value,
         paytype,
         paydate: paydate.split('T')[0],
         checknumber,
@@ -316,6 +318,7 @@ class DonationsList extends React.Component {
       this.props.envelopeId && this.fetchDonations();
       refresh && this.newDonation();
       this.setState({showForm: false});
+      this.props.onClose();
     }.bind(this));
   }
 
@@ -348,7 +351,7 @@ class DonationsList extends React.Component {
 
   render() {
     let donationsHeader = ["Member", "Date", "Amount"];
-    this.props.memberId && (donationsHeader = ["Date", "Amount"]);
+    (this.props.memberId || this.props.account) && (donationsHeader = ["Date", "Amount"]);
     this.props.isStatement && (donationsHeader = ["Fund", "Date", "Amount"]);
     this.props.isPrintable && (donationsHeader = ["Date", "Payment Type", "Fund", "Amount"]);
 
@@ -411,7 +414,7 @@ class DonationsList extends React.Component {
           });
 
           if (!found) {
-            if (this.props.memberId) {
+            if (this.props.memberId || this.props.account) {
               donations.push(
                 [
                   donation.id,
@@ -457,6 +460,20 @@ class DonationsList extends React.Component {
       ]
     )
 
+    const checkDonationForm = () => {
+      const {
+        paytype,
+        fundValues,
+      } = this.state
+
+      let sumValue = 0;
+      fundValues.map((fund) => {
+        sumValue += fund.amount;
+      })
+
+      return !!!paytype || sumValue <= 0;
+    }
+
     return (
       <GridContainer>
         <AlertDialog
@@ -476,7 +493,8 @@ class DonationsList extends React.Component {
             )
           }
         </GridItem>
-        <GridItem xs={12} sm={12} md={this.props.fullWidth ? 12 : 6}>
+        {(!this.props.memberId || this.props.isStatement) && (
+          <GridItem xs={12} sm={12} md={this.props.fullWidth ? 12 : 6}>
           <Table
             tableHeaderColor="primary"
             tableHead={donationsHeader}
@@ -486,15 +504,20 @@ class DonationsList extends React.Component {
             rowActions={actions}
           />
         </GridItem>
+        )}
+        
         {
           !this.props.fullWidth && (
             <GridItem xs={12} sm={12} md={6}>
             <br />
-            <div className="right">
-            <Button className="form-button float-right" color="info" size="sm" onClick={this.saveDonation} disabled={!this.state.member}>Save</Button>
-              <Button className="form-button float-right" color="warning" size="sm" onClick={this.newDonation}>Add Donation</Button>
-            </div>
-            {this.state.showForm && this.donationForm()}
+            {!this.props.memberId && (
+              <div className="right">
+                <Button className="form-button float-right" color="info" size="sm" onClick={this.saveDonation} disabled={!this.state.member}>Save</Button>
+                <Button className="form-button float-right" color="warning" size="sm" onClick={this.newDonation}>Add Donation</Button>
+              </div>
+            )}
+            {(this.state.showForm || this.props.memberId) && this.donationForm()}
+            {this.props.memberId && <Button className="form-button float-right" color="info" size="sm" onClick={this.saveDonation} disabled={checkDonationForm()}>Save</Button>}
             </GridItem>
           )
         }

@@ -9,12 +9,14 @@ import CreateEnvelope from './CreateEnvelope.jsx'
 
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import AddDonation from "./AddDonation";
 
 class Donations extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabValue: 'envelopes'
+      tabValue: 'envelopes',
+      openDonation: false
     };
   }
 
@@ -22,8 +24,18 @@ class Donations extends React.Component {
 
   };
 
+  handleDonation = (toggle) => {
+    this.setState({
+      openDonation: toggle
+    });
+  }
+
   handleTabChange = (event, value) => {
-    this.setState({ tabValue: value });
+    if (value === 'add-donation') {
+      this.handleDonation(true);
+    } else {
+      this.setState({ tabValue: value });
+    }
   };
 
   componentWillMount () {
@@ -61,6 +73,11 @@ class Donations extends React.Component {
           disableRipple
           label="STATEMENTS"
         />
+        <Tab
+          value='add-donation'
+          disableRipple
+          label="ADD DONATION"
+        />
 
       {
         Utils.isMoneyHandler(this.props.account.role) && 
@@ -81,6 +98,7 @@ class Donations extends React.Component {
         
         {this.state.tabValue === 'envelopes' && Utils.isMoneyHandler(this.props.account.role) && <EnvelopeList tabs={this.getTabs()} />}
         {this.state.tabValue === 'statements' && <Statements memberRole={this.props.account.role} memberId={this.props.account.memberid} tabs={this.getTabs()} />}
+        <AddDonation open={this.state.openDonation} memberId={this.props.account.memberid} onClose={() => this.handleDonation(false)} />
         {this.state.tabValue === 'create-envelope' && Utils.isMoneyHandler(this.props.account.role) && <CreateEnvelope tabs={this.getTabs()} />}
       </div>
     );

@@ -58,6 +58,7 @@ class Statements extends React.Component {
 
   componentDidMount() {
     this.fetchSettings();
+    this.fetchQuickDonations();
   }
 
   handleSearch = () => {
@@ -138,7 +139,6 @@ class Statements extends React.Component {
         className="statement-data" fullWidth
         isStatement
         donations={this.state.donations}
-        isPrintable
       />
     );
 
