@@ -9,8 +9,8 @@ import IconButton from '@material-ui/core/IconButton';
 
 import CloseIcon from '@material-ui/icons/Close';
 
-import Button from "components/CustomButtons/Button.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 
 export default class AddEventDialog extends React.Component {
   static defaultProps = {

@@ -16,11 +16,11 @@ import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 
 import CloseIcon from '@material-ui/icons/Close';
-import Button from "components/CustomButtons/Button.jsx";
-import Checkbox from "components/CustomInput/CustomCheckbox.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
+import Checkbox from "../../components/CustomInput/CustomCheckbox.jsx";
 
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import ToolBar from "components/ToolBar/ToolBar.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
+import ToolBar from "../../components/ToolBar/ToolBar.jsx";
 import MemberSelect from '../utils/MemberSelect';
 import GroupSelect from '../utils/GroupSelect';
 

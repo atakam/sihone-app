@@ -4,14 +4,14 @@ import { connect } from "react-redux";
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
+import dashboardStyle from "../../assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
 import AddEventDialog from './AddEventDialog'
 import AddEventFullScreenDialog from './AddEventFullScreenDialog'
 
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardBody from "components/Card/CardBody.jsx";
+import Card from "../../components/Card/Card.jsx";
+import CardHeader from "../../components/Card/CardHeader.jsx";
+import CardBody from "../../components/Card/CardBody.jsx";
 
 import { Calendar, momentLocalizer, Views } from 'react-big-calendar';
 import moment from 'moment';

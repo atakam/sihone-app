@@ -3,16 +3,16 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import { connect } from "react-redux";
 // core components
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import Table from "components/Table/Table.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
+import GridItem from "../../components/Grid/GridItem.jsx";
+import GridContainer from "../../components/Grid/GridContainer.jsx";
+import Table from "../../components/Table/Table.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
 
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Button from "components/CustomButtons/Button.jsx";
-import AlertDialog from "components/Dialog/AlertDialog";
+import Button from "../../components/CustomButtons/Button.jsx";
+import AlertDialog from "../../components/Dialog/AlertDialog";
 
 import MemberSelect from '../utils/MemberSelect.jsx';
 

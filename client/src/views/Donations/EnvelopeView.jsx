@@ -12,7 +12,7 @@ import Add from "@material-ui/icons/Add";
 
 import CreateEnvelope from './CreateEnvelope.jsx';
 
-import ToolBar from "components/ToolBar/ToolBar.jsx";
+import ToolBar from "../../components/ToolBar/ToolBar.jsx";
 
 const styles = {
   appBar: {

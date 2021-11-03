@@ -6,7 +6,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // core components
 import CustomAppBar from "./CustomAppBar";
 
-import headerStyle from "assets/jss/material-dashboard-react/components/headerStyle.jsx";
+import headerStyle from "../../assets/jss/material-dashboard-react/components/headerStyle.jsx";
 
 function Header({ ...props }) {
   function makeBrand() {

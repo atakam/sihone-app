@@ -1,7 +1,5 @@
 import React from "react";
 
-import TabContainer from 'components/TabContainer/TabContainer.jsx'
-
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import MemberReport from "./MemberReport";

@@ -8,16 +8,16 @@ import "perfect-scrollbar/css/perfect-scrollbar.css";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
-import Header from "components/Header/Header.jsx";
-import Footer from "components/Footer/Footer.jsx";
-import Sidebar from "components/Sidebar/Sidebar.jsx";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer.jsx";
+import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 
-import dashboardRoutes from "routes/dashboard.jsx";
+import dashboardRoutes from "../../routes/dashboard.jsx";
 
-import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
+import dashboardStyle from "../../assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 
-import image from "assets/img/sidebar-2.jpg";
-import logo from "assets/img/logo_light.png";
+import image from "../../assets/img/sidebar-2.jpg";
+import logo from "../../assets/img/logo_light.png";
 
 import Person from "@material-ui/icons/Person";
 import Accessibility from "@material-ui/icons/Accessibility";
@@ -35,7 +35,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import DialogContent from '@material-ui/core/DialogContent';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import ToolBar from "components/ToolBar/ToolBar.jsx";
+import ToolBar from "../../components/ToolBar/ToolBar.jsx";
 
 const topData = [
   {

@@ -15,9 +15,9 @@ import withStyles from "@material-ui/core/styles/withStyles";
 // import PersonAdd from "@material-ui/icons/PersonAdd";
 // import ExitToApp from "@material-ui/icons/ExitToApp";
 // // core components
-// import Button from "components/CustomButtons/Button.jsx";
+// import Button from "../../components/CustomButtons/Button.jsx";
 
-import headerLinksStyle from "assets/jss/material-dashboard-react/components/headerLinksStyle";
+import headerLinksStyle from "../../assets/jss/material-dashboard-react/components/headerLinksStyle";
 
 import { logout } from "../../actions/account";
 

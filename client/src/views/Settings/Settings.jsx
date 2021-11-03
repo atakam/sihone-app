@@ -15,7 +15,7 @@ import AttachMoney from "@material-ui/icons/AttachMoney";
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-import Snackbar from "components/Snackbar/Snackbar.jsx";
+import Snackbar from "../../components/Snackbar/Snackbar.jsx";
 import LiveTvIcon from '@material-ui/icons/LiveTv';
 
 class Settings extends React.Component {

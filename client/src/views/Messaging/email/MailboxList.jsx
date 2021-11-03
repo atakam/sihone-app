@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "components/CustomButtons/Button.jsx";
+import Button from "../../../components/CustomButtons/Button.jsx";
 
 class MailboxList extends React.Component {
   render(){

@@ -2,17 +2,17 @@ import React from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 // core components
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import Snackbar from "components/Snackbar/Snackbar.jsx";
-import AlertDialog from "components/Dialog/AlertDialog";
-import Table from "components/Table/Table.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
+import GridItem from "../../components/Grid/GridItem.jsx";
+import GridContainer from "../../components/Grid/GridContainer.jsx";
+import Card from "../../components/Card/Card.jsx";
+import CardHeader from "../../components/Card/CardHeader.jsx";
+import CardBody from "../../components/Card/CardBody.jsx";
+import CardFooter from "../../components/Card/CardFooter.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
+import Snackbar from "../../components/Snackbar/Snackbar.jsx";
+import AlertDialog from "../../components/Dialog/AlertDialog";
+import Table from "../../components/Table/Table.jsx";
 
 import MemberView from '../Members/MemberView.jsx'
 

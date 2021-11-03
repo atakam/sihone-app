@@ -11,7 +11,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Add from "@material-ui/icons/Add";
 import CreateAccount from './CreateAccount.jsx'
 
-import ToolBar from "components/ToolBar/ToolBar.jsx";
+import ToolBar from "../../components/ToolBar/ToolBar.jsx";
 
 const styles = {
   appBar: {
