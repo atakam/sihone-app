@@ -5,14 +5,14 @@ import axios from "axios";
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 // core components
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
+import GridItem from "../../components/Grid/GridItem.jsx";
+import GridContainer from "../../components/Grid/GridContainer.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
+import Card from "../../components/Card/Card.jsx";
+import CardHeader from "../../components/Card/CardHeader.jsx";
+import CardBody from "../../components/Card/CardBody.jsx";
+import CardFooter from "../../components/Card/CardFooter.jsx";
 
 import './Settings.css';
 
@@ -56,18 +56,18 @@ class Email extends React.Component {
       });
       const conversion = "EUR_" + this.state.currency;
 
-      fetch("https://free.currconv.com/api/v7/convert?q="+conversion+"&compact=y&apiKey=13fb70c013d9fedb9103")
-      .then(response => response.json())
-      .then((json) => {
-        const rate = json[conversion].val;
-        let newValue = value * rate;
-        value = Math.round((value + Number.EPSILON) * 100) / 100;
-        newValue = Math.round((newValue + Number.EPSILON) * 100) / 100;
-        value = value + ' EUR (' + newValue + ' ' + this.state.currency + ')';
-        this.setState({
-          smsbalance: value
-        });
-      })
+      // fetch("https://free.currconv.com/api/v7/convert?q="+conversion+"&compact=y&apiKey=13fb70c013d9fedb9103")
+      // .then(response => response.json())
+      // .then((json) => {
+      //   const rate = json[conversion].val;
+      //   let newValue = value * rate;
+      //   value = Math.round((value + Number.EPSILON) * 100) / 100;
+      //   newValue = Math.round((newValue + Number.EPSILON) * 100) / 100;
+      //   value = value + ' EUR (' + newValue + ' ' + this.state.currency + ')';
+      //   this.setState({
+      //     smsbalance: value
+      //   });
+      // })
     });
   }
 

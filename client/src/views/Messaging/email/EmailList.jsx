@@ -1,6 +1,6 @@
 import React from "react";
-import Table from "components/Table/Table.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
+import Table from "../../../components/Table/Table.jsx";
+import GridItem from "../../../components/Grid/GridItem.jsx";
 
 class EmailList extends React.Component {
   render(){

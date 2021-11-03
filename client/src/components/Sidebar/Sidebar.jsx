@@ -14,7 +14,7 @@ import Icon from "@material-ui/core/Icon";
 
 import Utils from "../../views/utils/Utils";
 
-import sidebarStyle from "assets/jss/material-dashboard-react/components/sidebarStyle.jsx";
+import sidebarStyle from "../../assets/jss/material-dashboard-react/components/sidebarStyle.jsx";
 
 const Sidebar = ({ ...props }) => {
   // verifies if routeName is the one active (in browser input)

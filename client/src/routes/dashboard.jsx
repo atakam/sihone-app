@@ -14,17 +14,17 @@ import Assignment from "@material-ui/icons/Assignment";
 // import Activity from "@material-ui/icons/Notifications";
 import ExitToApp from "@material-ui/icons/ExitToApp";
 // core components/views
-import DashboardPage from "views/Dashboard/Dashboard.jsx";
-import EventsPage from "views/Events/Events.jsx";
-import MembersPage from "views/Members/Members.jsx";
-import GroupsPage from "views/Groups/Groups.jsx";
-import DonationsPage from "views/Donations/Donations.jsx";
-import AccountingPage from "views/Accounting/Accounting.jsx";
-import MessagingPage from "views/Messaging/Messaging.jsx";
-import LiveStreamPage from "views/LiveStream/LiveStream.jsx";
-// import ActivityPage from "views/Activity/Activity.jsx";
-import ReportingPage from "views/Reporting/Reporting.jsx";
-import SettingsPage from "views/Settings/Settings.jsx";
+import DashboardPage from "../views/Dashboard/Dashboard.jsx";
+import EventsPage from "../views/Events/Events.jsx";
+import MembersPage from "../views/Members/Members.jsx";
+import GroupsPage from "../views/Groups/Groups.jsx";
+import DonationsPage from "../views/Donations/Donations.jsx";
+import AccountingPage from "../views/Accounting/Accounting.jsx";
+import MessagingPage from "../views/Messaging/Messaging.jsx";
+import LiveStreamPage from "../views/LiveStream/LiveStream.jsx";
+// import ActivityPage from "../views/Activity/Activity.jsx";
+import ReportingPage from "../views/Reporting/Reporting.jsx";
+import SettingsPage from "../views/Settings/Settings.jsx";
 import LogoutPage from "../layouts/Logout/Logout";
 
 const dashboardPage = <DashboardPage />

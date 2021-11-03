@@ -1,10 +1,10 @@
 import React from "react";
 
-import Button from "components/CustomButtons/Button.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
 // @material-ui/core
 import withStyles from "@material-ui/core/styles/withStyles";
 
-import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
+import dashboardStyle from "../../assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
 
 class Events extends React.Component {

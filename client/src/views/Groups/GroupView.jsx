@@ -10,7 +10,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import CreateGroup from './CreateGroup.jsx'
 
-import ToolBar from "components/ToolBar/ToolBar.jsx";
+import ToolBar from "../../components/ToolBar/ToolBar.jsx";
 
 const styles = {
   appBar: {

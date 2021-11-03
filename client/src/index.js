@@ -8,10 +8,10 @@ import thunk from "redux-thunk";
 
 import combineReducers from "./reducers";
 
-import "assets/css/material-dashboard-react.css?v=1.4.1";
-import "assets/css/custom.css";
+import "./assets/css/material-dashboard-react.css?v=1.4.1";
+import "./assets/css/custom.css";
 
-import indexRoutes from "routes/index.jsx";
+import indexRoutes from "./routes/index.jsx";
 
 import { fetchAuthenticated } from "./actions/account";
 

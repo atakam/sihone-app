@@ -11,7 +11,7 @@ import Tab from '@material-ui/core/Tab';
 import Youtube from './Youtube';
 import Facebook from './Facebook';
 
-import dashboardStyle from "assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
+import dashboardStyle from "../../assets/jss/material-dashboard-react/views/dashboardStyle.jsx";
 
 import "react-big-calendar/lib/css/react-big-calendar.css";
 

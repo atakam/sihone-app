@@ -2,12 +2,12 @@ import React from "react";
 import axios from "axios";
 
 // core components
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import Card from "components/Card/Card.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import Button from "components/CustomButtons/Button.jsx";
+import GridItem from "../../../components/Grid/GridItem.jsx";
+import GridContainer from "../../../components/Grid/GridContainer.jsx";
+import Card from "../../../components/Card/Card.jsx";
+import CardBody from "../../../components/Card/CardBody.jsx";
+import CustomInput from "../../../components/CustomInput/CustomInput.jsx";
+import Button from "../../../components/CustomButtons/Button.jsx";
 
 class SmsView extends React.Component {
 

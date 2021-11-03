@@ -1,8 +1,8 @@
 import React from "react";
 import SmsList from "./SmsList";
 import SmsView from "./SmsView";
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
+import GridItem from "../../../components/Grid/GridItem.jsx";
+import GridContainer from "../../../components/Grid/GridContainer.jsx";
 
 class SmsApp extends React.Component {
     constructor(props) {

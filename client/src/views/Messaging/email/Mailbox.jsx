@@ -3,9 +3,9 @@ import axios from "axios";
 import Email from "./Email";
 import EmailList from "./EmailList";
 import NoneSelected from "./NoneSelected";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import AlertDialog from "components/Dialog/AlertDialog";
+import GridContainer from "../../../components/Grid/GridContainer.jsx";
+import GridItem from "../../../components/Grid/GridItem.jsx";
+import AlertDialog from "../../../components/Dialog/AlertDialog";
 
 class Mailbox extends React.Component {
   constructor(props) {

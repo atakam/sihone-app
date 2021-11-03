@@ -1,19 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
-import CsvParse from '@vtex/react-csv-parse';
+//import CsvParse from '@vtex/react-csv-parse';
 // @material-ui/core components
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 // core components
-import Checkbox from "components/CustomInput/CustomCheckbox.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
-import CardBody from "components/Card/CardBody.jsx";
-import CardFooter from "components/Card/CardFooter.jsx";
-import Snackbar from "components/Snackbar/Snackbar.jsx";
+import Checkbox from "../../components/CustomInput/CustomCheckbox.jsx";
+import GridItem from "../../components/Grid/GridItem.jsx";
+import GridContainer from "../../components/Grid/GridContainer.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
+import Card from "../../components/Card/Card.jsx";
+import CardHeader from "../../components/Card/CardHeader.jsx";
+import CardBody from "../../components/Card/CardBody.jsx";
+import CardFooter from "../../components/Card/CardFooter.jsx";
+import Snackbar from "../../components/Snackbar/Snackbar.jsx";
 
 class CreateMember extends React.Component {
   constructor(props) {
@@ -182,12 +182,12 @@ class CreateMember extends React.Component {
                   
                   <GridItem xs={12} sm={12} md={6}>
                     <h6 className="form-subtitle">Import</h6>
-                    <CsvParse
+                    {/* <CsvParse
                       keys={keys}
                       onDataUploaded={this.handleData}
                       onError={this.handleError}
                       render={onChange => <input type="file" onChange={onChange} accept=".csv" />}
-                    />
+                    /> */}
                     <FormControlLabel
                       control={
                         <Checkbox

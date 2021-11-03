@@ -2,11 +2,11 @@ import React from "react";
 import axios from "axios";
 
 import Utils from "../../utils/Utils";
-import GridContainer from "components/Grid/GridContainer.jsx";
-import GridItem from "components/Grid/GridItem.jsx";
-import CustomInput from "components/CustomInput/CustomInput.jsx";
-import Button from "components/CustomButtons/Button.jsx";
-import Snackbar from "components/Snackbar/Snackbar.jsx";
+import GridContainer from "../../../components/Grid/GridContainer.jsx";
+import GridItem from "../../../components/Grid/GridItem.jsx";
+import CustomInput from "../../../components/CustomInput/CustomInput.jsx";
+import Button from "../../../components/CustomButtons/Button.jsx";
+import Snackbar from "../../../components/Snackbar/Snackbar.jsx";
 
 import MemberSelect from '../../utils/MemberSelect.jsx'
 import GroupSelect from '../../utils/GroupSelect.jsx'
