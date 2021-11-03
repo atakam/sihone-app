@@ -57,7 +57,7 @@ class CustomAppBar extends React.Component {
       <AppBar position="sticky">
         <Toolbar>
           <Typography variant="h6" style={{flexGrow: '1'}}>
-          {'JadeSoft >'}
+          {'Arise & Shine >'}
           &nbsp;<strong>{title}</strong>
           </Typography>
           <br />
