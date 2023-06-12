@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS families(
-  id               SERIAL PRIMARY KEY,
+  id               INTEGER PRIMARY KEY,
   familyname       VARCHAR(64),
   email            VARCHAR(64),
   phone            VARCHAR(64),
@@ -10,10 +10,10 @@ CREATE TABLE IF NOT EXISTS families(
   country          VARCHAR(64)
 );
 CREATE TABLE IF NOT EXISTS members(
-  id               SERIAL PRIMARY KEY,
+  id               INTEGER PRIMARY KEY,
   memberuid        VARCHAR(64),
-  firstname        VARCHAR,
-  lastname         VARCHAR,
+  firstname        VARCHAR(255),
+  lastname         VARCHAR(255),
   gender           VARCHAR(64),
   birthdate        TIMESTAMP,
   marital          VARCHAR(64),
@@ -25,26 +25,26 @@ CREATE TABLE IF NOT EXISTS members(
   membershipdate   TIMESTAMP,
   baptismdate      TIMESTAMP,
   access           BOOLEAN NOT NULL,
-  avatar           VARCHAR,
+  avatar           VARCHAR(255),
   hearaboutus      TEXT,
   subscribtion     BOOLEAN NOT NULL,
   active           BOOLEAN NOT NULL,
   password         VARCHAR(255),
   sessionid        VARCHAR(255),
   FOREIGN KEY (familyid) REFERENCES families(id)
-  
+
 );
 
 CREATE TABLE IF NOT EXISTS accounts(
-  id              SERIAL PRIMARY KEY,
+  id              INTEGER PRIMARY KEY,
   descriptiontext TEXT NOT NULL,
-  accountdate    VARCHAR,
+  accountdate    VARCHAR(255),
   isopen          BOOLEAN NOT NULL,
   candelete          BOOLEAN NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS transactions(
-  id            SERIAL PRIMARY KEY,
+  id            INTEGER PRIMARY KEY,
   accountid    INTEGER,
   descriptiontext TEXT NOT NULL,
   transactiontype       VARCHAR(64),
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS transactions(
 );
 
 CREATE TABLE IF NOT EXISTS envelopes(
-  id              SERIAL PRIMARY KEY,
+  id              INTEGER PRIMARY KEY,
   descriptiontext TEXT NOT NULL,
   envelopedate    VARCHAR NOT NULL,
   isopen          BOOLEAN NOT NULL,
@@ -63,12 +63,12 @@ CREATE TABLE IF NOT EXISTS envelopes(
 );
 
 CREATE TABLE IF NOT EXISTS paymenttypes(
-  id              SERIAL PRIMARY KEY,
+  id              INTEGER PRIMARY KEY,
   paymenttype        VARCHAR NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS donations(
-  id            SERIAL PRIMARY KEY,
+  id            INTEGER PRIMARY KEY,
   envelopeid    INTEGER,
   memberid      INTEGER,
   paytype       INTEGER,
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS donations(
 );
 
 CREATE TABLE IF NOT EXISTS funds(
-  id              SERIAL PRIMARY KEY,
+  id              INTEGER PRIMARY KEY,
   fundname        VARCHAR NOT NULL
 );
 
@@ -93,14 +93,14 @@ CREATE TABLE IF NOT EXISTS donationfund(
 );
 
 CREATE TABLE IF NOT EXISTS grouptypes(
-  id              SERIAL PRIMARY KEY,
+  id              INTEGER PRIMARY KEY,
   grouptype       VARCHAR NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS groups(
-  id            SERIAL PRIMARY KEY,
+  id            INTEGER PRIMARY KEY,
   grouptypeid   INTEGER,
-  groupname       VARCHAR,
+  groupname       VARCHAR(255),
   FOREIGN KEY (grouptypeid) REFERENCES grouptypes(id)
 );
 
@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS membergroup(
 );
 
 CREATE TABLE IF NOT EXISTS activities(
-  id              SERIAL PRIMARY KEY,
+  id              INTEGER PRIMARY KEY,
   descriptiontext TEXT NOT NULL,
   activitydate    VARCHAR NOT NULL,
   memberid        INTEGER,
@@ -120,13 +120,13 @@ CREATE TABLE IF NOT EXISTS activities(
 );
 
 CREATE TABLE IF NOT EXISTS reports(
-  id              SERIAL PRIMARY KEY,
+  id              INTEGER PRIMARY KEY,
   querystring     TEXT NOT NULL,
   reportdate    VARCHAR NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS emails(
-  id              SERIAL PRIMARY KEY,
+  id              INTEGER PRIMARY KEY,
   subject         TEXT,
   specials        TEXT,
   emailtext       TEXT NOT NULL,
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS groupemail(
 );
 
 CREATE TABLE IF NOT EXISTS events(
-  id               SERIAL PRIMARY KEY,
+  id               INTEGER PRIMARY KEY,
   description      TEXT,
   location         TEXT,
   allday           BOOLEAN NOT NULL,
@@ -174,7 +174,7 @@ CREATE TABLE IF NOT EXISTS groupevent(
 );
 
 CREATE TABLE IF NOT EXISTS sms(
-  id              SERIAL PRIMARY KEY,
+  id              INTEGER PRIMARY KEY,
   smstext       TEXT NOT NULL,
   smsdate    VARCHAR NOT NULL,
   specials        TEXT
@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS groupsms(
 );
 
 CREATE TABLE IF NOT EXISTS settings (
-  id              SERIAL PRIMARY KEY,
+  id              INTEGER PRIMARY KEY,
   churchname VARCHAR(255) NOT NULL,
   charitynumber VARCHAR(255) NOT NULL,
   streetaddress VARCHAR(50) NOT NULL,
